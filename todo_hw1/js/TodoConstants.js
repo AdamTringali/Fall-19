@@ -41,7 +41,8 @@ const TodoGUIId = {
     // IDs FOR SCREENS
     TODO_HOME: 'todo_home',
     TODO_LIST: 'todo_list',
-    //addition
+    EDIT_ITEM: 'edit_item',
+    //addition ^^
 
     // IDs FOR HOME SCREEN CONTROLS
     HOME_YOUR_LISTS_CONTAINER: 'home_your_lists_container',

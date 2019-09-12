@@ -144,9 +144,9 @@ class TodoListController {
 
     processEditItem() {
         window.todo.model.goEditItem();
-        window.todo.view.buildListItem(TodoGUIId.LIST_DETAILS_NAME_CONTAINER,1);
+        //window.todo.view.buildListItem(TodoGUIId.LIST_DETAILS_NAME_CONTAINER,1);
         //window.todo.model.goList();
-        //window.todo.model.goHome();
+       // window.todo.model.goHome();
     }
 
     processSortItemsByDueDate() {

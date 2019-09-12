@@ -18,7 +18,7 @@ body {
 }
 
 /* SCREENS */
-#todo_home, #todo_list, #todo_item, #todo_edit_item {
+#todo_home, #todo_list, #todo_item, #edit_item {
     background-color: var(--swatch-primary);
 }
 #todo_list {}
