@@ -59,6 +59,12 @@ body {
     margin-top: 1%;
     margin-bottom: 1%;
 }
+
+#item_edit_container {
+    padding-left: 0%;
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
 #list_details_name_container {}
 #list_name_prompt {}
 #list_name_textfield {}

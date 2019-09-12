@@ -138,6 +138,7 @@ class TodoListModel {
 
     goEditItem(){
         
+        //this.view.showElementWithId(TodoGUIId.TODO_HOME, false);
         this.view.showElementWithId(TodoGUIId.TODO_LIST, false);
 
         this.view.showElementWithId(TodoGUIId.EDIT_ITEM, true);
