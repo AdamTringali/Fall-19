@@ -86,6 +86,8 @@ body {
 /* LIST SCREEN CLASSES */
 .list_item_card, .list_item_add_card {
     background-color: var(--swatch-neutral);
+    justify-items: stretch;
+
 }
 .list_item_card:hover, .list_item_add_card:hover {
     background-color: var(--swatch-complement);
@@ -112,6 +114,7 @@ body {
 .list_item_card_description {
     font-weight: bold;
     font-size: 14pt;
+    
 }
 .list_item_card_assigned_to, .list_item_card_due_date, 
 .list_item_card_completed, .list_item_card_not_completed {

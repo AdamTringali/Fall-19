@@ -13,6 +13,8 @@ body {
     grid-row-gap: 15px;
     padding: 5px 10px 5px 10px;
 }
+
+
 #todo_list {}
 #todo_item {}
 
@@ -60,10 +62,28 @@ body {
     margin-bottom: 1%;
 }
 
-#item_edit_container {
+#list_edit_container{
+    display: grid;
+    grid-template-columns: 15% 1fr;
+    width: 150px;
+}
+
+#item_edit_header {
     padding-left: 0%;
     margin-top: 1%;
     margin-bottom: 1%;
+}
+#item_edit_container {
+    padding-left: 0%;
+    display: grid;
+    grid-gap: 30px;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    align-items: baseline;
+  
+}
+#item_edit_textfield {
+    display: inline-block;
 }
 #list_details_name_container {}
 #list_name_prompt {}
@@ -87,6 +107,11 @@ body {
 .list_item_card_description {
     position: absolute;
     left: 2%;
+}
+
+.list_edit_card_description{
+    width: 150px;
+    display: inline-block;
 }
 .list_item_task_header, .list_item_due_date_header, .list_item_status_header {
     position: absolute;

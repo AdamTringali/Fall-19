@@ -82,8 +82,8 @@ class TodoListView {
         // THESE THREE SPANS GO IN THE DETAILS DIV
         newItemDiv.appendChild(descriptionDiv);
         newItemDiv.appendChild(assignedToDiv);
-        newItemDiv.appendChild(completedDiv);
         newItemDiv.appendChild(dueDateDiv);
+        newItemDiv.appendChild(completedDiv);
 
         return newItemDiv;
     }
@@ -175,6 +175,12 @@ class TodoListView {
         let listNameTextField = document.getElementById(TodoGUIId.LIST_NAME_TEXTFIELD);
         listNameTextField.value = listToLoad.getName();
         this.loadItems(listToLoad);
+
+        /** 
+         * let listOwnerTextField = document.getElementById(TodoGUIId.LIST_OWNER_TEXTFIELD);
+        listOwnerTextField.value = listToLoad.getOwner();
+        this.loadItems(listToLoad);
+        **/
     }
 
     /**

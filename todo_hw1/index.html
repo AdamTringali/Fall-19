@@ -69,27 +69,38 @@
     <div id="edit_item" hidden>
         
         
-         <div id="item_edit_container"><h3>Item</h3></div> 
+         <div id="item_edit_header"><h3>Item</h3></div> 
         <!-- <div id="list_trash" ><img src="images/trash_can.png"></div> -->
 
         <div id="item_edit_container">
-            <div id="list_details_name_container" class="text_toolbar">
-                <span id="list_item_card_description">Description:</span>
+            <div id="list_edit_container" class="text_toolbar">
+                <span id="list_edit_card_description" >Description:</span>
                 <input type="text" id="list_item_card_description_textfield" />
             </div>
-            <!-- Should the owner be the same for each list? -->
-            <!-- <div id="list_details_owner_container" class="text_toolbar">
-                <span id="list_owner_prompt">Owner:</span>
-                <input type="text" id="list_owner_textfield" />
-            </div>  -->
-            <!-- end addition -->
+
+            <div id="list_edit_container" class="text_toolbar">
+                <span id="list_edit_card_description">Assigned To:</span>
+                <input type="text" id="list_item_card_assigned_to_textfield" />
+            </div>
+
+            <div id="list_edit_container" class="text_toolbar">
+                <span id="list_edit_card_description">Due Date:</span>
+                <input type="text" id="list_item_card_due_date" />
+            </div>
+
+            <div id="list_edit_container">
+                <span id="list_edit_card_description">Completed:</span>
+                <input type="checkbox" id="list_item_card_completed" />
+
+            </div>
+
         </div>
        <!--  <div id="list_items_container">
         </div> -->
-        <!-- <div id="submit_or_cancel">
+         <div id="submit_or_cancel">
             <button id="submit" >Submit</button>
             <button id="cancel" >Cancel</button>
-        </div> -->
+        </div>
     </div> 
 
 

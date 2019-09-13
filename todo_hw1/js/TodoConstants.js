@@ -57,6 +57,7 @@ const TodoGUIId = {
     LIST_HEADING: 'list_heading',
     //added
     LIST_TRASH: 'list_trash',
+    LIST_ITEM_CARD_ASSIGNED_TO_TEXTFIELD: 'list_item_card_assigned_to_textfield',
     //e
     LIST_DETAILS_CONTAINER: 'list_details_container',
     LIST_DETAILS_NAME_CONTAINER: 'list_details_name_container',
@@ -66,6 +67,9 @@ const TodoGUIId = {
     LIST_OWNER_PROMPT: "list_owner_prompt",
     LIST_OWNER_TEXTFIELD: 'list_owner_textfield',
     LIST_ITEMS_CONTAINER: 'list_items_container',
+    //addition
+    LIST_DUE_DATE: 'list_due_date',
+    
 };
 
 /**
