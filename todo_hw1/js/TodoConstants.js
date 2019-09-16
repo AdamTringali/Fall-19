@@ -65,9 +65,9 @@ const TodoGUIId = {
     LIST_TRASH: 'list_trash',
     LIST_ADD_ITEM: 'list_add_item',
     LIST_ITEM_CARD_ASSIGNED_TO_TEXTFIELD: 'list_item_card_assigned_to_textfield',
-    LIST_ITEM_CARD_UP_BUTTON: 'list_item_card_up_button',
-    LIST_ITEM_CARD_DOWN_BUTTON: 'list_item_card_down_button',
-    LIST_ITEM_CARD_REMOVE_BUTTON: 'list_item_card_remove_button',
+    LIST_ITEM_CARD_UP_BUTTON2: 'list_item_card_up_button2',
+    //LIST_ITEM_CARD_DOWN_BUTTON: 'list_item_card_down_button',
+    //LIST_ITEM_CARD_REMOVE_BUTTON: 'list_item_card_remove_button',
     //e
     
     LIST_DETAILS_CONTAINER: 'list_details_container',
@@ -103,6 +103,7 @@ const TodoGUIClass = {
     //added
     LIST_ITEM_DUE_DATE_HEADER: "list_item_due_date_header",
     LIST_ITEM_CARD_UP_BUTTON: "list_item_card_up_button",
+    LIST_ITEM_CARD_DOWN_BUTTON: "list_item_card_down_button",
     LIST_ITEM_CARD_REMOVE_BUTTON: "list_item_card_remove_button",
     //e
     LIST_ITEM_CARD_DESCRIPTION: "list_item_card_description",

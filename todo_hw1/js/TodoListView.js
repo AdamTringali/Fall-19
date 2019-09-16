@@ -89,18 +89,21 @@ class TodoListView {
         newItemDiv.appendChild(completedDiv);
 
         //addition
+    
+
 
 
         let moveButtons = document.createElement(TodoHTML.DIV);
         moveButtons.setAttribute(TodoHTML.CLASS,TodoGUIClass.LIST_ITEM_CARD_BUTTONS);
         var upButton = document.createElement("img");
-        upButton.setAttribute("id", "list_item_card_up_button");
+        upButton.setAttribute("id", "list_item_card_up_button2");
+        upButton.setAttribute(TodoHTML.CLASS,TodoGUIClass.LIST_ITEM_CARD_UP_BUTTON);
         upButton.setAttribute("src", "images/icons/MoveUp.png");
         this.setupCallback(upButton, TodoHTML.ONCLICK, TodoCallback.PROCESS_MOVE_ITEM_UP, itemArgs);       
 
 
         var downButton = document.createElement("img");
-        downButton.setAttribute("id", "list_item_card_down_button");
+        downButton.setAttribute(TodoHTML.CLASS,TodoGUIClass.LIST_ITEM_CARD_DOWN_BUTTON);
         downButton.setAttribute("src", "images/icons/MoveDown.png");
         this.setupCallback(downButton, TodoHTML.ONCLICK, TodoCallback.PROCESS_MOVE_ITEM_DOWN, itemArgs);       
 
@@ -110,13 +113,13 @@ class TodoListView {
         var removeButton = document.createElement("img");
         removeButton.setAttribute(TodoHTML.CLASS, TodoGUIClass.LIST_ITEM_CARD_REMOVE_BUTTON);
         //t.setAttribute("id", "list_item_card_remove_button");
+        
         removeButton.setAttribute("src", "images/icons/Close48.png");
-        this.setupCallback(removeButton, TodoHTML.ONCLICK, TodoCallback.PROCESS_DELETE_ITEM, itemArgs);       
+        //removeButton.setAttribute("class", "image-blurred-edge");
+        this.setupCallback(removeButton, TodoHTML.ONCLICK, TodoCallback.PROCESS_DELETE_ITEM, itemArgs); 
 
 
-
-        //window.todo.controller.registerEventHandler(TodoGUIId.LIST_ITEM_CARD_UP_BUTTON, TodoHTML.CLICK, this[TodoCallback.PROCESS_MOVE_ITEM_UP]);
-        //this.setupCallback(upButton, TodoHTML.ONCLICK, TodoCallback.PROCESS_MOVE_ITEM_UP, callbackArguments);
+    
 
 
         moveButtons.appendChild(upButton);
@@ -124,6 +127,7 @@ class TodoListView {
         moveButtons.appendChild(removeButton);
 
         newItemDiv.appendChild(moveButtons);
+
 
 
         return newItemDiv;

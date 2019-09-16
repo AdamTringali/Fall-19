@@ -287,6 +287,7 @@ class TodoListController {
     }
 
     processChangeItem() {
+        console.log("process changeitem: ");
         window.todo.controller.processEditItem();
 
        // window.todo.model.goHome();
