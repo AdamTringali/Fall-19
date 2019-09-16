@@ -47,10 +47,14 @@
     </div>
 
     <div id="todo_list" hidden>
+
+
         <div id="list_heading">@todo</div>
         <div id="list_trash" ><img src="images/trash_can.png"></div> 
 
+
         <div id="list_details_container">
+            
             <div id="list_details_name_container" class="text_toolbar">
                 <span id="list_name_prompt">Name:</span>
                 <input type="text" id="list_name_textfield" />
@@ -60,10 +64,16 @@
                 <span id="list_owner_prompt">Owner:</span>
                 <input type="text" id="list_owner_textfield" />
             </div>
+            
             <!-- end addition -->
         </div>
         <div id="list_items_container">
+           
         </div>
+   
+        <div id="list_heading"><img src="images/icons/AddItem.png" id="list_add_item" style="display: block; margin: auto; "></div>
+
+
     </div>
 
     <div id="edit_item" hidden>
@@ -85,21 +95,20 @@
 
             <div id="list_edit_container" class="text_toolbar">
                 <span id="list_edit_card_description">Due Date:</span>
-                <input type="text" id="list_item_card_due_date" />
+                <input class="Date" id="edit_item_due_date" />
             </div>
 
             <div id="list_edit_container">
                 <span id="list_edit_card_description">Completed:</span>
-                <input type="checkbox" id="list_item_card_completed" />
-
+                <input type="checkbox"  id="list_item_card_completed" style="position: fixed; left: 30.4%; "/>
             </div>
 
         </div>
        <!--  <div id="list_items_container">
         </div> -->
          <div id="submit_or_cancel">
-            <button id="submit" >Submit</button>
-            <button id="cancel" >Cancel</button>
+            <button id="edit_submit" >Submit</button>
+            <button id="edit_cancel" >Cancel</button>
         </div>
     </div> 
 

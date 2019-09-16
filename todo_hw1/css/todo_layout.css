@@ -16,7 +16,7 @@ body {
 
 
 #todo_list {}
-#todo_item {}
+/* #todo_item {} */ 
 
 /* HOME SCREEN CONTROLS */
 #home_your_lists_container {
@@ -53,6 +53,8 @@ body {
     text-align: right;
     top: 5%;
 }
+
+
 #list_details_container {
     padding-left: 2%;
     display: grid;
@@ -64,8 +66,12 @@ body {
 
 #list_edit_container{
     display: grid;
-    grid-template-columns: 15% 1fr;
-    width: 150px;
+    grid-template-columns: 1fr 3fr;
+}
+
+#list_edit_container_check{
+    display: grid;
+    grid-template-columns: 1fr auto;
 }
 
 #item_edit_header {
@@ -109,10 +115,11 @@ body {
     left: 2%;
 }
 
-.list_edit_card_description{
+
+/*.list_edit_card_description{
     width: 150px;
     display: inline-block;
-}
+}*/
 .list_item_task_header, .list_item_due_date_header, .list_item_status_header {
     position: absolute;
     top: 5%;
@@ -131,6 +138,17 @@ body {
 .list_item_status_header, .list_item_card_completed, .list_item_card_not_completed {
     left: 60%;
 }
+
+.list_item_card_completed2{
+    right: 5%;
+}
+
+.list_item_card_buttons {
+    right: 5%;
+    position: absolute;
+}
+
+
 .list_item_card_toolbar {
     position: absolute;
     left: 85%;

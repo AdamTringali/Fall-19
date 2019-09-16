@@ -15,18 +15,10 @@ class TodoList {
         this.name = "Unnknown";
         this.owner = "Unknown";
         this.items = new Array();
-        this.due_date = "0-0-0-0000"
     }   
     
     // GETTER/SETTER METHODS
 
-    setDueDate(initDate) {
-        this.due_date = initDate;
-    }
-
-    getDueDate() {
-        return this.due_date;
-    }
 
     setName(initName) {
         this.name = initName;
@@ -43,6 +35,11 @@ class TodoList {
     getOwner() {
         return this.owner;
     }
+
+    numItems(){
+        return this.items.length;
+    }
+
 
     /**
      * Adds an item to the end of the list.

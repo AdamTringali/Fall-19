@@ -15,16 +15,27 @@ class TodoListItem {
         this.description = "Unknown";
         this.assignedTo = "Unknown";
         this.completed = false;
-        this.dueDate = "0000-00-00"
+        this.dueDate = "0000-00-00";
+        this.editing = false;
     }
 
     // GETTER/SETTER METHODS
+
+    setEditing(val) {
+        this.editing = val;
+    }
+
+    isEditing() {
+        return this.editing;
+    }
 
     getDueDate() {
         return this.dueDate;
     }
 
     setDueDate(initDueDate) {
+        //console.log("TodoListItem:28//setDueDate: " + initDueDate);
+
         this.dueDate = initDueDate;
     }
 
@@ -33,6 +44,7 @@ class TodoListItem {
     }
 
     setDescription(initDescription) {
+        //console.log("TodoListItem:36//setDescription: " + initDescription);
         this.description = initDescription;
     }
 
@@ -41,6 +53,8 @@ class TodoListItem {
     }
 
     setAssignedTo(initAssignedTo) {
+        //console.log("TodoListItem:47//setAssignedTo: " + initAssignedTo);
+
         this.assignedTo = initAssignedTo;
     }
 

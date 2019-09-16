@@ -53,12 +53,23 @@ const TodoGUIId = {
     HOME_NEW_LIST_CONTAINER: 'home_new_list_container',
     HOME_NEW_LIST_BUTTON: 'home_new_list_button',
 
+    //IDs FOR EDIT SCREEN CONTROLS
+    //addition
+    EDIT_SUBMIT: 'edit_submit',
+    EDIT_CANCEL: 'edit_cancel',
+    EDIT_ITEM_DUE_DATE: 'edit_item_due_date',
+
     // IDs FOR LIST SCREEN CONTROLS
     LIST_HEADING: 'list_heading',
     //added
     LIST_TRASH: 'list_trash',
+    LIST_ADD_ITEM: 'list_add_item',
     LIST_ITEM_CARD_ASSIGNED_TO_TEXTFIELD: 'list_item_card_assigned_to_textfield',
+    LIST_ITEM_CARD_UP_BUTTON: 'list_item_card_up_button',
+    LIST_ITEM_CARD_DOWN_BUTTON: 'list_item_card_down_button',
+    LIST_ITEM_CARD_REMOVE_BUTTON: 'list_item_card_remove_button',
     //e
+    
     LIST_DETAILS_CONTAINER: 'list_details_container',
     LIST_DETAILS_NAME_CONTAINER: 'list_details_name_container',
     LIST_NAME_PROMPT: 'list_name_prompt',
@@ -81,6 +92,7 @@ const TodoGUIClass = {
     // HOME SCREEN CLASSes
     HOME_LIST_LINK: "home_list_link",
 
+    LIST_ITEM_CARD_BUTTONS: 'list_item_card_buttons',
     // LIST SCREEN CLASSes
     LIST_ITEM_CARD: "list_item_card",
     LIST_ITEM_ADD_CARD: "list_item_add_card",
@@ -90,6 +102,8 @@ const TodoGUIClass = {
     LIST_ITEM_STATUS_HEADER: "list_item_status_header",
     //added
     LIST_ITEM_DUE_DATE_HEADER: "list_item_due_date_header",
+    LIST_ITEM_CARD_UP_BUTTON: "list_item_card_up_button",
+    LIST_ITEM_CARD_REMOVE_BUTTON: "list_item_card_remove_button",
     //e
     LIST_ITEM_CARD_DESCRIPTION: "list_item_card_description",
     LIST_ITEM_CARD_ASSIGNED_TO: "list_item_card_assigned_to",
@@ -105,6 +119,8 @@ const TodoGUIClass = {
 const TodoCallback = {
     // SOME CALLBACKS ARE SETUP AT THE START BECAUSE THE 
     // CONTROLS ARE DECLARED INSIDE index.html
+    PROCESS_EDIT_DUE_DATE: "processEditDueDate",
+
     PROCESS_CREATE_NEW_LIST: "processCreateNewList",
     PROCESS_GO_HOME: "processGoHome",
     PROCESS_DELETE_LIST: "processDeleteList",

@@ -51,6 +51,7 @@ class TodoListView {
         newItemDiv.setAttribute(TodoHTML.CLASS, TodoGUIClass.LIST_ITEM_CARD);
         let itemArgs = [listItemIndex];
         this.setupCallback(newItemDiv, TodoHTML.ONCLICK, TodoCallback.PROCESS_EDIT_ITEM, itemArgs);
+        
 
         // WE'LL PUT ITEMS INTO THIS CARD IN A GRID
         let descriptionDiv = document.createElement(TodoHTML.DIV);
@@ -66,6 +67,8 @@ class TodoListView {
         let dueDateDiv = document.createElement(TodoHTML.DIV);
         dueDateDiv.setAttribute(TodoHTML.CLASS,TodoGUIClass.LIST_ITEM_CARD_DUE_DATE);
         dueDateDiv.innerHTML = listItem.getDueDate();
+        //console.log(listItem.getDescription());
+
         //end
         
 
@@ -85,8 +88,47 @@ class TodoListView {
         newItemDiv.appendChild(dueDateDiv);
         newItemDiv.appendChild(completedDiv);
 
+        //addition
+
+
+        let moveButtons = document.createElement(TodoHTML.DIV);
+        moveButtons.setAttribute(TodoHTML.CLASS,TodoGUIClass.LIST_ITEM_CARD_BUTTONS);
+        var upButton = document.createElement("img");
+        upButton.setAttribute("id", "list_item_card_up_button");
+        upButton.setAttribute("src", "images/icons/MoveUp.png");
+        this.setupCallback(upButton, TodoHTML.ONCLICK, TodoCallback.PROCESS_MOVE_ITEM_UP, itemArgs);       
+
+
+        var downButton = document.createElement("img");
+        downButton.setAttribute("id", "list_item_card_down_button");
+        downButton.setAttribute("src", "images/icons/MoveDown.png");
+        this.setupCallback(downButton, TodoHTML.ONCLICK, TodoCallback.PROCESS_MOVE_ITEM_DOWN, itemArgs);       
+
+
+        //let removeButton = document.createElement(TodoHTML.DIV);
+        //removeButton.setAttribute(TodoHTML.CLASS, TodoGUIClass.LIST_ITEM_CARD_REMOVE_BUTTON);
+        var removeButton = document.createElement("img");
+        removeButton.setAttribute(TodoHTML.CLASS, TodoGUIClass.LIST_ITEM_CARD_REMOVE_BUTTON);
+        //t.setAttribute("id", "list_item_card_remove_button");
+        removeButton.setAttribute("src", "images/icons/Close48.png");
+        this.setupCallback(removeButton, TodoHTML.ONCLICK, TodoCallback.PROCESS_DELETE_ITEM, itemArgs);       
+
+
+
+        //window.todo.controller.registerEventHandler(TodoGUIId.LIST_ITEM_CARD_UP_BUTTON, TodoHTML.CLICK, this[TodoCallback.PROCESS_MOVE_ITEM_UP]);
+        //this.setupCallback(upButton, TodoHTML.ONCLICK, TodoCallback.PROCESS_MOVE_ITEM_UP, callbackArguments);
+
+
+        moveButtons.appendChild(upButton);
+        moveButtons.appendChild(downButton);
+        moveButtons.appendChild(removeButton);
+
+        newItemDiv.appendChild(moveButtons);
+
+
         return newItemDiv;
     }
+        
 
     /**
      * This function builds and returns a DIV with the header in the
@@ -114,7 +156,10 @@ class TodoListView {
         let dueDateHeaderDiv = document.createElement(TodoHTML.DIV);
         dueDateHeaderDiv.setAttribute(TodoHTML.CLASS, TodoGUIClass.LIST_ITEM_DUE_DATE_HEADER);
         dueDateHeaderDiv.innerHTML = 'Due Date';
-        this.setupCallback(dueDateHeaderDiv, TodoHTML.ONCLICK, TodoCallback.PROCESS_SORT_ITEMS_BY_DUE_DATE, callbackArguments);
+        this.setupCallback(dueDateHeaderDiv, TodoHTML.ONCLICK, TodoCallback.PROCESS_SORT_ITEMS_BY_DUE_DATE, callbackArguments);       
+       
+       
+       
         //end addition
 
 
@@ -125,6 +170,7 @@ class TodoListView {
         
         return listItemHeaderDiv;
     }
+
 
     /**
      * This method is for building and returning a link on the front page
@@ -176,11 +222,10 @@ class TodoListView {
         listNameTextField.value = listToLoad.getName();
         this.loadItems(listToLoad);
 
-        /** 
-         * let listOwnerTextField = document.getElementById(TodoGUIId.LIST_OWNER_TEXTFIELD);
+         let listOwnerTextField = document.getElementById(TodoGUIId.LIST_OWNER_TEXTFIELD);
         listOwnerTextField.value = listToLoad.getOwner();
         this.loadItems(listToLoad);
-        **/
+        
     }
 
     /**
@@ -276,8 +321,8 @@ class TodoListView {
 
     /**
      * This method is for toggling the element in the DOM with the elementId id to
-     * show it or hide it.
-     * 
+
+     
      * @param {String} elementId 
      * @param {Boolean} show 
      */
