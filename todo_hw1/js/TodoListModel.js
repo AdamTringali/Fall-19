@@ -124,6 +124,14 @@ class TodoListModel {
         this.view.showElementWithId(TodoGUIId.TODO_HOME, true);        
     }
 
+    showPopup() {
+        this.view.showElementWithId(TodoGUIId.DELETE_LIST_POPUP, true);
+    }
+
+    closePopup() {
+        this.view.showElementWithId(TodoGUIId.DELETE_LIST_POPUP, false);
+    }
+
     /**
      * This function will navigate the user to the list screen where they
      * may edit a list.

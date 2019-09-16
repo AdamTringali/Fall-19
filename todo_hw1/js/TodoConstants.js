@@ -58,6 +58,8 @@ const TodoGUIId = {
     EDIT_SUBMIT: 'edit_submit',
     EDIT_CANCEL: 'edit_cancel',
     EDIT_ITEM_DUE_DATE: 'edit_item_due_date',
+    YES_BUTTON: 'yes_button',
+    NO_BUTTON: 'no_button',
 
     // IDs FOR LIST SCREEN CONTROLS
     LIST_HEADING: 'list_heading',
@@ -65,7 +67,9 @@ const TodoGUIId = {
     LIST_TRASH: 'list_trash',
     LIST_ADD_ITEM: 'list_add_item',
     LIST_ITEM_CARD_ASSIGNED_TO_TEXTFIELD: 'list_item_card_assigned_to_textfield',
-    LIST_ITEM_CARD_UP_BUTTON2: 'list_item_card_up_button2',
+
+    DELETE_LIST_POPUP: "delete_list_popup",
+
     //LIST_ITEM_CARD_DOWN_BUTTON: 'list_item_card_down_button',
     //LIST_ITEM_CARD_REMOVE_BUTTON: 'list_item_card_remove_button',
     //e

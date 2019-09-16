@@ -34,10 +34,15 @@ class TodoListController {
 
         //CONTROLS ON EDIT ITEM SCREEN
         //-- addition --
+
         this.registerEventHandler(TodoGUIId.EDIT_SUBMIT,TodoHTML.CLICK,this[TodoCallback.PROCESS_SUBMIT_ITEM_CHANGES]);
         this.registerEventHandler(TodoGUIId.EDIT_CANCEL,TodoHTML.CLICK,this[TodoCallback.PROCESS_CANCEL_ITEM_CHANGES]);
 
         this.registerEventHandler(TodoGUIId.EDIT_ITEM_DUE_DATE,TodoHTML.CLICK,this[TodoCallback.PROCESS_EDIT_DUE_DATE]);
+
+
+        this.registerEventHandler(TodoGUIId.YES_BUTTON, TodoHTML.CLICK, this[TodoCallback.PROCESS_CONFIRM_DELETE_LIST]);
+        this.registerEventHandler(TodoGUIId.NO_BUTTON, TodoHTML.CLICK, this[TodoCallback.PROCESS_CANCEL_DELETE_LIST]);
 
         //this.registerEventHandler(TodoGUIId.LIST_ITEM_CARD_REMOVE_BUTTON, TodoHTML.CLICK, this[TodoCallback.PROCESS_DELETE_ITEM]);
 
@@ -151,13 +156,33 @@ class TodoListController {
         }
     }
 
-    processDeleteList() {
+    processConfirmDeleteList(){
         window.todo.model.removeList(window.todo.model.listToEdit);
+        window.todo.model.closePopup();
+
+        window.todo.model.goHome();     
+           
+
+    }
+
+    processCancelDeleteList(){
+        window.todo.model.closePopup();
+    }
+
+    processDeleteList() {
+        console.log("process delete list")
+
+
+        console.log("process showing popup" );
+
+        window.todo.model.showPopup();
+
 
         //processdeletelist will start by calling showdialog.. 
-
         //window.todo.view.showDialog();
-        window.todo.model.goHome();        
+
+       // window.todo.model.removeList(window.todo.model.listToEdit);
+      //  window.todo.model.goHome();        
     }
 
     processEditItem(index) {
