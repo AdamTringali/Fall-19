@@ -63,13 +63,9 @@ class TodoListView {
         assignedToDiv.innerHTML =
             'Assigned To: ' + this.buildOpenTag(TodoHTML.STRONG) + listItem.getAssignedTo() + this.buildCloseTag(TodoHTML.STRONG);
 
-        //addition
         let dueDateDiv = document.createElement(TodoHTML.DIV);
         dueDateDiv.setAttribute(TodoHTML.CLASS,TodoGUIClass.LIST_ITEM_CARD_DUE_DATE);
         dueDateDiv.innerHTML = listItem.getDueDate();
-        //console.log(listItem.getDescription());
-
-        //end
         
 
         let completedDiv = document.createElement(TodoHTML.DIV);
@@ -82,13 +78,12 @@ class TodoListView {
             completedDiv.setAttribute(TodoHTML.CLASS, TodoGUIClass.LIST_ITEM_CARD_NOT_COMPLETED);
         }
 
-        // THESE THREE SPANS GO IN THE DETAILS DIV
+        // THESE FOUR SPANS GO IN THE DETAILS DIV
         newItemDiv.appendChild(descriptionDiv);
         newItemDiv.appendChild(assignedToDiv);
         newItemDiv.appendChild(dueDateDiv);
         newItemDiv.appendChild(completedDiv);
 
-        //addition
     
 
 
@@ -96,7 +91,7 @@ class TodoListView {
         let moveButtons = document.createElement(TodoHTML.DIV);
         moveButtons.setAttribute(TodoHTML.CLASS,TodoGUIClass.LIST_ITEM_CARD_BUTTONS);
         var upButton = document.createElement("img");
-        upButton.setAttribute("id", "list_item_card_up_button2");
+        upButton.setAttribute("id", "list_item_card_up_button");
         upButton.setAttribute(TodoHTML.CLASS,TodoGUIClass.LIST_ITEM_CARD_UP_BUTTON);
         upButton.setAttribute("src", "images/icons/MoveUp.png");
         this.setupCallback(upButton, TodoHTML.ONCLICK, TodoCallback.PROCESS_MOVE_ITEM_UP, itemArgs);       
@@ -118,10 +113,19 @@ class TodoListView {
         //removeButton.setAttribute("class", "image-blurred-edge");
         this.setupCallback(removeButton, TodoHTML.ONCLICK, TodoCallback.PROCESS_DELETE_ITEM, itemArgs); 
 
+        if(listItemIndex == 0){
+            console.log("process iiiindex item is 0; disable move up button");
+            //document.getElementById("list_item_card_up_button").style.backgroundColor = "var(--swatch-complementtwo)";
+            upButton.style.backgroundColor = "var(--swatch-complementtwo)";
+            //test.setAttribute("background-color", "var(--swatch-complementtwo)");
+        }
 
-    
-
-
+        if(listItemIndex == (window.todo.model.listToEdit.numItems() - 1))
+        {
+            console.log("process iiindex is numItems. disable down button");
+            downButton.style.backgroundColor = "var(--swatch-complementtwo)";
+        }
+        
         moveButtons.appendChild(upButton);
         moveButtons.appendChild(downButton);
         moveButtons.appendChild(removeButton);
@@ -136,7 +140,7 @@ class TodoListView {
 
     /**
      * This function builds and returns a DIV with the header in the
-     * table of cards for the todo list.
+     * table of cards for the todo win.
      */
     buildListItemsHeader() {
         // WE'LL PUT ITEMS INTO THIS CARD IN A GRID
@@ -155,17 +159,10 @@ class TodoListView {
         statusHeaderDiv.innerHTML = 'Status';
         this.setupCallback(statusHeaderDiv, TodoHTML.ONCLICK, TodoCallback.PROCESS_SORT_ITEMS_BY_STATUS, callbackArguments);
 
-
-        //addition
         let dueDateHeaderDiv = document.createElement(TodoHTML.DIV);
         dueDateHeaderDiv.setAttribute(TodoHTML.CLASS, TodoGUIClass.LIST_ITEM_DUE_DATE_HEADER);
         dueDateHeaderDiv.innerHTML = 'Due Date';
         this.setupCallback(dueDateHeaderDiv, TodoHTML.ONCLICK, TodoCallback.PROCESS_SORT_ITEMS_BY_DUE_DATE, callbackArguments);       
-       
-       
-       
-        //end addition
-
 
         // THESE GO IN THE DETAILS DIV
         listItemHeaderDiv.appendChild(taskHeaderDiv);

@@ -145,24 +145,15 @@ class TodoListModel {
     }
 
     goEditItem(){
-        
-        //this.view.showElementWithId(TodoGUIId.TODO_HOME, false);
         document.getElementById(TodoGUIId.TODO_HOME).style.display = "none";
-        //var te = document.getElementById("list_item_card_description_textfield");
-       // this.editItem = true;
-
         this.view.showElementWithId(TodoGUIId.TODO_LIST, false);
         this.view.showElementWithId(TodoGUIId.EDIT_ITEM, true);
-  
     }
 
     stopEditItem(){
         document.getElementById(TodoGUIId.TODO_HOME).style.display = "grid";
-       // this.editItem = false;
-
         this.view.showElementWithId(TodoGUIId.EDIT_ITEM, false);
         this.view.showElementWithId(TodoGUIId.TODO_LIST, true);
-
     }
 
     /**
@@ -180,7 +171,6 @@ class TodoListModel {
         }
     }
 
-    //addition
     updateListOwner(listBeingEdited, newOwner) {
         if (listBeingEdited.getOwner() != newOwner) {
             listBeingEdited.setOwner(newOwner);

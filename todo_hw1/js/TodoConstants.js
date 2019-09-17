@@ -38,6 +38,8 @@ const TodoHTML = {
  * events.
  */
 const TodoGUIId = {
+    LIST_ITEM_CARD_UP_BUTTON: "list_item_card_up_button",
+    LIST_ITEM_CARD_BUTTONS: "list_item_card_buttons",
     // IDs FOR SCREENS
     TODO_HOME: 'todo_home',
     TODO_LIST: 'todo_list',

@@ -22,7 +22,6 @@ class TodoListController {
         this.registerEventHandler(TodoGUIId.HOME_NEW_LIST_BUTTON, TodoHTML.CLICK, this[TodoCallback.PROCESS_CREATE_NEW_LIST]);
 
         // THEN THE CONTROLS ON THE LIST SCREE`N
-        //addition
         this.registerEventHandler(TodoGUIId.LIST_TRASH, TodoHTML.CLICK, this[TodoCallback.PROCESS_DELETE_LIST])
         this.registerEventHandler(TodoGUIId.LIST_ADD_ITEM, TodoHTML.CLICK,this[TodoCallback.PROCESS_CHANGE_ITEM])
 
@@ -33,20 +32,16 @@ class TodoListController {
         
 
         //CONTROLS ON EDIT ITEM SCREEN
-        //-- addition --
-
         this.registerEventHandler(TodoGUIId.EDIT_SUBMIT,TodoHTML.CLICK,this[TodoCallback.PROCESS_SUBMIT_ITEM_CHANGES]);
         this.registerEventHandler(TodoGUIId.EDIT_CANCEL,TodoHTML.CLICK,this[TodoCallback.PROCESS_CANCEL_ITEM_CHANGES]);
-
         this.registerEventHandler(TodoGUIId.EDIT_ITEM_DUE_DATE,TodoHTML.CLICK,this[TodoCallback.PROCESS_EDIT_DUE_DATE]);
 
 
+        //CONTROLS ON POPUP
         this.registerEventHandler(TodoGUIId.YES_BUTTON, TodoHTML.CLICK, this[TodoCallback.PROCESS_CONFIRM_DELETE_LIST]);
         this.registerEventHandler(TodoGUIId.NO_BUTTON, TodoHTML.CLICK, this[TodoCallback.PROCESS_CANCEL_DELETE_LIST]);
 
-        //this.registerEventHandler(TodoGUIId.LIST_ITEM_CARD_REMOVE_BUTTON, TodoHTML.CLICK, this[TodoCallback.PROCESS_DELETE_ITEM]);
 
-        //this.registerEventHandler(TodoGUIId.LIST_OWNER_TEXTFIELD, TodoHTML.KEYUP, this[TodoCallback.PROCESS_CHANGE_OWNER])  
     }
 
     /**
@@ -159,10 +154,7 @@ class TodoListController {
     processConfirmDeleteList(){
         window.todo.model.removeList(window.todo.model.listToEdit);
         window.todo.model.closePopup();
-
-        window.todo.model.goHome();     
-           
-
+        window.todo.model.goHome();    
     }
 
     processCancelDeleteList(){
@@ -171,18 +163,8 @@ class TodoListController {
 
     processDeleteList() {
         console.log("process delete list")
-
-
         console.log("process showing popup" );
-
         window.todo.model.showPopup();
-
-
-        //processdeletelist will start by calling showdialog.. 
-        //window.todo.view.showDialog();
-
-       // window.todo.model.removeList(window.todo.model.listToEdit);
-      //  window.todo.model.goHome();        
     }
 
     processEditItem(index) {
@@ -214,18 +196,8 @@ class TodoListController {
             checkbox.checked = false;
         }
 
-      
         console.log("process :: " + descriptionTextField.value);
-   
-
-
-
        window.todo.model.goEditItem();
-      // console.log("Starting edit item: " + item.isEditing());
-
-
-        //window.todo.model.goList();
-       // window.todo.model.goHome();
     }
 
     processSortItemsByDueDate() {
@@ -240,7 +212,6 @@ class TodoListController {
         console.log("process submit");
 
         let listBeingEdited = window.todo.model.listToEdit;
-        //listBeingEdited.getItemAtIndex(0).isEditingItem();
 
         var descriptionTextField = document.getElementById("list_item_card_description_textfield");
         var assignedToTextField = document.getElementById("list_item_card_assigned_to_textfield");
@@ -279,24 +250,7 @@ class TodoListController {
             item.setCompleted(checkbox.checked);      
             listBeingEdited.addItem(item);
          }
-
-        //console.log("edit item desc:" + item.getDescription());
-      /*  item.setDescription(descriptionTextField.value);
-        item.setAssignedTo(assignedToTextField.value);
-        item.setDueDate(dueDate.value);
-        item.setEditing(false);*/
-
-
         window.todo.view.loadItems(listBeingEdited);
-
-
-
-
-
-
-
-
-
         console.log("Ending edit item: " + item.isEditing());
         window.todo.model.stopEditItem();
     }
@@ -314,8 +268,6 @@ class TodoListController {
     processChangeItem() {
         console.log("process changeitem: ");
         window.todo.controller.processEditItem();
-
-       // window.todo.model.goHome();
 
     }
 
@@ -335,15 +287,12 @@ class TodoListController {
         event.stopPropagation();
         console.log("Process Move item up: " + index);
         if(index == 0){
-            console.log("process index is 0. Unable to move item up");
+            console.log("process iindex is 0. Unable to move item up");
             return;
         }
-
         this.swapItems(index, 2);
-
     }
 
-    
     processMoveItemDown(index) {
         event.stopPropagation();
         console.log("Process Move item down: " + index);
