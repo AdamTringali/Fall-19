@@ -12,12 +12,22 @@ class TodoList {
      * The constructor creates a default, empty list.
      */
     constructor() {
-        this.name = "Unnknown";
+        this.name = "Unknown";
         this.owner = "Unknown";
         this.items = new Array();
+        this.count = 0;
     }   
     
     // GETTER/SETTER METHODS
+
+    getCount(){
+        return this.count;
+    }
+
+    setConut(initCount){
+        this.count = initCount;
+
+    }
 
 
     setName(initName) {

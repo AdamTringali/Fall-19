@@ -71,6 +71,7 @@ const TodoGUIId = {
     LIST_ITEM_CARD_ASSIGNED_TO_TEXTFIELD: 'list_item_card_assigned_to_textfield',
 
     DELETE_LIST_POPUP: "delete_list_popup",
+    DELETE_LIST_POPUP_CONTENTS: "delete_list_popup_contents",
 
     //LIST_ITEM_CARD_DOWN_BUTTON: 'list_item_card_down_button',
     //LIST_ITEM_CARD_REMOVE_BUTTON: 'list_item_card_remove_button',

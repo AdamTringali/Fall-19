@@ -125,11 +125,25 @@ class TodoListModel {
     }
 
     showPopup() {
+        //setTimeout( this.view.showElementWithId(TodoGUIId.DELETE_LIST_POPUP, true), 3000);
         this.view.showElementWithId(TodoGUIId.DELETE_LIST_POPUP, true);
+       // document.getElementById(TodoGUIId.DELETE_LIST_POPUP_CONTENTS).style.visibility = "visible";
+//        document.getElementById(TodoGUIId.DELETE_LIST_POPUP_CONTENTS).style.transform = "translateX(60%)";
+        setTimeout(function(){
+            document.getElementById(TodoGUIId.DELETE_LIST_POPUP_CONTENTS).style.transform = "translateX(-60%)";
+                }, 50);
+
+        
     }
 
+
     closePopup() {
+        setTimeout(function(){
+            document.getElementById(TodoGUIId.DELETE_LIST_POPUP_CONTENTS).style.transform = "translateX(100%)";
+                }, 1000);
         this.view.showElementWithId(TodoGUIId.DELETE_LIST_POPUP, false);
+
+            
     }
 
     /**
@@ -184,6 +198,19 @@ class TodoListModel {
      */
     loadNewList() {
         this.listToEdit = new TodoList();
+        let count = 1;
+        for (let i = 0; i < this.todoLists.length; i++) {
+            let testList = this.todoLists[i]; 
+            if (testList.getName() === this.listToEdit.getName()) {
+                count += 1;
+            }
+        }
+
+        console.log("count loadnewlist: " + this.listToEdit.getCount());
+        console.log("count of name: " + this.listToEdit.getName() + " : " + count);
+        this.listToEdit.setConut(count);
+
+
         this.prependList(this.listToEdit);
         this.view.loadListData(this.listToEdit);
     }
@@ -196,14 +223,36 @@ class TodoListModel {
      */
     loadList(listName) {
         // FIRST FIND THE LIST WITH THE GIVEN NAME
+        let count = 0;
+        console.log("count start : " + count) + " : ";
         let listToLoad = null;
         for (let i = 0; i < this.todoLists.length; i++) {
             let testList = this.todoLists[i]; 
             if (testList.getName() === listName) {
                 listToLoad = testList;
-                i = this.todoLists.length;
+                count += 1;
+               // i = this.todoLists.length;
             }
         }
+
+        if(count > 1)//2 lists with same name
+        {
+            console.log("double list same name");
+            let listToLoad = null;
+            for (let i = 0; i < this.todoLists.length; i++) {
+                let testList = this.todoLists[i]; 
+                if (testList.getName() === listName && testList.getCount() == count) {
+                    console.log("double list same name match");
+                    listToLoad = testList;
+                    //count += 1;
+                   // i = this.todoLists.length;
+                }
+            }
+        }
+
+
+
+        console.log("count end : " + count);
 
         if (listToLoad != null) {
             this.setListToEdit(listToLoad);
@@ -251,9 +300,17 @@ class TodoListModel {
         
         if (thisModel.isCurrentItemSortCriteria(ItemSortCriteria.SORT_BY_DUE_DATE_DECREASING) 
             || thisModel.isCurrentItemSortCriteria(ItemSortCriteria.SORT_BY_DUE_DATE_INCREASING)){
-                var num1 = item1.getDueDate().replace(/[^0-9 ]/g, "")
-                var num2 = item2.getDueDate().replace(/[^0-9 ]/g, "")
-                console.log("process sort by due date111");
+                var num1, num2;
+                if(thisModel.isCurrentItemSortCriteria(ItemSortCriteria.SORT_BY_DUE_DATE_DECREASING)){
+                    num1 = item2.getDueDate().replace(/[^0-9 ]/g, "");
+                    num2 = item1.getDueDate().replace(/[^0-9 ]/g, "");
+                }
+                else{
+                    num1 = item1.getDueDate().replace(/[^0-9 ]/g, "");
+                    num2 = item2.getDueDate().replace(/[^0-9 ]/g, "");
+                }
+               
+                console.log("process sort by due date111, num1 : " + num1 + ' num2: ' + num2);
                 if(parseInt(num1) < parseInt(num2)){
                     //console.log("process return -1");
                     return -1;
