@@ -216,11 +216,6 @@ class TodoListController {
 
   
 
-    processValidateInfo(){
-        console.log("process validateinfo");
-
-    }
-
     processSubmitItemChanges() {
         console.log("process submit");
 
@@ -235,7 +230,19 @@ class TodoListController {
 
         if(descriptionTextField.value == "" || assignedToTextField.value == "" || dueDate.value == ""){
             console.log("process :: empty");
-            window.todo.controller.processValidateInfo();
+            var item = new TodoListItem();
+            if(descriptionTextField.value != "")
+                item.setDescription(descriptionTextField.value);
+            if(assignedToTextField.value != "")
+                item.setAssignedTo(assignedToTextField.value);
+            if(dueDate.value != "")
+                item.setDueDate(dueDate.value);
+            item.setCompleted(checkbox.checked);
+            listBeingEdited.addItem(item);
+
+            window.todo.view.loadItems(listBeingEdited);
+            console.log("Ending edit item: " + item.isEditing());
+            window.todo.model.stopEditItem();
             return;
         }
 
