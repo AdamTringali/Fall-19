@@ -247,6 +247,30 @@ class TodoListModel {
             item1 = item2;
             item2 = temp;
         }
+        //SORT BY DUE DATE
+        
+        if (thisModel.isCurrentItemSortCriteria(ItemSortCriteria.SORT_BY_DUE_DATE_DECREASING) 
+            || thisModel.isCurrentItemSortCriteria(ItemSortCriteria.SORT_BY_DUE_DATE_INCREASING)){
+                var num1 = item1.getDueDate().replace(/[^0-9 ]/g, "")
+                var num2 = item2.getDueDate().replace(/[^0-9 ]/g, "")
+                console.log("process sort by due date111");
+                if(parseInt(num1) < parseInt(num2)){
+                    //console.log("process return -1");
+                    return -1;
+                
+                }
+                else if (parseInt(num1) > parseInt(num2)){
+                    //console.log("process item1 due date: " + item1.getDueDate().replace(/[^0-9 ]/g, ""));
+
+                    return 1;
+                }
+                else{   
+                    //console.log("process return 0");
+
+                    return 0;
+                }
+            }
+    
         // SORT BY ITEM DESCRIPTION
         if (thisModel.isCurrentItemSortCriteria(ItemSortCriteria.SORT_BY_TASK_INCREASING)
             || thisModel.isCurrentItemSortCriteria(ItemSortCriteria.SORT_BY_TASK_DECREASING)) {

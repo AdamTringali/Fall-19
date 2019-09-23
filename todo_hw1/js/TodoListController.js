@@ -151,6 +151,20 @@ class TodoListController {
         }
     }
 
+    processSortItemsByDueDate() {
+        console.log("process sort due date 222");
+        if(window.todo.model.isCurrentItemSortCriteria(ItemSortCriteria.SORT_BY_DUE_DATE_INCREASING) ){
+            window.todo.model.sortTasks(ItemSortCriteria.SORT_BY_DUE_DATE_DECREASING);
+            console.log("process sort decreasing");
+        }
+        else{
+            window.todo.model.sortTasks(ItemSortCriteria.SORT_BY_DUE_DATE_INCREASING);
+            console.log("process sort increasing");
+
+        }
+
+    }
+
     processConfirmDeleteList(){
         window.todo.model.removeList(window.todo.model.listToEdit);
         window.todo.model.closePopup();
@@ -200,8 +214,7 @@ class TodoListController {
        window.todo.model.goEditItem();
     }
 
-    processSortItemsByDueDate() {
-    }
+  
 
     processValidateInfo(){
         console.log("process validateinfo");
