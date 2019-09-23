@@ -167,7 +167,7 @@ class TodoListController {
 
     processConfirmDeleteList(){
         window.todo.model.removeList(window.todo.model.listToEdit);
-        window.todo.model.closePopup();
+        window.todo.model.closePopupConfirm();
         window.todo.model.goHome();    
     }
 
@@ -228,7 +228,45 @@ class TodoListController {
         var item = null;
         var i = 0;
 
-        if(descriptionTextField.value == "" || assignedToTextField.value == "" || dueDate.value == ""){
+
+
+        for (; i < listBeingEdited.numItems(); i++) {
+            item = listBeingEdited.getItemAtIndex(i);
+            if(item.isEditing() == true){
+                i = 5000
+                if(descriptionTextField.value != "")
+                    item.setDescription(descriptionTextField.value);
+                else   
+                    item.setDescription("Unknown");
+
+                if(assignedToTextField.value != "")
+                    item.setAssignedTo(assignedToTextField.value);
+                else
+                    item.setAssignedTo("Unknown");
+
+                if(dueDate.value != "")
+                    item.setDueDate(dueDate.value);
+                else   
+                    item.setDueDate("2019-09-23");
+
+                item.setEditing(false);
+                item.setCompleted(checkbox.checked);
+            }
+        }
+
+       /* for (; i < listBeingEdited.numItems(); i++) {
+            item = listBeingEdited.getItemAtIndex(i);
+            if(item.isEditing() == true){
+                i = 5000;
+                item.setDescription(descriptionTextField.value);
+                item.setAssignedTo(assignedToTextField.value);
+                item.setDueDate(dueDate.value);
+                item.setEditing(false);
+                item.setCompleted(checkbox.checked);
+            }
+        }*/
+
+        /*if(descriptionTextField.value == "" || assignedToTextField.value == "" || dueDate.value == ""){
             console.log("process :: empty");
             var item = new TodoListItem();
             if(descriptionTextField.value != "")
@@ -245,22 +283,6 @@ class TodoListController {
             window.todo.model.stopEditItem();
             return;
         }
-
-        
-
-        for (; i < listBeingEdited.numItems(); i++) {
-            item = listBeingEdited.getItemAtIndex(i);
-            if(item.isEditing() == true){
-                i = 5000;
-                item.setDescription(descriptionTextField.value);
-                item.setAssignedTo(assignedToTextField.value);
-                item.setDueDate(dueDate.value);
-                item.setEditing(false);
-                item.setCompleted(checkbox.checked);
-            }
-        }
-
-
         if(i == listBeingEdited.numItems()){
             console.log("process item not found?");
             var item = new TodoListItem();
@@ -269,7 +291,21 @@ class TodoListController {
             item.setDueDate(dueDate.value);
             item.setCompleted(checkbox.checked);      
             listBeingEdited.addItem(item);
+         }*/
+
+         if(i == listBeingEdited.numItems()){
+            console.log("process item not found?");
+            var item = new TodoListItem();
+             if(descriptionTextField.value != "")
+                item.setDescription(descriptionTextField.value);
+            if(assignedToTextField.value != "")
+                item.setAssignedTo(assignedToTextField.value);
+            if(dueDate.value != "")
+                item.setDueDate(dueDate.value);
+            item.setCompleted(checkbox.checked);   
+            listBeingEdited.addItem(item);
          }
+
         window.todo.view.loadItems(listBeingEdited);
         console.log("Ending edit item: " + item.isEditing());
         window.todo.model.stopEditItem();

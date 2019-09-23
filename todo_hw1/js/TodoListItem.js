@@ -15,7 +15,7 @@ class TodoListItem {
         this.description = "Unknown";
         this.assignedTo = "Unknown";
         this.completed = false;
-        this.dueDate = "2019-09-22";
+        this.dueDate = "2019-09-23";
         this.editing = false;
     }
 

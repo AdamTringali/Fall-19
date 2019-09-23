@@ -114,7 +114,7 @@ class TodoListView {
         this.setupCallback(removeButton, TodoHTML.ONCLICK, TodoCallback.PROCESS_DELETE_ITEM, itemArgs); 
 
         if(listItemIndex == 0){
-            console.log("process iiiindex item is 0; disable move up button");
+            //console.log("process iiiindex item is 0; disable move up button");
             //document.getElementById("list_item_card_up_button").style.backgroundColor = "var(--swatch-complementtwo)";
             upButton.style.backgroundColor = "var(--swatch-complementtwo)";
             //test.setAttribute("background-color", "var(--swatch-complementtwo)");
@@ -122,7 +122,7 @@ class TodoListView {
 
         if(listItemIndex == (window.todo.model.listToEdit.numItems() - 1))
         {
-            console.log("process iiindex is numItems. disable down button");
+            //console.log("process iiindex is numItems. disable down button");
             downButton.style.backgroundColor = "var(--swatch-complementtwo)";
         }
         
