@@ -5,7 +5,7 @@
  * This file provides responses for all user interface interactions.
  * 
  * @author McKilla Gorilla
- * @author ?
+ * @author Adam Tringali
  */
 class TodoListController {
     /**
@@ -105,9 +105,9 @@ class TodoListController {
      * @param {String} listName The name of the list to load into
      * the controls on the list screen.
      */
-    processEditList(listName) {
+    processEditList(listName, index) {
         // LOAD THE SELECTED LIST
-        window.todo.model.loadList(listName);
+        window.todo.model.loadList(listName, index);
 
         // CHANGE THE SCREEN
         window.todo.model.goList();
@@ -152,15 +152,11 @@ class TodoListController {
     }
 
     processSortItemsByDueDate() {
-        console.log("process sort due date 222");
         if(window.todo.model.isCurrentItemSortCriteria(ItemSortCriteria.SORT_BY_DUE_DATE_INCREASING) ){
             window.todo.model.sortTasks(ItemSortCriteria.SORT_BY_DUE_DATE_DECREASING);
-            console.log("process sort decreasing");
         }
         else{
             window.todo.model.sortTasks(ItemSortCriteria.SORT_BY_DUE_DATE_INCREASING);
-            console.log("process sort increasing");
-
         }
 
     }
@@ -176,20 +172,15 @@ class TodoListController {
     }
 
     processDeleteList() {
-        console.log("process delete list")
-        console.log("process showing popup" );
         window.todo.model.showPopup();
     }
 
     processEditItem(index) {
-        console.log("Process Edit Item: " + index);
-
         var dueDate = document.getElementById("edit_item_due_date");
         var assignedToTextField = document.getElementById("list_item_card_assigned_to_textfield");
         var descriptionTextField = document.getElementById("list_item_card_description_textfield");
         var checkbox = document.getElementById("list_item_card_completed");
         dueDate.setAttribute("type", "date");
-
 
         if(index >= 0){
             let listBeingEdited = window.todo.model.listToEdit;
@@ -210,14 +201,10 @@ class TodoListController {
             checkbox.checked = false;
         }
 
-        console.log("process :: " + descriptionTextField.value);
        window.todo.model.goEditItem();
     }
 
-  
-
     processSubmitItemChanges() {
-        console.log("process submit");
 
         let listBeingEdited = window.todo.model.listToEdit;
 
@@ -227,8 +214,6 @@ class TodoListController {
         var checkbox = document.getElementById("list_item_card_completed");
         var item = null;
         var i = 0;
-
-
 
         for (; i < listBeingEdited.numItems(); i++) {
             item = listBeingEdited.getItemAtIndex(i);
@@ -254,47 +239,7 @@ class TodoListController {
             }
         }
 
-       /* for (; i < listBeingEdited.numItems(); i++) {
-            item = listBeingEdited.getItemAtIndex(i);
-            if(item.isEditing() == true){
-                i = 5000;
-                item.setDescription(descriptionTextField.value);
-                item.setAssignedTo(assignedToTextField.value);
-                item.setDueDate(dueDate.value);
-                item.setEditing(false);
-                item.setCompleted(checkbox.checked);
-            }
-        }*/
-
-        /*if(descriptionTextField.value == "" || assignedToTextField.value == "" || dueDate.value == ""){
-            console.log("process :: empty");
-            var item = new TodoListItem();
-            if(descriptionTextField.value != "")
-                item.setDescription(descriptionTextField.value);
-            if(assignedToTextField.value != "")
-                item.setAssignedTo(assignedToTextField.value);
-            if(dueDate.value != "")
-                item.setDueDate(dueDate.value);
-            item.setCompleted(checkbox.checked);
-            listBeingEdited.addItem(item);
-
-            window.todo.view.loadItems(listBeingEdited);
-            console.log("Ending edit item: " + item.isEditing());
-            window.todo.model.stopEditItem();
-            return;
-        }
-        if(i == listBeingEdited.numItems()){
-            console.log("process item not found?");
-            var item = new TodoListItem();
-            item.setDescription(descriptionTextField.value);
-            item.setAssignedTo(assignedToTextField.value);
-            item.setDueDate(dueDate.value);
-            item.setCompleted(checkbox.checked);      
-            listBeingEdited.addItem(item);
-         }*/
-
          if(i == listBeingEdited.numItems()){
-            console.log("process item not found?");
             var item = new TodoListItem();
              if(descriptionTextField.value != "")
                 item.setDescription(descriptionTextField.value);
@@ -307,33 +252,26 @@ class TodoListController {
          }
 
         window.todo.view.loadItems(listBeingEdited);
-        console.log("Ending edit item: " + item.isEditing());
         window.todo.model.stopEditItem();
     }
 
     processCancelItemChanges() {
         let listBeingEdited = window.todo.model.listToEdit;
         var test = (listBeingEdited.getItemAtIndex(0));
-        test.setEditing(false);
-
-        console.log("Ending edit item: " + test.isEditing());
+        if(test != null)
+            test.setEditing(false);
 
         window.todo.model.stopEditItem();
     }
 
     processChangeItem() {
-        console.log("process changeitem: ");
         window.todo.controller.processEditItem();
-
     }
 
     processDeleteItem(index) {
-        console.log("Process Deleteitem: " + index);
         event.stopPropagation();
         let listBeingEdited = window.todo.model.listToEdit;
-        //listBeingEdited.getItemAtIndex(index);
         if(index >= 0 && index < listBeingEdited.numItems()){
-            console.log("process delete item test pass. deleting item");
             listBeingEdited.removeItem(listBeingEdited.getItemAtIndex(index));
         }
         window.todo.view.loadItems(listBeingEdited);
@@ -341,9 +279,7 @@ class TodoListController {
 
     processMoveItemUp(index) {
         event.stopPropagation();
-        console.log("Process Move item up: " + index);
         if(index == 0){
-            console.log("process iindex is 0. Unable to move item up");
             return;
         }
         this.swapItems(index, 2);
@@ -351,12 +287,9 @@ class TodoListController {
 
     processMoveItemDown(index) {
         event.stopPropagation();
-        console.log("Process Move item down: " + index);
         let listBeingEdited = window.todo.model.listToEdit;
-        //console.log("process numitems: " + listBeingEdited.numItems());
         if(++index == listBeingEdited.numItems())
         {
-            console.log("process index is numItems. Unable to move item down");
             return;
         }
 
@@ -389,7 +322,5 @@ class TodoListController {
         t2.setCompleted(compl);
 
         window.todo.view.loadItems(listBeingEdited);
-
     }
-
 }

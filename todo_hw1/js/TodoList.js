@@ -5,7 +5,7 @@
  * This class represents a list with all the items in our todo list.
  * 
  * @author McKilla Gorilla
- * @author ?
+ * @author Adam Tringali
  */
 class TodoList {
     /**

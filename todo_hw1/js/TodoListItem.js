@@ -5,7 +5,7 @@
  * This class represents an item for our list.
  * 
  * @author McKilla Gorilla
- * @author ?
+ * @author Adam Tringali
  */
 class TodoListItem {
     /**
@@ -34,8 +34,6 @@ class TodoListItem {
     }
 
     setDueDate(initDueDate) {
-        //console.log("TodoListItem:28//setDueDate: " + initDueDate);
-
         this.dueDate = initDueDate;
     }
 
@@ -44,7 +42,6 @@ class TodoListItem {
     }
 
     setDescription(initDescription) {
-        //console.log("TodoListItem:36//setDescription: " + initDescription);
         this.description = initDescription;
     }
 
@@ -53,8 +50,6 @@ class TodoListItem {
     }
 
     setAssignedTo(initAssignedTo) {
-        //console.log("TodoListItem:47//setAssignedTo: " + initAssignedTo);
-
         this.assignedTo = initAssignedTo;
     }
 

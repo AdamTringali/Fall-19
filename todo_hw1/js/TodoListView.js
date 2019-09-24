@@ -6,7 +6,7 @@
  * for loading data into our controls and building other UI controls.
  * 
  * @author McKilla Gorilla
- * @author ?
+ * @author Adam Tringali
  */
 class TodoListView {
     /**
@@ -102,38 +102,22 @@ class TodoListView {
         downButton.setAttribute("src", "images/icons/MoveDown.png");
         this.setupCallback(downButton, TodoHTML.ONCLICK, TodoCallback.PROCESS_MOVE_ITEM_DOWN, itemArgs);       
 
-
-        //let removeButton = document.createElement(TodoHTML.DIV);
-        //removeButton.setAttribute(TodoHTML.CLASS, TodoGUIClass.LIST_ITEM_CARD_REMOVE_BUTTON);
         var removeButton = document.createElement("img");
         removeButton.setAttribute(TodoHTML.CLASS, TodoGUIClass.LIST_ITEM_CARD_REMOVE_BUTTON);
-        //t.setAttribute("id", "list_item_card_remove_button");
-        
         removeButton.setAttribute("src", "images/icons/Close48.png");
-        //removeButton.setAttribute("class", "image-blurred-edge");
         this.setupCallback(removeButton, TodoHTML.ONCLICK, TodoCallback.PROCESS_DELETE_ITEM, itemArgs); 
 
-        if(listItemIndex == 0){
-            //console.log("process iiiindex item is 0; disable move up button");
-            //document.getElementById("list_item_card_up_button").style.backgroundColor = "var(--swatch-complementtwo)";
+        if(listItemIndex == 0)
             upButton.style.backgroundColor = "var(--swatch-complementtwo)";
-            //test.setAttribute("background-color", "var(--swatch-complementtwo)");
-        }
-
+        
         if(listItemIndex == (window.todo.model.listToEdit.numItems() - 1))
-        {
-            //console.log("process iiindex is numItems. disable down button");
             downButton.style.backgroundColor = "var(--swatch-complementtwo)";
-        }
+        
         
         moveButtons.appendChild(upButton);
         moveButtons.appendChild(downButton);
         moveButtons.appendChild(removeButton);
-
         newItemDiv.appendChild(moveButtons);
-
-
-
         return newItemDiv;
     }
         
@@ -179,14 +163,14 @@ class TodoListView {
      * 
      * @param {String} listName Name of the list to appear in the link.
      */
-    buildListLink(listName) {
+    buildListLink(listName, index) {
         let newA = document.createElement(TodoHTML.A);
         newA.setAttribute(TodoHTML.CLASS, TodoGUIClass.HOME_LIST_LINK);
         newA.setAttribute('href', '#');
         newA.innerHTML = listName;
         let br = document.createElement(TodoHTML.BR);
         newA.appendChild(br);
-        let callbackArguments = [listName];
+        let callbackArguments = [listName, index];
         this.setupCallback(newA, TodoHTML.ONCLICK, TodoCallback.PROCESS_EDIT_LIST, callbackArguments);
         return newA;
     }
@@ -253,7 +237,7 @@ class TodoListView {
     appendListLink(listToAppend) {
         let yourListsList = document.getElementById(TodoGUIId.HOME_YOUR_LISTS_LIST);
         let listName = listToAppend.getName();
-        let newA = this.buildListLink(listName);
+        let newA = this.buildListLink(listName, listToAppend.getCount());
         yourListsList.appendChild(newA);
         let newBr = document.createElement(TodoHTML.BR);
         yourListsList.appendChild(newBr);

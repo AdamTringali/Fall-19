@@ -12,6 +12,7 @@
  * when suitable.
  * 
  * @author McKilla Gorilla
+ * @author Adam Tringali
  */
 
 /**

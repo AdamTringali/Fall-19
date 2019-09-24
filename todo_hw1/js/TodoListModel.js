@@ -17,7 +17,7 @@
  * inside the view of the page.
  * 
  * @author McKilla Gorilla
- * @author ?
+ * @author Adam Tringali
  */
 class TodoListModel {
     /**
@@ -125,41 +125,28 @@ class TodoListModel {
     }
 
     showPopup() {
-        //setTimeout( this.view.showElementWithId(TodoGUIId.DELETE_LIST_POPUP, true), 3000);
         this.view.showElementWithId(TodoGUIId.DELETE_LIST_POPUP, true);
-       // document.getElementById(TodoGUIId.DELETE_LIST_POPUP_CONTENTS).style.visibility = "visible";
-//        document.getElementById(TodoGUIId.DELETE_LIST_POPUP_CONTENTS).style.transform = "translateX(60%)";
         setTimeout(function(){
             document.getElementById(TodoGUIId.DELETE_LIST_POPUP_CONTENTS).style.transform = "translateX(-60%)";
                 }, 50);
-
-        
     }
 
     closePopupConfirm(){
+        document.getElementById(TodoGUIId.DELETE_LIST_POPUP_CONTENTS).style.transform = "translateX(100%)";
         window.todo.view.showElementWithId(TodoGUIId.DELETE_LIST_POPUP, false);
     }
 
-
     closePopup() {
 
-        setTimeout(this.doThis(), 50);
-            
-        //document.getElementById(TodoGUIId.DELETE_LIST_POPUP_CONTENTS).style.transform = "translateX(-60%)";
-        //this.view.showElementWithId(TodoGUIId.DELETE_LIST_POPUP, false);
-        //document.getElementById(TodoGUIId.DELETE_LIST_POPUP).style.visibility = "hidden";
+        setTimeout(function(){        
+            document.getElementById(TodoGUIId.DELETE_LIST_POPUP_CONTENTS).style.transform = "translateX(100%)";
+                }, 50);
 
         setTimeout(function(){
             window.todo.view.showElementWithId(TodoGUIId.DELETE_LIST_POPUP, false);
         }, 1200);
 
             
-    }
-
-    doThis(){
-        document.getElementById(TodoGUIId.DELETE_LIST_POPUP_CONTENTS).style.transform = "translateX(100%)";
-        //this.view.showElementWithId(TodoGUIId.DELETE_LIST_POPUP_CONTENTS, false);
-
     }
 
     /**
@@ -218,19 +205,15 @@ class TodoListModel {
      */
     loadNewList() {
         this.listToEdit = new TodoList();
-        let count = 1;
+        var count = 1;
         for (let i = 0; i < this.todoLists.length; i++) {
             let testList = this.todoLists[i]; 
             if (testList.getName() === this.listToEdit.getName()) {
-                count += 1;
+                //console.log("print increment count");
+                count++;
             }
         }
-
-        //console.log("count loadnewlist: " + this.listToEdit.getCount());
-        //console.log("count of name: " + this.listToEdit.getName() + " : " + count);
         this.listToEdit.setConut(count);
-
-
         this.prependList(this.listToEdit);
         this.view.loadListData(this.listToEdit);
     }
@@ -241,17 +224,15 @@ class TodoListModel {
      * 
      * @param {String} listName The name of the list to load.
      */
-    loadList(listName) {
+    loadList(listName, index) {
         // FIRST FIND THE LIST WITH THE GIVEN NAME
         let count = 0;
-        //console.log("count start : " + count) + " : ";
         let listToLoad = null;
         for (let i = 0; i < this.todoLists.length; i++) {
             let testList = this.todoLists[i]; 
-            if (testList.getName() === listName) {
+            if (testList.getName() === listName ) {
                 listToLoad = testList;
                 count += 1;
-               // i = this.todoLists.length;
             }
         }
 
@@ -261,7 +242,7 @@ class TodoListModel {
             let listToLoad = null;
             for (let i = 0; i < this.todoLists.length; i++) {
                 let testList = this.todoLists[i]; 
-                if (testList.getName() === listName && testList.getCount() == count) {
+                if (testList.getName() === listName && testList.getCount() === index) {
                     //console.log("double list same name match");
                     listToLoad = testList;
                     //count += 1;
@@ -269,11 +250,6 @@ class TodoListModel {
                 }
             }
         }
-
-
-
-        //console.log("count end : " + count);
-
         if (listToLoad != null) {
             this.setListToEdit(listToLoad);
         }
@@ -329,21 +305,15 @@ class TodoListModel {
                     num1 = item1.getDueDate().replace(/[^0-9 ]/g, "");
                     num2 = item2.getDueDate().replace(/[^0-9 ]/g, "");
                 }
-               
-                //console.log("process sort by due date111, num1 : " + num1 + ' num2: ' + num2);
+    
                 if(parseInt(num1) < parseInt(num2)){
-                    //console.log("process return -1");
                     return -1;
                 
                 }
                 else if (parseInt(num1) > parseInt(num2)){
-                    //console.log("process item1 due date: " + item1.getDueDate().replace(/[^0-9 ]/g, ""));
-
                     return 1;
                 }
                 else{   
-                    //console.log("process return 0");
-
                     return 0;
                 }
             }
