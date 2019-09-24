@@ -218,6 +218,8 @@ class TodoListController {
         for (; i < listBeingEdited.numItems(); i++) {
             item = listBeingEdited.getItemAtIndex(i);
             if(item.isEditing() == true){
+                console.log("process should be not be here, isediting" + item.isEditing());
+
                 i = 5000
                 if(descriptionTextField.value != "")
                     item.setDescription(descriptionTextField.value);
@@ -240,7 +242,7 @@ class TodoListController {
         }
 
          if(i == listBeingEdited.numItems()){
-            var item = new TodoListItem();
+             var item = new TodoListItem();
              if(descriptionTextField.value != "")
                 item.setDescription(descriptionTextField.value);
             if(assignedToTextField.value != "")
@@ -257,9 +259,12 @@ class TodoListController {
 
     processCancelItemChanges() {
         let listBeingEdited = window.todo.model.listToEdit;
-        var test = (listBeingEdited.getItemAtIndex(0));
-        if(test != null)
-            test.setEditing(false);
+        var item = null;
+        var i = 0;
+        for (; i < listBeingEdited.numItems(); i++) {
+            item = listBeingEdited.getItemAtIndex(i);
+            item.setEditing(false);
+        }
 
         window.todo.model.stopEditItem();
     }
