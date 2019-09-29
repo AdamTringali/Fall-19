@@ -1,3 +1,18 @@
 
 *.zip
 sandbox_hw2/public/manifest.json
+sandbox_hw2/package-lock.json
+sandbox_hw2/package.json
+sandbox_hw2/public/favicon.ico
+sandbox_hw2/public/index.html
+sandbox_hw2/public/logo192.png
+sandbox_hw2/public/logo512.png
+sandbox_hw2/public/robots.txt
+sandbox_hw2/README.md
+sandbox_hw2/src/App.css
+sandbox_hw2/src/App.js
+sandbox_hw2/src/App.test.js
+sandbox_hw2/src/index.css
+sandbox_hw2/src/index.js
+sandbox_hw2/src/logo.svg
+sandbox_hw2/src/serviceWorker.js
