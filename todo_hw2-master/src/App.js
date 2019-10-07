@@ -25,8 +25,8 @@ class App extends Component {
   loadList = (todoListToLoad) => {
     this.setState({currentScreen: AppScreen.LIST_SCREEN});
     this.setState({currentList: todoListToLoad});
-    console.log("currentList: " + this.state.currentList);
-    console.log("currentScreen: " + this.state.currentScreen);
+    /*console.log("currentList: " + this.state.currentList);
+    console.log("currentScreen: " + this.state.currentScreen);*/
   }
 
   /*setListName= (e) => {
@@ -41,8 +41,56 @@ setListOwner = (list) => {
 
 setListName = (todoListToChange) => {
     console.log(todoListToChange.target.value);
-    //this.state.todoList.name = "asd";
-    //this.setState({owner: todoListToChange.target.value});
+    let cpy = [...this.state.todoLists];
+
+   
+
+
+
+    //this.setState({todoLists : cpy});
+}
+
+moveUp() {
+  console.log("moveup method app.js");
+}
+
+moveDown() {
+  console.log("moveDown app.js");
+}
+
+removeItem() {
+  console.log("removeitem app.js");
+}
+
+editItem = (e) => {
+  e.stopPropigation();
+  console.log("edititem app.js");
+  this.addItem();
+
+  var descriptiontf = document.getElementById("item_assigned_to_textfield");  
+  descriptiontf.innerHTML = "asd";
+}
+
+addItem = () => {
+  console.log("additem app.js");
+  this.setState({currentScreen: AppScreen.ITEM_SCREEN});
+  //this.setState({currentList: null});
+    //this.setState({currentList: todoListToLoad});
+}
+
+cancelItemChange = () =>{
+  console.log("cancelitemchange app.js");
+  this.setState({currentScreen: AppScreen.LIST_SCREEN});
+
+  //this.loadList(todoListToLoad);
+}
+
+submitItemChange = () =>{
+  console.log("submititemchange app.js");
+}
+
+createNewList(){
+  console.log("create new list app.js");
 }
 
 
@@ -51,15 +99,22 @@ setListName = (todoListToChange) => {
       case AppScreen.HOME_SCREEN:
         return <HomeScreen 
         loadList={this.loadList.bind(this)} 
-        todoLists={this.state.todoLists} />;
+        todoLists={this.state.todoLists} 
+        createNewList={this.createNewList} />;
       case AppScreen.LIST_SCREEN:            
         return <ListScreen
           goHome={this.goHome.bind(this)}
           todoList={this.state.currentList} 
           setListName={this.setListName}
-/>;
+          moveUp={this.moveUp}
+          moveDown={this.moveDown}
+          removeItem={this.removeItem}
+          addItem={this.addItem}  
+          editItem={this.editItem} />;
       case AppScreen.ITEM_SCREEN:
-        return <ItemScreen />;
+        return <ItemScreen 
+          cancelItemChange={this.cancelItemChange}
+          submitItemChange={this.submitItemChange} />;
       default:
         return <div>ERROR</div>;
     }

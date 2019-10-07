@@ -49,13 +49,19 @@ export class ListScreen extends Component {
                         <span id="list_owner_prompt">Owner:</span>
                         <input 
                             defaultValue={this.getListOwner()}
-                            onChange={e => this.setState({ text: e.target.value })}                            type="text" 
+                            onChange={e => this.setState({ text: e.target.value })} type="text" 
                             id="list_owner_textfield" 
                             
                             />
                     </div>
                 </div>
-                <ListItemsTable todoList={this.props.todoList} />
+                <ListItemsTable todoList={this.props.todoList} 
+                moveUp={this.props.moveUp}
+                moveDown={this.props.moveDown}
+                removeItem={this.props.removeItem}
+                addItem={this.props.addItem}
+                editItem={this.props.editItem}
+                />
             </div>
         )
     }
