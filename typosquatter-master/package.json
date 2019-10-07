@@ -1,0 +1,19 @@
+{
+  "name": "typosquatter",
+  "version": "1.0.0",
+  "description": "CSE 331 Project 4: Distributed Typosquatting Detector",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kennliang/typosquatter.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kennliang/typosquatter/issues"
+  },
+  "homepage": "https://github.com/kennliang/typosquatter#readme"
+}
