@@ -29,6 +29,23 @@ class App extends Component {
     console.log("currentScreen: " + this.state.currentScreen);
   }
 
+  /*setListName= (e) => {
+    console.log("setListName from app.js");
+    //return "asdasd";
+    //this.props.todoList.name = e;
+}
+
+setListOwner = (list) => {
+    console.log("setListOwner from app.js" + list.owner);
+}*/
+
+setListName = (todoListToChange) => {
+    console.log(todoListToChange.target.value);
+    //this.state.todoList.name = "asd";
+    //this.setState({owner: todoListToChange.target.value});
+}
+
+
   render() {
     switch(this.state.currentScreen) {
       case AppScreen.HOME_SCREEN:
@@ -38,7 +55,9 @@ class App extends Component {
       case AppScreen.LIST_SCREEN:            
         return <ListScreen
           goHome={this.goHome.bind(this)}
-          todoList={this.state.currentList} />;
+          todoList={this.state.currentList} 
+          setListName={this.setListName}
+/>;
       case AppScreen.ITEM_SCREEN:
         return <ItemScreen />;
       default:

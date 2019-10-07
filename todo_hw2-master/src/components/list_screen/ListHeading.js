@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 export class ListHeading extends Component {
     render() {
         return (
-            <div id="list_heading"
+            <div id="list_heading" className="list_heading"
                 onClick={this.props.goHome}
             >   @todo
             </div>
