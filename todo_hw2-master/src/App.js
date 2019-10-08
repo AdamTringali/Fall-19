@@ -16,6 +16,7 @@ class App extends Component {
   state = {
     currentScreen: AppScreen.HOME_SCREEN,
     todoLists: testTodoListData.todoLists,
+    addItem: ItemScreen.state,
     currentList: null
   }
 
@@ -27,6 +28,7 @@ class App extends Component {
   loadList = (todoListToLoad) => {
     this.setState({currentScreen: AppScreen.LIST_SCREEN});
     this.setState({currentList: todoListToLoad});
+    console.log("thislist: " + todoListToLoad.name);
     /*console.log("currentList: " + this.state.currentList);
     console.log("currentScreen: " + this.state.currentScreen);*/
   }
@@ -60,11 +62,12 @@ moveUp = (listItem) => {
   var found; 
   for(; indx < cpy.length; indx++)
   {
-    if(cpy[indx].items[listItem.key].description === listItem.description){
-      item = cpy[indx].items[listItem.key];
-      found = indx;
-      indx = cpy.length;
-    }
+    if(cpy[indx].items.length > listItem.key)
+      if(cpy[indx].items[listItem.key].description === listItem.description){
+        item = cpy[indx].items[listItem.key];
+        found = indx;
+        indx = cpy.length;
+      }
   }
 
   console.log(item.description);
@@ -100,11 +103,12 @@ moveDown = (listItem) => {
   var found; 
   for(; indx < cpy.length; indx++)
   {
-    if(cpy[indx].items[listItem.key].description === listItem.description){
-      item = cpy[indx].items[listItem.key];
-      found = indx;
-      indx = cpy.length;
-    }
+    if(cpy[indx].items.length > listItem.key)
+      if(cpy[indx].items[listItem.key].description === listItem.description){
+        item = cpy[indx].items[listItem.key];
+        found = indx;
+        indx = cpy.length;
+      }
   }
 
   console.log(item.description);
@@ -140,7 +144,7 @@ removeItem = (listItem) => {
   for(; indx < cpy.length; indx++)
   {
     console.log("key : " + listItem.key + "index: " + indx);
-    if(cpy[indx].item.length > listItem.key)
+    if(cpy[indx].items.length > listItem.key)
       if(cpy[indx].items[listItem.key].description === listItem.description){
         item = cpy[indx].items[listItem.key];
         found = indx;
@@ -165,10 +169,17 @@ removeItem = (listItem) => {
 editItem = (itemToEdit) => {
   //event.stopPropagation();
   console.log("edititem app.js : " + itemToEdit.description);
+  const newTodo = {
+    key: 5,
+    description: "asd",
+    due_date: "",
+    assigned_to: "item.assign",
+    completed: "item.compl"
+  }
+  this.setState({addItem: newTodo });
+
   this.addItem();
 
-  var descriptiontf = document.getElementById("item_assigned_to_textfield");  
-  console.log("descriptiontf appjs: " + descriptiontf);
 }
 
 addItem = () => {
@@ -181,6 +192,7 @@ addItem = () => {
 cancelItemChange = () =>{
   console.log("cancelitemchange app.js");
   this.setState({currentScreen: AppScreen.LIST_SCREEN});
+  console.log("todolists: " + this.props.todoLists);
 
   //this.loadList(todoListToLoad);
 }
@@ -189,17 +201,21 @@ submitItemChange = (item) =>{
   console.log("submititemchange app.js");
   //item.getElementById("item_description_textfield");
   console.log(item);
-  console.log(this.props.currentList);
+  console.log("todolists: " + this.props.todoLists);
+  console.log("currentList: " + this.state.currentList.items.length);
   
   const newTodo = {
-    key: 5,
-    description: item,
-    due_date: "00-00-0000",
-    assigned_to: "rick",
-    completed: false
+    key: this.state.currentList.items.length,
+    description: item.descrip,
+    due_date: item.dued,
+    assigned_to: item.assign,
+    completed: item.compl
   }
 
-  this.setState({currentList: [...this.state.currentList.items, newTodo]  });
+  this.state.currentList.items.push(newTodo);
+  //this.setState({currentList: [...this.state.currentList.items, newTodo]  });
+  this.setState({currentScreen: AppScreen.LIST_SCREEN});
+
 }
 
 createNewList(){
@@ -209,8 +225,20 @@ createNewList(){
 setTextFieldPrompt = (item) =>{
   //document.getElementById(item).innerHTML = "asdasd";
   //this.setState({ value: "asdasd22"});
-
   
+}
+
+setMyStateTwo = () =>{
+  console.log("setmystateTwo");
+  const newTodo = {
+    key: 5,
+    description: "asd",
+    due_date: "",
+    assigned_to: "item.assign",
+    completed: "item.compl"
+  }
+
+  return newTodo;
 }
 
 
@@ -236,7 +264,8 @@ setTextFieldPrompt = (item) =>{
         return <ItemScreen 
           cancelItemChange={this.cancelItemChange}
           submitItemChange={this.submitItemChange} 
-          setTextFieldPrompt={this.setTextFieldPrompt}/>;
+          setTextFieldPrompt={this.setTextFieldPrompt}
+          setMyStateTwo={this.setMyStateTwo}/>;
       default:
         return <div>ERROR</div>;
     }
