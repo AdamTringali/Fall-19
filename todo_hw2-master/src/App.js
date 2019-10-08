@@ -10,6 +10,8 @@ const AppScreen = {
   ITEM_SCREEN: "ITEM_SCREEN"
 }
 
+
+
 class App extends Component {
   state = {
     currentScreen: AppScreen.HOME_SCREEN,
@@ -29,46 +31,144 @@ class App extends Component {
     console.log("currentScreen: " + this.state.currentScreen);*/
   }
 
-  /*setListName= (e) => {
-    console.log("setListName from app.js");
-    //return "asdasd";
-    //this.props.todoList.name = e;
+ 
+
+setListOwner = (todoListToChange, val) => {
+    todoListToChange.owner = val.target.value;
+
 }
 
-setListOwner = (list) => {
-    console.log("setListOwner from app.js" + list.owner);
-}*/
-
-setListName = (todoListToChange) => {
-    console.log(todoListToChange.target.value);
-    let cpy = [...this.state.todoLists];
-
+setListName = (todoListToChange, val) => {
+    console.log(val.target.value);
+    console.log(todoListToChange.name);
+    todoListToChange.name = val.target.value;
+    /*let cpy = [...this.state.todoLists];
+    var indx = 0;
+    var item;
+    var found;*/ 
+    
    
-
-
-
     //this.setState({todoLists : cpy});
 }
 
-moveUp() {
+moveUp = (listItem) => {
   console.log("moveup method app.js");
+  //console.log(listItem.key)
+  let cpy = [...this.state.todoLists];
+  var indx = 0;
+  var item;
+  var found; 
+  for(; indx < cpy.length; indx++)
+  {
+    if(cpy[indx].items[listItem.key].description === listItem.description){
+      item = cpy[indx].items[listItem.key];
+      found = indx;
+      indx = cpy.length;
+    }
+  }
+
+  console.log(item.description);
+
+  if( listItem.key === 0)
+    console.log("first item");
+  else{
+    var desc = item.description;
+    var assign = item.assigned_to;
+    var due = item.due_date;
+    var compl = item.completed;
+    item.description = cpy[found].items[listItem.key-1].description;
+    item.assigned_to = cpy[found].items[listItem.key-1].assigned_to;
+    item.due_date = cpy[found].items[listItem.key-1].due_date;
+    item.completed = cpy[found].items[listItem.key-1].completed;
+    cpy[found].items[listItem.key-1].description = desc;
+    cpy[found].items[listItem.key-1].assigned_to = assign;
+    cpy[found].items[listItem.key-1].due_date = due;
+    cpy[found].items[listItem.key-1].completed = compl;
+    
+    this.setState({});
+  }
 }
 
-moveDown() {
+moveDown = (listItem) => {
   console.log("moveDown app.js");
+  console.log(listItem.description);
+  console.log(...this.state.todoLists);
+
+  let cpy = [...this.state.todoLists];
+  var indx = 0;
+  var item;
+  var found; 
+  for(; indx < cpy.length; indx++)
+  {
+    if(cpy[indx].items[listItem.key].description === listItem.description){
+      item = cpy[indx].items[listItem.key];
+      found = indx;
+      indx = cpy.length;
+    }
+  }
+
+  console.log(item.description);
+
+  if( (cpy[found].items.length-1) === listItem.key)
+    console.log("last item");
+  else{
+    var desc = item.description;
+    var assign = item.assigned_to;
+    var due = item.due_date;
+    var compl = item.completed;
+    item.description = cpy[found].items[listItem.key+1].description;
+    item.assigned_to = cpy[found].items[listItem.key+1].assigned_to;
+    item.due_date = cpy[found].items[listItem.key+1].due_date;
+    item.completed = cpy[found].items[listItem.key+1].completed;
+    cpy[found].items[listItem.key+1].description = desc;
+    cpy[found].items[listItem.key+1].assigned_to = assign;
+    cpy[found].items[listItem.key+1].due_date = due;
+    cpy[found].items[listItem.key+1].completed = compl;
+    
+    this.setState({});
+  }
+  
 }
 
-removeItem() {
+removeItem = (listItem) => {
+  //listItem.stopPropagation();
   console.log("removeitem app.js");
+  let cpy = [...this.state.todoLists];
+  var indx = 0;
+  var item;
+  var found; 
+  for(; indx < cpy.length; indx++)
+  {
+    console.log("key : " + listItem.key + "index: " + indx);
+    if(cpy[indx].item.length > listItem.key)
+      if(cpy[indx].items[listItem.key].description === listItem.description){
+        item = cpy[indx].items[listItem.key];
+        found = indx;
+        indx = cpy.length;
+      }
+  }
+  cpy[found].items.splice(listItem.key, 1);
+  console.log("removing item");
+  //cpy[found].numItems = cpy[found].numItems - 1;
+  console.log(cpy[found].items.length);
+  for(indx = 0; indx < cpy[found].items.length; indx++)
+  {
+    console.log(indx);
+    cpy[found].items[indx].key = indx;
+    this.setState({});
+
+  }
+  //listItem.key = -1;
+  this.setState({});
 }
 
-editItem = (e) => {
-  e.stopPropigation();
-  console.log("edititem app.js");
+editItem = (itemToEdit) => {
+  //event.stopPropagation();
+  console.log("edititem app.js : " + itemToEdit.description);
   this.addItem();
 
   var descriptiontf = document.getElementById("item_assigned_to_textfield");  
-  descriptiontf.innerHTML = "asd";
+  console.log("descriptiontf appjs: " + descriptiontf);
 }
 
 addItem = () => {
@@ -85,12 +185,32 @@ cancelItemChange = () =>{
   //this.loadList(todoListToLoad);
 }
 
-submitItemChange = () =>{
+submitItemChange = (item) =>{
   console.log("submititemchange app.js");
+  //item.getElementById("item_description_textfield");
+  console.log(item);
+  console.log(this.props.currentList);
+  
+  const newTodo = {
+    key: 5,
+    description: item,
+    due_date: "00-00-0000",
+    assigned_to: "rick",
+    completed: false
+  }
+
+  this.setState({currentList: [...this.state.currentList.items, newTodo]  });
 }
 
 createNewList(){
   console.log("create new list app.js");
+}
+
+setTextFieldPrompt = (item) =>{
+  //document.getElementById(item).innerHTML = "asdasd";
+  //this.setState({ value: "asdasd22"});
+
+  
 }
 
 
@@ -106,6 +226,7 @@ createNewList(){
           goHome={this.goHome.bind(this)}
           todoList={this.state.currentList} 
           setListName={this.setListName}
+          setListOwner={this.setListOwner}
           moveUp={this.moveUp}
           moveDown={this.moveDown}
           removeItem={this.removeItem}
@@ -114,7 +235,8 @@ createNewList(){
       case AppScreen.ITEM_SCREEN:
         return <ItemScreen 
           cancelItemChange={this.cancelItemChange}
-          submitItemChange={this.submitItemChange} />;
+          submitItemChange={this.submitItemChange} 
+          setTextFieldPrompt={this.setTextFieldPrompt}/>;
       default:
         return <div>ERROR</div>;
     }

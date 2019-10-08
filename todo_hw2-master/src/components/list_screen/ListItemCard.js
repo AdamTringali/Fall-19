@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 
 export class ListItemCard extends Component {
+
+
     render() {
         //console.log(this.props.listItem.completed.toString());
         let str = "";
@@ -21,12 +23,11 @@ export class ListItemCard extends Component {
         if(this.props.listItem.key === (--length))
             downButtoncss = "list_item_card_down_button_disabled";
 
-            
 
 
         return (
-            <div className='list_item_card' onClick={this.props.editItem}>
-                <div className='list_item_card_description'>
+            <div className='list_item_card' >
+                <div className='list_item_card_description' onClick={this.props.editItem.bind(this, this.props.listItem)}>
                     {this.props.listItem.description}
                 </div>
                 <div className='list_item_card_assigned_to'>
@@ -41,9 +42,9 @@ export class ListItemCard extends Component {
 
                 <div  className='list_item_card_buttons'>
                         
-                    <img src="./images/icons/MoveUp.png" className={upButtoncss} onClick={this.props.moveUp.bind(this)}/> 
-                    <img src="./images/icons/MoveDown.png" className={downButtoncss} onClick={this.props.moveDown}/> 
-                    <img src="./images/icons/Close48.png" className='list_item_card_remove_button' onClick={this.props.removeItem}/> 
+                    <img src="./images/icons/MoveUp.png" className={upButtoncss} onClick={this.props.moveUp.bind(this, this.props.listItem)}/> 
+                    <img src="./images/icons/MoveDown.png" className={downButtoncss} onClick={this.props.moveDown.bind(this, this.props.listItem)}/> 
+                    <img src="./images/icons/Close48.png" className='list_item_card_remove_button' onClick={this.props.removeItem.bind(this,this.props.listItem)}/> 
 
                 </div>
             </div>

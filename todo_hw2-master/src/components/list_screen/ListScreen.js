@@ -20,13 +20,6 @@ export class ListScreen extends Component {
         }
     }
 
-    setListOwner = (e) => {
-        //console.log("this + " + document.getElementById("list_owner_textfield").value);
-        //this.props.todoList.owner = e.target.value;
-        this.setState({name: e.target.value});
-        //this.props.todoList.owner = e.target.value;
-       // document.getElementById("list_owner_textfield") = e.target.value;
-    }
 
 
 
@@ -39,7 +32,7 @@ export class ListScreen extends Component {
                     <div id="list_details_name_container" className="text_toolbar">
                         <span id="list_name_prompt">Name:</span>
                         <input 
-                            onChange={this.props.setListName}
+                            onChange={this.props.setListName.bind(this, this.props.todoList)}
                             defaultValue={this.getListName()} 
                             type="text" 
                             id="list_name_textfield" 
@@ -49,7 +42,7 @@ export class ListScreen extends Component {
                         <span id="list_owner_prompt">Owner:</span>
                         <input 
                             defaultValue={this.getListOwner()}
-                            onChange={e => this.setState({ text: e.target.value })} type="text" 
+                            onChange={this.props.setListOwner.bind(this, this.props.todoList)} type="text" 
                             id="list_owner_textfield" 
                             
                             />
