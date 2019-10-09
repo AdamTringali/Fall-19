@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import ListHeading from './ListHeading'
 import ListItemsTable from './ListItemsTable'
 import ListTrash from './ListTrash'
+import ListDeletePopup from './ListDeletePopup'
 import PropTypes from 'prop-types';
 
 export class ListScreen extends Component {
@@ -20,6 +21,31 @@ export class ListScreen extends Component {
         }
     }
 
+    showModal = () => {
+        this.setState({ 
+            show: !this.state.show
+        })
+    }
+
+    deleteList = () => {
+        this.setState({show: !this.state.show});
+        this.props.deleteList();
+    }
+
+    dontDelete = () =>{
+        console.log("dontdeletelist listscreen.js");
+        this.setState({show: !this.state.show});
+    }
+
+    confirmDeleteList = () =>{
+        console.log("confirmdeletelist listscreen js");
+        this.props.confirmDeleteList();
+    }
+
+    state = {
+        show: false
+    }
+
 
 
 
@@ -27,7 +53,11 @@ export class ListScreen extends Component {
         return (
             <div id="todo_list">
                 <ListHeading goHome={this.props.goHome} />
-                <ListTrash />
+                <ListTrash deleteList={this.deleteList}/>
+                <ListDeletePopup show={this.state.show}
+                confirmDeleteList={this.confirmDeleteList}
+                dontDelete={this.dontDelete} />
+                
                 <div id="list_details_container">
                     <div id="list_details_name_container" className="text_toolbar">
                         <span id="list_name_prompt">Name:</span>
@@ -54,6 +84,9 @@ export class ListScreen extends Component {
                 removeItem={this.props.removeItem}
                 addItem={this.props.addItem}
                 editItem={this.props.editItem}
+                sortByTask={this.props.sortByTask}
+                sortByDueDate={this.props.sortByDueDate}
+                sortByStatus={this.props.sortByStatus}
                 />
             </div>
         )

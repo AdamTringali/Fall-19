@@ -190,6 +190,29 @@ font-size: 10pt;
 
 /* FOR A MODAL DIALOG */
 
+.delete_list_popup {
+  position: fixed; /* Stay in place */
+   z-index: 1; /* Sit on top */
+  padding-top: 210px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.delete_list_popup_content {
+ /* transition: transform 1s .5s; */
+ transition: ease-in-out;
+  transform: translateX(70%); 
+  display: grid;
+  /* float: right; */
+  background-color: var(--swatch-complement);
+  padding: 20px;
+  border: 1px solid #888;
+  width: 40%;
+}
+
 .modal { 
   position: fixed;
   top: 0;
@@ -202,8 +225,7 @@ font-size: 10pt;
   padding: 1rem;
   background: var(--black);
   cursor: pointer;
-  visibility: hidden;
-  opacity: 0;
+  opacity: 1;
   transition: all 0.35s ease-in;
 }
 

@@ -11,7 +11,6 @@ export class ItemScreen extends Component {
     }
 
 
-
     editItema = (item) => {
         console.log("imhere");
     }

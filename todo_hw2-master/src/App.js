@@ -16,7 +16,6 @@ class App extends Component {
   state = {
     currentScreen: AppScreen.HOME_SCREEN,
     todoLists: testTodoListData.todoLists,
-    addItem: ItemScreen.state,
     currentList: null
   }
 
@@ -222,9 +221,48 @@ createNewList(){
   console.log("create new list app.js");
 }
 
+deleteList = () => {
+  console.log("delete list appjs");
+}
+
+confirmDeleteList = () => {
+  console.log("confirm deletelist appjs");
+  console.log(this.state.currentList);
+
+    this.state.todoLists.splice(this.state.currentList.key, 1);
+    console.log("removing item");
+    let cpy = [...this.state.todoLists];
+    var indx = 0;
+    for(; indx < this.state.todoLists.length; indx++)
+    {
+      console.log(indx);
+      cpy[indx].key = indx;
+    }
+
+    this.goHome();
+}
+
+
+
 setTextFieldPrompt = (item) =>{
   //document.getElementById(item).innerHTML = "asdasd";
   //this.setState({ value: "asdasd22"});
+  
+}
+
+sortByDueDate = () =>{
+  console.log("sortByDueDate appjs");
+}
+
+sortByTask = () =>{
+  console.log("sortByTask appjs");
+}
+
+sortByStatus = () =>{
+  console.log("sortByStatus appjs");
+  //let cpy = [...this.state.todoLists];
+  //cpy[0].items.sort(cpy[0].items[0].status);
+
   
 }
 
@@ -259,7 +297,14 @@ setMyStateTwo = () =>{
           moveDown={this.moveDown}
           removeItem={this.removeItem}
           addItem={this.addItem}  
-          editItem={this.editItem} />;
+          editItem={this.editItem} 
+          deleteList={this.deleteList}
+          sortByTask={this.sortByTask}
+          sortByDueDate={this.sortByDueDate}
+          sortByStatus={this.sortByStatus}
+          confirmDeleteList={this.confirmDeleteList}
+          
+          />;
       case AppScreen.ITEM_SCREEN:
         return <ItemScreen 
           cancelItemChange={this.cancelItemChange}
