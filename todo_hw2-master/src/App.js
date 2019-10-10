@@ -217,13 +217,29 @@ submitItemChange = (item) =>{
 
 }
 
-createNewList(){
+createNewList= () =>{
   console.log("create new list app.js");
+  //this.setState({currentScreen: AppScreen.LIST_SCREEN});
+
+  let todos = this.state.todoLists;
+  console.log(todos.length);
+  const newTodo = {
+    key: todos.length,
+    items: [],
+    name: "AA",
+    owner: "23",
+  }
+  todos.push(newTodo);
+  this.setState({todoLists: todos});
+  //this.state.todoLists.push(newTodo);
+  //this.setState({todoLists: todoLists});
+  //this.setState({todoLists: newTodo});
+ // console.log("thislist: " + todoListToLoad.name);
 }
 
-deleteList = () => {
+/*deleteList = () => {
   console.log("delete list appjs");
-}
+}*/
 
 confirmDeleteList = () => {
   console.log("confirm deletelist appjs");
@@ -244,11 +260,11 @@ confirmDeleteList = () => {
 
 
 
-setTextFieldPrompt = (item) =>{
+/*setTextFieldPrompt = (item) =>{
   //document.getElementById(item).innerHTML = "asdasd";
   //this.setState({ value: "asdasd22"});
   
-}
+}*/
 
 sortByDueDate = () =>{
   console.log("sortByDueDate appjs");
@@ -266,7 +282,7 @@ sortByStatus = () =>{
   
 }
 
-setMyStateTwo = () =>{
+/*setMyStateTwo = () =>{
   console.log("setmystateTwo");
   const newTodo = {
     key: 5,
@@ -277,7 +293,7 @@ setMyStateTwo = () =>{
   }
 
   return newTodo;
-}
+}*/
 
 
   render() {

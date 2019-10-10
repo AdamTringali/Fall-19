@@ -202,9 +202,8 @@ font-size: 10pt;
 }
 
 .delete_list_popup_content {
- /* transition: transform 1s .5s; */
- transition: ease-in-out;
-  transform: translateX(70%); 
+  transition: transform 1s .5s; 
+ /*transition: ease-in-out;*/
   display: grid;
   /* float: right; */
   background-color: var(--swatch-complement);
