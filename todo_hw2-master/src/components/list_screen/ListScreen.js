@@ -21,37 +21,20 @@ export class ListScreen extends Component {
         }
     }
 
-    showModal = () => {
+    /*showModal = () => {
         this.setState({ 
             show: !this.state.show
         })
-    }
+    }*/
 
     deleteList = () => {
         this.setState({show: !this.state.show});
-        //this.props.deleteList();
     }
 
     dontDelete = () =>{
         console.log("dontdeletelist listscreen.js");
-        //this.setState({timeToClose: true});
-        //this.setState({style: "translateX(225%)"});
-        //this.setStyleClose();
-          
-                //this.setState({style: "translateX(60%)"})
-        this.setState({style: "translateX(225%)"});
-         
-
-        
-            //this.props.setStyle();
         this.setState({show: !this.state.show});
 
-
-    
-        //this.setState({style: "translateX(225%)"});
-        
-                
-//        this.setState({show: !this.state.show});
     }
 
 
@@ -60,22 +43,10 @@ export class ListScreen extends Component {
         this.props.confirmDeleteList();
     }
 
-    state = {
+   state = {
         show: false,
-        style: "translateX(225%)",
-        timeToClose: false
     }
 
-    setStyle = () => {
-        this.setState({style: "translateX(60%)"});
-    }
-
-    setStyleClose = () =>{
-        this.setState({style: "translateX(225%)"});
-        this.setState({timeToClose: false});
-
-
-    }
 
 
 
@@ -89,10 +60,7 @@ export class ListScreen extends Component {
                 <ListDeletePopup show={this.state.show}
                 confirmDeleteList={this.confirmDeleteList}
                 dontDelete={this.dontDelete} 
-                style={this.state.style}
-                timeToClose={this.state.timeToClose}
-                setStyle={this.setStyle}
-                setStyleClose={this.setStyleClose}/>
+                />
                 
                 <div id="list_details_container">
                     <div id="list_details_name_container" className="text_toolbar">

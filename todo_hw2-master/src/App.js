@@ -10,6 +10,14 @@ const AppScreen = {
   ITEM_SCREEN: "ITEM_SCREEN"
 }
 
+const newTodo = {
+  key: -1,
+  description: "",
+  due_date: "",
+  assigned_to: "",
+  completed: ""
+}
+
 
 
 class App extends Component {
@@ -165,20 +173,29 @@ removeItem = (listItem) => {
   this.setState({});
 }
 
+
 editItem = (itemToEdit) => {
   //event.stopPropagation();
   console.log("edititem app.js : " + itemToEdit.description);
-  const newTodo = {
-    key: 5,
-    description: "asd",
-    due_date: "",
-    assigned_to: "item.assign",
-    completed: "item.compl"
-  }
-  this.setState({addItem: newTodo });
+
+  newTodo.description = itemToEdit.description;
+  newTodo.assigned_to = itemToEdit.assigned_to;
+  newTodo.due_date = itemToEdit.due_date;
+  newTodo.completed = itemToEdit.completed;
+  newTodo.key = itemToEdit.key;
+
+  console.log("key app.js: " + newTodo.key); 
+
+  //this.setState({: newTodo });
 
   this.addItem();
 
+  //this.resetItem();
+
+}
+
+resetItem(){
+  newTodo.key = -1;
 }
 
 addItem = () => {
@@ -192,28 +209,46 @@ cancelItemChange = () =>{
   console.log("cancelitemchange app.js");
   this.setState({currentScreen: AppScreen.LIST_SCREEN});
   console.log("todolists: " + this.props.todoLists);
-
+  this.resetItem();
   //this.loadList(todoListToLoad);
 }
 
 submitItemChange = (item) =>{
   console.log("submititemchange app.js");
   //item.getElementById("item_description_textfield");
-  console.log(item);
+  console.log("item key: " + item.key);
   console.log("todolists: " + this.props.todoLists);
   console.log("currentList: " + this.state.currentList.items.length);
-  
-  const newTodo = {
-    key: this.state.currentList.items.length,
-    description: item.descrip,
-    due_date: item.dued,
-    assigned_to: item.assign,
-    completed: item.compl
-  }
 
-  this.state.currentList.items.push(newTodo);
+  if(item.key === -1){
+    //CREAING A NEW ITEM
+    const newTodo = {
+      key: this.state.currentList.items.length,
+      description: item.descrip,
+      due_date: item.dued,
+      assigned_to: item.assign,
+      completed: item.compl
+    }
+    this.state.currentList.items.push(newTodo);
+  }else{
+    //MODIFYING AN EXISTING ITEM
+    //console.log("current todoList " + this.state.currentList.items;
+    let newItem = this.state.currentList.items[item.key];
+    newItem.description = item.descrip;
+    newItem.assigned_to = item.assign;
+    newItem.due_date = item.dued;
+    newItem.completed = item.compl;
+    console.log("oldItem name: " + newItem.description);
+    console.log("newitem name: " + item.descrip)
+
+  }
+  
+  
+ 
+
   //this.setState({currentList: [...this.state.currentList.items, newTodo]  });
   this.setState({currentScreen: AppScreen.LIST_SCREEN});
+  this.resetItem();
 
 }
 
@@ -326,7 +361,8 @@ sortByStatus = () =>{
           cancelItemChange={this.cancelItemChange}
           submitItemChange={this.submitItemChange} 
           setTextFieldPrompt={this.setTextFieldPrompt}
-          setMyStateTwo={this.setMyStateTwo}/>;
+          setMyStateTwo={this.setMyStateTwo}
+          itemToEdit={newTodo}/>;
       default:
         return <div>ERROR</div>;
     }
