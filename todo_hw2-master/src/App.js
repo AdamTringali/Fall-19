@@ -19,7 +19,6 @@ const newTodo = {
 }
 
 
-
 class App extends Component {
   state = {
     currentScreen: AppScreen.HOME_SCREEN,
@@ -51,42 +50,48 @@ class App extends Component {
     }
     this.state.transactions.push(transaction);
     this.doTransaction();
-   
+
+
+    console.log(this.toString());
   }
 
   doTransaction = () => {
     if (this.hasTransactionToRedo()) {
-        this.state.performingDo = true;
+      this.setState({performingDo: true});
+        //this.state.performingDo = true;
         let transaction = this.state.transactions[this.state.mostRecentTransaction+1];
         this.doTransactionTwo(transaction);
-        this.state.mostRecentTransaction++;
-        this.state.performingDo = false;
-    }
+        //this.state.mostRecentTransaction++;
+        this.setState({mostRecentTransaction: this.state.mostRecentTransaction+1});
+
+       // this.setState({mostRecentTransaction: this.state.mostRecentTransaction+1})
+        this.setState({performingDo: false});
+      }
 }
 
-doTransactionTwo(){
-  console.log("dotransactionTwo");
-}
-
-toString() {
-  var text = "--Number of Transactions: " + this.state.transactions.length + "\n";
-  text += "--Current Index on Stack: " + this.state.mostRecentTransaction + "\n";
-  text += "--Current Transaction Stack:\n";
-  var i = 0;
-  for (; i <= this.state.mostRecentTransaction; i++) {
-      let jT = this.state.transactions[i];
-      text += "----" + jT.toString() + "\n";
+  doTransactionTwo(){
+    console.log("dotransactionTwo");
   }
-  return text;
-}
 
-hasTransactionToUndo() {
-  return this.state.mostRecentTransaction >= 0;
-}
+  toString() {
+    var text = "--Number of Transactions: " + this.state.transactions.length + "\n";
+    text += "--Current Index on Stack: " + this.state.mostRecentTransaction + "\n";
+    text += "--Current Transaction Stack:\n";
+    var i = 0;
+    for (; i <= this.state.mostRecentTransaction; i++) {
+        let jT = this.state.transactions[i].process + " " + this.state.transactions[i].item.description;
+        text += "----" + jT.toString() + "\n";
+    }
+    return text;
+  }
 
-hasTransactionToRedo() {
-  return this.state.mostRecentTransaction < (this.state.transactions.length-1);
-}
+  hasTransactionToUndo() {
+    return this.state.mostRecentTransaction >= 0;
+  }
+
+  hasTransactionToRedo() {
+    return this.state.mostRecentTransaction < (this.state.transactions.length-1);
+  }
 
   componentWillMount(){
     document.addEventListener("keydown", this.handleKeyDown.bind(this))
@@ -94,7 +99,42 @@ hasTransactionToRedo() {
 
   undoRemoveItem = (itemToAdd) => {
     console.log("undoRemoveItem: " + itemToAdd.description);
+    newTodo.description = itemToAdd.description;
+    newTodo.due_date = itemToAdd.due_date;
+    newTodo.assigned_to = itemToAdd.assigned_to;
+    newTodo.completed = itemToAdd.completed;
     this.state.currentList.items.push(itemToAdd);
+    var insertIndex = itemToAdd.key;
+
+    this.resetItemsKey();
+
+
+    var endIndex = this.state.currentList.items.length - 2;
+    let listOfItems = this.state.currentList.items;
+    console.log("list of items: " + listOfItems);
+    console.log("insert index: " + insertIndex + " endindex: " + endIndex);
+    for(;endIndex >= insertIndex; endIndex--){
+      listOfItems[endIndex + 1].description = listOfItems[endIndex].description;
+      listOfItems[endIndex + 1].due_date = listOfItems[endIndex].due_date;
+      listOfItems[endIndex + 1].assigned_to = listOfItems[endIndex].assigned_to;
+      listOfItems[endIndex + 1].completed = listOfItems[endIndex].completed;
+      //listOfItems[endIndex].key = listOfItems[endIndex + 1].key;
+    }
+    //AFTER FOR LOOP ALL ITEMS HAVE BEEN SHIFTED AND ITEMS CONTAINS A DUPLICATE 
+    //AT ITEMTOADD.KEY AND ITEMTOADD.KEY+1. INSERT ITEM TO ITEMTOADD.KEY
+
+    console.log("itemtoadd description end: " + newTodo.description);
+
+    listOfItems[insertIndex].description = newTodo.description;
+    listOfItems[insertIndex].due_date = newTodo.due_date;
+    listOfItems[insertIndex].assigned_to = newTodo.assigned_to;
+    listOfItems[insertIndex].completed = newTodo.completed;
+    //listOfItems[insertIndex].key = itemToAdd.key;
+    
+
+
+
+
     this.setState({currentList: this.state.currentList});
   
 
@@ -104,16 +144,21 @@ hasTransactionToRedo() {
     if (e.ctrlKey && e.which === 90) {
       //UNDO
        console.log("control-z");
-       if(this.hasTransactionToUndo()){
-         this.state.performingUndo = true;
-         let transaction = this.state.transactions[this.state.mostRecentTransaction];
-         console.log("trans process: " + transaction.process);
-         if(transaction.process === "removeitem")
+
+
+      if(this.hasTransactionToUndo()){
+        this.setState({performingUndo: true});
+        let transaction = this.state.transactions[this.state.mostRecentTransaction];
+        console.log("trans process: " + transaction.process);
+        
+        if(transaction.process === "removeitem"){
           this.undoRemoveItem(transaction.item);
-         //transaction.undoTransaction();
-         this.state.mostRecentTransaction--;
-         this.performingUndo = false;
         }
+
+        this.setState({mostRecentTransaction: this.state.mostRecentTransaction-1});
+        this.state.transactions.pop();
+        this.setState({performingUndo: false});
+      }
 
         console.log(this.toString());
     } else if (e.ctrlKey & e.which === 89) {
@@ -123,17 +168,23 @@ hasTransactionToRedo() {
 
     } 
 
-   }
+  }
+
+  clearAllTransactions(){
+    this.setState({transactions: []});
+    this.setState({mostRecentTransaction: -1});
+  }
 
   goHome = () => {
     this.setState({currentScreen: AppScreen.HOME_SCREEN});
     this.setState({currentList: null});
+    this.clearAllTransactions();
   }
 
   loadList = (todoListToLoad) => {
     this.setState({currentScreen: AppScreen.LIST_SCREEN});
     this.setState({currentList: todoListToLoad});
-    console.log("thislist: " + todoListToLoad.name);
+    //console.log("thislist: " + todoListToLoad.name);
     /*console.log("currentList: " + this.state.currentList);
     console.log("currentScreen: " + this.state.currentScreen);*/
   }
@@ -239,7 +290,7 @@ hasTransactionToRedo() {
 
   removeItem = (listItem) => {
     //listItem.stopPropagation();
-    console.log("removeitem app.js");
+    //console.log("removeitem app.js");
     let cpy = [...this.state.todoLists];
     var indx = 0;
     //var item = null;
@@ -255,12 +306,12 @@ hasTransactionToRedo() {
         }
     }*/
     cpy[found].items.splice(listItem.key, 1);
-    console.log("removing item");
+   // console.log("removing item");
     //cpy[found].numItems = cpy[found].numItems - 1;
-    console.log(cpy[found].items.length);
+   // console.log(cpy[found].items.length);
     for(indx = 0; indx < cpy[found].items.length; indx++)
     {
-      console.log(indx);
+      //console.log(indx);
       cpy[found].items[indx].key = indx;
       this.setState({});
 
@@ -273,9 +324,9 @@ hasTransactionToRedo() {
       item: listItem
     }
 
-    console.log("undoRemoveItem22: " + listItem.description);
+    console.log("Adding (removeitem) Transaction: " + listItem.description);
     this.addTransaction(myTrans);
-    console.log(this.toString());
+    //console.log(this.toString());
   }
 
   editItem = (itemToEdit) => {
