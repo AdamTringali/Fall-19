@@ -8,7 +8,7 @@ export class ListItemsTable extends Component {
         return (
             <div id="list_items_container">
                 <div className="list_item_header_card">
-                <div className="list_item_task_header" onClick={this.props.sortByTask}>Task</div>
+                <div className="list_item_task_header" onClick={this.props.sortByTask.bind(this, this.props.todoList)}>Task</div>
                 <div className="list_item_due_date_header" onClick={this.props.sortByDueDate}>Due Date</div>
                 <div className="list_item_status_header" onClick={this.props.sortByStatus}>Status</div>
                 </div>

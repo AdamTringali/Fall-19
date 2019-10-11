@@ -28,9 +28,14 @@ export class ItemScreen extends Component {
     }
 
     onCheck = (e) => {
-        console.log(e.target.value);
+        this.setState({ editingItem: true});
+        console.log("targ : " + e.target.value);
         //console.log(e.);
-        this.setState({ compl: !this.state.compl})
+        console.log("compl : " + this.state.compl);
+        this.state.compl = !this.state.compl;
+        console.log("compl2 : " + this.state.compl);
+
+        this.setState({ compl: this.state.compl})
     }
 
     render() {
@@ -54,8 +59,9 @@ export class ItemScreen extends Component {
             if(!this.state.editingItem)
             {
                 console.log("editing currnet item");
-                console.log("description: " + this.props.itemToEdit.description)
-                console.log("key: itemscreen " + this.props.itemToEdit.key)
+                console.log("description: " + this.props.itemToEdit.description);
+                console.log("key: itemscreen " + this.props.itemToEdit.key);
+                //this.setState({descrip: this.props})
                 this.state.descrip = this.props.itemToEdit.description;
                 this.state.assign = this.props.itemToEdit.assigned_to;
                 this.state.dued = this.props.itemToEdit.due_date;
