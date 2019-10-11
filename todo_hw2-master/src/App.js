@@ -27,19 +27,102 @@ class App extends Component {
     currentList: null,
     taskSort: 0,
     dueDateSort: 0,
-    completedSort: 0
+    completedSort: 0,
+    transactions: [],
+    mostRecentTransaction: -1,
+    performingDo: false,
+    performingUndo: false
   }
+
+  isPerformingDo = () => {
+    return this.state.performingDo;
+  }
+
+  isPerformingUndo = () => {
+    return this.state.performingUndo;
+  }
+
+  addTransaction = (transaction) => {
+    if((this.state.mostRecentTransaction < 0) || (this.mostRecentTransaction < (this.state.transactions.length-1))){
+      var i = transaction.length-1;
+      for(; i > this.state.mostRecentTransaction; i--){
+        this.state.transactions.splice(i, 1);
+      }
+    }
+    this.state.transactions.push(transaction);
+    this.doTransaction();
+   
+  }
+
+  doTransaction = () => {
+    if (this.hasTransactionToRedo()) {
+        this.state.performingDo = true;
+        let transaction = this.state.transactions[this.state.mostRecentTransaction+1];
+        this.doTransactionTwo(transaction);
+        this.state.mostRecentTransaction++;
+        this.state.performingDo = false;
+    }
+}
+
+doTransactionTwo(){
+  console.log("dotransactionTwo");
+}
+
+toString() {
+  var text = "--Number of Transactions: " + this.state.transactions.length + "\n";
+  text += "--Current Index on Stack: " + this.state.mostRecentTransaction + "\n";
+  text += "--Current Transaction Stack:\n";
+  var i = 0;
+  for (; i <= this.state.mostRecentTransaction; i++) {
+      let jT = this.state.transactions[i];
+      text += "----" + jT.toString() + "\n";
+  }
+  return text;
+}
+
+hasTransactionToUndo() {
+  return this.state.mostRecentTransaction >= 0;
+}
+
+hasTransactionToRedo() {
+  return this.state.mostRecentTransaction < (this.state.transactions.length-1);
+}
+
   componentWillMount(){
     document.addEventListener("keydown", this.handleKeyDown.bind(this))
     }
+
+  undoRemoveItem = (itemToAdd) => {
+    console.log("undoRemoveItem: " + itemToAdd.description);
+    this.state.currentList.items.push(itemToAdd);
+    this.setState({currentList: this.state.currentList});
+  
+
+  }
+
   handleKeyDown(e) {
-    if (e.ctrlKey && e.which === 87) {
-       console.log("first one 87")
-    } else if (e.ctrlKey & e.which === 83) {
-      console.log("first one 83")
-    } else if (e.ctrlKey && e.shiftKey && e.which === 68) {
-      console.log("first one 87")
-    }
+    if (e.ctrlKey && e.which === 90) {
+      //UNDO
+       console.log("control-z");
+       if(this.hasTransactionToUndo()){
+         this.state.performingUndo = true;
+         let transaction = this.state.transactions[this.state.mostRecentTransaction];
+         console.log("trans process: " + transaction.process);
+         if(transaction.process === "removeitem")
+          this.undoRemoveItem(transaction.item);
+         //transaction.undoTransaction();
+         this.state.mostRecentTransaction--;
+         this.performingUndo = false;
+        }
+
+        console.log(this.toString());
+    } else if (e.ctrlKey & e.which === 89) {
+      //REDO
+      console.log("control-y");
+      
+
+    } 
+
    }
 
   goHome = () => {
@@ -184,6 +267,15 @@ class App extends Component {
     }
     //listItem.key = -1;
     this.setState({});
+
+    const myTrans = {
+      process: "removeitem",
+      item: listItem
+    }
+
+    console.log("undoRemoveItem22: " + listItem.description);
+    this.addTransaction(myTrans);
+    console.log(this.toString());
   }
 
   editItem = (itemToEdit) => {
