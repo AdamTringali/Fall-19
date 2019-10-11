@@ -159,9 +159,9 @@ class App extends Component {
     console.log("removeitem app.js");
     let cpy = [...this.state.todoLists];
     var indx = 0;
-    var item;
-    var found; 
-    for(; indx < cpy.length; indx++)
+    //var item = null;
+    var found = this.state.currentList.key;
+    /*for(; indx < cpy.length; indx++)
     {
       console.log("key : " + listItem.key + "index: " + indx);
       if(cpy[indx].items.length > listItem.key)
@@ -170,7 +170,7 @@ class App extends Component {
           found = indx;
           indx = cpy.length;
         }
-    }
+    }*/
     cpy[found].items.splice(listItem.key, 1);
     console.log("removing item");
     //cpy[found].numItems = cpy[found].numItems - 1;

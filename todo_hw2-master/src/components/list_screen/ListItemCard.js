@@ -42,9 +42,9 @@ export class ListItemCard extends Component {
 
                 <div  className='list_item_card_buttons'>
                         
-                    <img src="./images/icons/MoveUp.png" className={upButtoncss} onClick={this.props.moveUp.bind(this, this.props.listItem)}/> 
-                    <img src="./images/icons/MoveDown.png" className={downButtoncss} onClick={this.props.moveDown.bind(this, this.props.listItem)}/> 
-                    <img src="./images/icons/Close48.png" className='list_item_card_remove_button' onClick={this.props.removeItem.bind(this,this.props.listItem)}/> 
+                    <img src="./images/icons/MoveUp.png" alt="move_up_icon" className={upButtoncss} onClick={this.props.moveUp.bind(this, this.props.listItem)}/> 
+                    <img src="./images/icons/MoveDown.png" alt="move_down_icon" className={downButtoncss} onClick={this.props.moveDown.bind(this, this.props.listItem)}/> 
+                    <img src="./images/icons/Close48.png" alt="remove_icon" className='list_item_card_remove_button' onClick={this.props.removeItem.bind(this,this.props.listItem)}/> 
 
                 </div>
             </div>

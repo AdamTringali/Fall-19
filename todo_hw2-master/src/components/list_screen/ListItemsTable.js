@@ -29,7 +29,7 @@ export class ListItemsTable extends Component {
 
                 <div className='list_item_add_card' onClick={this.props.addItem}>
 
-                    <img src="./images/icons/AddItem.png" /> 
+                    <img src="./images/icons/AddItem.png" alt="add_item_icon"/> 
 
                 </div>
                 

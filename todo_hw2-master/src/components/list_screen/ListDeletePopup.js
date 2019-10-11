@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { isAbsolute } from 'path';
 
 export class ListDeletePopup extends Component {
 
