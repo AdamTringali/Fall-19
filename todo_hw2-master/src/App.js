@@ -177,7 +177,19 @@ class App extends Component {
     this.setState({numRedoTransactions: this.state.numRedoTransactions - 1});*/
   }
 
-  undoRemoveItem = (itemToAdd) => {
+  undoRemoveItem = (itemToAdd2) => {
+    var itemToAdd = itemToAdd2;
+    var x = 0;
+    if(!itemToAdd2.process)
+    {
+      console.log("null");
+    }
+    else{
+      //NOT NULL
+      itemToAdd = itemToAdd2.item;
+      x = 1;
+
+    }
     
     console.log("undoRemoveItem: " + itemToAdd.description);
 
@@ -219,19 +231,68 @@ class App extends Component {
       assigned_to: this.state.currentList.items[insertIndex].assigned_to,
       completed: this.state.currentList.items[insertIndex].completed
     }
-
     const myTrans = {
       process: "removeitem",
       item: newTodo2
     }
-  
-    
-    this.state.redoTransactions.push(myTrans);
-        
+
+    if(x === 0){
+      this.state.redoTransactions.push(myTrans);
+    }else{
+      myTrans.process = "newitem";
+      this.addTransaction(myTrans);
+    }
 
     //this.setState({redoTransactions: this.state.redoTransactions});
 
+  }
+
+  undoNewItem = () => {
+    console.log("undoNewItem: " + this.state.transactions[this.state.mostRecentTransaction].item.description);
+    var item = this.state.transactions[this.state.mostRecentTransaction].item;
+    this.removeItem(this.state.transactions[this.state.mostRecentTransaction]);
+
+    const myTrans = {
+      process: "newitem",
+      item: item
+    }
   
+    console.log("item to undoNewItem(): " + myTrans.item.description);
+    
+    this.state.redoTransactions.push(myTrans);
+  }
+
+  redoNewItem = () => {
+    console.log("redoNewItem: ");
+    this.undoRemoveItem(this.state.redoTransactions[this.state.numRedoTransactions]);
+  }
+
+  undoEditItem = () => {
+    console.log("undoEditItem");
+    var newitem = this.state.transactions[this.state.mostRecentTransaction].item[1];
+    let cpy = this.state.currentList;
+    cpy.items[newitem.key] = newitem;
+
+    this.setState({currentList: cpy});
+
+
+
+    this.state.redoTransactions.push(this.state.transactions[this.state.mostRecentTransaction]);
+
+  }
+
+  redoEditItem = () => {
+    console.log("redoEditItem");
+    var newitem = this.state.redoTransactions[this.state.numRedoTransactions].item[0];
+    let cpy = this.state.currentList;
+    cpy.items[newitem.key] = newitem;
+
+    this.setState({currentList: cpy});
+
+
+
+    this.addTransaction(this.state.redoTransactions[this.state.numRedoTransactions]);
+
 
   }
 
@@ -253,6 +314,12 @@ class App extends Component {
         }
         else if(transaction.process === "moveup"){
           this.undoMoveUp();
+        }
+        else if(transaction.process === "newitem"){
+          this.undoNewItem();
+        }
+        else if(transaction.process === "edititem"){
+          this.undoEditItem();
         }
 
         this.setState({mostRecentTransaction: this.state.mostRecentTransaction-1});
@@ -278,7 +345,12 @@ class App extends Component {
         else if(transaction.process === "movedown"){
           this.redoMoveDown();
         }
-
+        else if(transaction.process === "newitem"){
+          this.redoNewItem();
+        }
+        else if(transaction.process === "edititem"){
+          this.redoEditItem();
+        }
 
         //let removeLast = this.state.redoTransactions;
         //removeLast.splice((removeLast.length-1),1);
@@ -475,9 +547,17 @@ class App extends Component {
 
   }
 
-  removeItem = (listItem) => {
+  removeItem = (listItem2) => {
     //listItem.stopPropagation();
     //console.log("removeitem app.js");
+    var listItem = listItem2;
+    var x = 0;
+    if(!listItem2.process)
+      console.log("not n");
+    else{
+      x = 1;
+      listItem = listItem2.item
+    }
     let cpy = [...this.state.todoLists];
     var indx = 0;
     //var item = null;
@@ -511,8 +591,10 @@ class App extends Component {
       item: listItem
     }
 
-    console.log("Adding (removeitem) Transaction: " + listItem.description);
-    this.addTransaction(myTrans);
+    if(x === 0){
+      console.log("Adding (removeitem) Transaction: " + listItem.description);
+      this.addTransaction(myTrans);
+    }
     //console.log(this.toString());
   }
 
@@ -558,10 +640,21 @@ class App extends Component {
   submitItemChange = (item) =>{
     console.log("submititemchange app.js");
     //item.getElementById("item_description_textfield");
-    console.log("item key: " + item.key);
-    console.log("todolists: " + this.props.todoLists);
-    console.log("currentList: " + this.state.currentList.items.length);
+    //console.log("item key: " + this.state.currentList.items[item.key].description);
+    //console.log("todolists: " + this.props.todoLists);
+    //console.log("currentList: " + this.state.currentList.items.length);
+    /*const original = {
+      description: this.state.currentList.items[item.key].description,
+      assigned_to: this.state.currentList.items[item.key].assigned_to,
+      due_date: this.state.currentList.items[item.key].due_date,
+      completed: this.state.currentList.items[item.key].completed,
+      key: item.key
+    }*/
 
+    const myTrans = {
+      process: "itemchange",
+      item: null
+    }
     if(item.key === -1){
       //CREAING A NEW ITEM
       const newTodo = {
@@ -574,11 +667,20 @@ class App extends Component {
       if(newTodo.description === "")
         newTodo.description = "Unknown";
 
+      myTrans.process = "newitem";
+      myTrans.item = newTodo;
       this.state.currentList.items.push(newTodo);
     }else{
       //MODIFYING AN EXISTING ITEM
       //console.log("current todoList " + this.state.currentList.items;
       let newItem = this.state.currentList.items[item.key];
+      const oldItem = {
+        description: newItem.description,
+        assigned_to:  newItem.assigned_to,
+        due_date: newItem.due_date,
+        completed:  newItem.completed,
+        key: newItem.key
+      }
       newItem.description = item.descrip;
       newItem.assigned_to = item.assign;
       newItem.due_date = item.dued;
@@ -587,7 +689,9 @@ class App extends Component {
       newItem.completed = item.compl;
       console.log("oldItem name: " + newItem.description);
       console.log("newitem name: " + item.descrip)
-
+      myTrans.process = "edititem";
+      myTrans.item = [newItem, oldItem];
+      //myTrans.item[1] = newItem;
     }
     
     
@@ -596,6 +700,12 @@ class App extends Component {
     //this.setState({currentList: [...this.state.currentList.items, newTodo]  });
     this.setState({currentScreen: AppScreen.LIST_SCREEN});
     this.resetItem();
+
+
+
+   // console.log("Adding (itemchange) Transaction before: " + myTrans.item[0].description);
+    //console.log("Adding (itemchange) Transaction after: " + myTrans.item[1].description);
+    this.addTransaction(myTrans);
 
   }
 
