@@ -96,34 +96,85 @@ class App extends Component {
   }
 
   hasTransactionToUndo() {
+    if(this.state.mostRecentTransaction >= 0)
+      if(!this.state.transactions[this.state.mostRecentTransaction].item)
+        console.log("item is null-undo");
+
     return this.state.mostRecentTransaction >= 0;
   }
 
   hasTransactionToRedo() {
+    if (this.state.numRedoTransactions >= 0)
+      if(!this.state.redoTransactions[this.state.numRedoTransactions].item)
+        console.log("item is null-redo");
     return this.state.numRedoTransactions >= 0;
   }
 
   componentWillMount(){
     document.addEventListener("keydown", this.handleKeyDown.bind(this))
-    }
+  }
 
-  redoRemoveItem = (item) => {
+  undoMoveUp = () => {
+    console.log("undoMoveUp");
+    console.log("item to undoMoveUp(movedown): " + this.state.transactions[this.state.mostRecentTransaction].item.description);
+    let transaction = this.state.transactions[this.state.mostRecentTransaction];
+    var key = transaction.item.key;
+    this.moveDown(transaction);
+
+    const myTrans = {
+      process: "moveup",
+      item: this.state.currentList.items[key+1]
+    }
+  
+    console.log("item to undoMoveUp(movedown): match: " + myTrans.item.description);
+    
+    this.state.redoTransactions.push(myTrans);
+        
+  }
+
+  redoMoveUp = () => {
+    console.log("redoMoveUp");
+    console.log("item to redoMoveUp(moveup): " + this.state.redoTransactions[this.state.numRedoTransactions].item.description);
+    let transaction = this.state.redoTransactions[this.state.numRedoTransactions];
+    this.moveUp(transaction.item);
+
+  }
+
+  redoMoveDown = () => {
+    console.log("redoMoveDown");
+    console.log("item to redoMoveUp(movedown): " + this.state.redoTransactions[this.state.numRedoTransactions].item.description);
+    let transaction = this.state.redoTransactions[this.state.numRedoTransactions];
+    this.moveDown(transaction.item);
+
+  }
+
+  undoMoveDown = () => {
+    console.log("undoMoveDown");
+    console.log("item to undoMoveDown(moveup): " + this.state.transactions[this.state.mostRecentTransaction].item.description);
+    let transaction = this.state.transactions[this.state.mostRecentTransaction];
+    this.moveUp(transaction);
+
+    const myTrans = {
+      process: "movedown",
+      item: this.state.currentList.items[transaction.item.key-1]
+    }
+  
+    console.log("item to undoMoveUp(movedown): match: " + myTrans.item.description);
+    
+    this.state.redoTransactions.push(myTrans);
+  }
+
+  redoRemoveItem = () => {
     console.log("redoRemoveItem");
     console.log("item to redo-remove: " + this.state.redoTransactions[this.state.numRedoTransactions].item.description);
 
     this.removeItem(this.state.redoTransactions[this.state.numRedoTransactions].item);
-    let removeLast = this.state.redoTransactions;
+ /*   let removeLast = this.state.redoTransactions;
     removeLast.splice((removeLast.length-1),1);
     this.setState({redoTransactions: removeLast});
 
     //this.state.redoTransactions.splice(this.state.redoTransactions[0],1);
-    this.setState({numRedoTransactions: this.state.numRedoTransactions - 1});
-
-    
-
-
-
-
+    this.setState({numRedoTransactions: this.state.numRedoTransactions - 1});*/
   }
 
   undoRemoveItem = (itemToAdd) => {
@@ -185,10 +236,9 @@ class App extends Component {
   }
 
   handleKeyDown(e) {
-    if (e.ctrlKey && e.which === 90) {
-      //UNDO
-       console.log("control-z");
+    if (e.ctrlKey && e.which === 90) {//UNDO
 
+       console.log("control-z");
 
       if(this.hasTransactionToUndo()){
         this.setState({performingUndo: true});
@@ -198,16 +248,22 @@ class App extends Component {
         if(transaction.process === "removeitem"){
           this.undoRemoveItem(transaction.item);
         }
+        else if(transaction.process === "movedown"){
+          this.undoMoveDown();
+        }
+        else if(transaction.process === "moveup"){
+          this.undoMoveUp();
+        }
 
         this.setState({mostRecentTransaction: this.state.mostRecentTransaction-1});
         this.setState({numRedoTransactions: this.state.numRedoTransactions + 1});
+        //this.state.transactions.splice(this.state.mostRecentTransaction-1,1);
         this.state.transactions.pop();
         this.setState({performingUndo: false});
       }
 
         console.log(this.toString());
-    } else if (e.ctrlKey & e.which === 89) {
-      //REDO
+    } else if (e.ctrlKey & e.which === 89) {//REDO
       console.log("control-y");
 
       if(this.hasTransactionToRedo()){
@@ -216,13 +272,22 @@ class App extends Component {
         if(transaction.process === "removeitem"){
           this.redoRemoveItem();
         }
-      }
+        else if(transaction.process === "moveup"){
+          this.redoMoveUp();
+        }
+        else if(transaction.process === "movedown"){
+          this.redoMoveDown();
+        }
 
 
-      //REDO
-      console.log("control-y");
-      //this.setState()
-      
+        //let removeLast = this.state.redoTransactions;
+        //removeLast.splice((removeLast.length-1),1);
+        //this.setState({redoTransactions: removeLast});
+    
+        //this.state.redoTransactions.splice(this.state.redoTransactions[0],1);
+        this.state.redoTransactions.pop();
+        this.setState({numRedoTransactions: this.state.numRedoTransactions - 1});
+      }      
     } 
 
     this.checkForDuplicates();
@@ -235,7 +300,11 @@ class App extends Component {
     //TWO ITEMS HAVE THE SAME PROCESS & ITEM. 
     //IF THEY THERE IS A MATCH REMOVE THE LOWER INDEX (LATEST OCCURING)
 
-    
+    //POSSIBLE OTHER SOLUTION
+    //JUST CHECK TO SEE IF ITEM EXISTS IN LIST, IF IT DOES EXECUTE 
+    //IF ITEM DOES NOT EXIST JUST POP THE ITEM FROM ARRAY AND DECREMENT LEN
+
+
   }
 
   clearAllTransactions(){
@@ -277,8 +346,18 @@ class App extends Component {
       //this.setState({todoLists : cpy});
   }
 
-  moveUp = (listItem) => {
+  moveUp = (listItem2) => {
     console.log("moveup method app.js");
+    var listItem = listItem2;
+    var x = 0;
+
+    if(!listItem2.process)
+      console.log("process is null");
+    else{
+      console.log("process is NOT null");
+      listItem = listItem2.item;
+      x = 1;
+    }
     //console.log(listItem.key)
     let cpy = [...this.state.todoLists];
     var indx = 0;
@@ -294,10 +373,12 @@ class App extends Component {
         }
     }
 
-    console.log(item.description);
+    //console.log(item.description);
 
-    if( listItem.key === 0)
-      console.log("first item");
+    if( listItem.key === 0){
+      //console.log("first item");
+      x = 1;
+    }
     else{
       var desc = item.description;
       var assign = item.assigned_to;
@@ -314,12 +395,35 @@ class App extends Component {
       
       this.setState({});
     }
+
+    if(x === 0){
+
+      const myTrans = {
+        process: "moveup",
+        item: cpy[found].items[listItem.key-1]
+      }
+
+      console.log("Adding (moveup) Transaction: " + myTrans.item.description);
+      this.addTransaction(myTrans);
+    }
   }
 
-  moveDown = (listItem) => {
+  moveDown = (listItem2) => {
+
+    var listItem = listItem2;
+    var x = 0;
+
+    if(!listItem2.process)
+      console.log("process is null");
+    else{
+      console.log("process is NOT null");
+      listItem = listItem2.item;
+      x = 1;
+    }
+
     console.log("moveDown app.js");
-    console.log(listItem.description);
-    console.log(...this.state.todoLists);
+   // console.log(listItem.description);
+   // console.log(...this.state.todoLists);
 
     let cpy = [...this.state.todoLists];
     var indx = 0;
@@ -335,10 +439,12 @@ class App extends Component {
         }
     }
 
-    console.log(item.description);
+    //console.log(item.description);
 
-    if( (cpy[found].items.length-1) === listItem.key)
-      console.log("last item");
+    if( (cpy[found].items.length-1) === listItem.key){
+     // console.log("last item");
+     x = 1;
+    }
     else{
       var desc = item.description;
       var assign = item.assigned_to;
@@ -356,6 +462,17 @@ class App extends Component {
       this.setState({});
     }
     
+    if(x === 0){
+      const myTrans = {
+        process: "movedown",
+        item: cpy[found].items[listItem.key+1]
+      }
+
+      console.log("Adding (movedown) Transaction: " + myTrans.item.description);
+      this.addTransaction(myTrans);
+    }
+
+
   }
 
   removeItem = (listItem) => {
