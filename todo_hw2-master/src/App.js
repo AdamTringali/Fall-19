@@ -30,7 +30,9 @@ class App extends Component {
     transactions: [],
     mostRecentTransaction: -1,
     performingDo: false,
-    performingUndo: false
+    performingUndo: false,
+    redoTransactions: [],
+    numRedoTransactions: -1
   }
 
   isPerformingDo = () => {
@@ -42,25 +44,33 @@ class App extends Component {
   }
 
   addTransaction = (transaction) => {
+    this.setState({performingDo: true});
+
     if((this.state.mostRecentTransaction < 0) || (this.mostRecentTransaction < (this.state.transactions.length-1))){
       var i = transaction.length-1;
       for(; i > this.state.mostRecentTransaction; i--){
         this.state.transactions.splice(i, 1);
       }
     }
+
+    this.setState({mostRecentTransaction: this.state.mostRecentTransaction+1});
+
     this.state.transactions.push(transaction);
-    this.doTransaction();
+    this.setState({performingDo: false});
+
+   // this.doTransaction();
 
 
     console.log(this.toString());
   }
 
-  doTransaction = () => {
+  /*doTransaction = () => {
+    console.log("do transaction");
     if (this.hasTransactionToRedo()) {
       this.setState({performingDo: true});
         //this.state.performingDo = true;
-        let transaction = this.state.transactions[this.state.mostRecentTransaction+1];
-        this.doTransactionTwo(transaction);
+        //let transaction = this.state.transactions[this.state.mostRecentTransaction+1];
+        //this.doTransactionTwo(transaction);
         //this.state.mostRecentTransaction++;
         this.setState({mostRecentTransaction: this.state.mostRecentTransaction+1});
 
@@ -71,7 +81,7 @@ class App extends Component {
 
   doTransactionTwo(){
     console.log("dotransactionTwo");
-  }
+  }*/
 
   toString() {
     var text = "--Number of Transactions: " + this.state.transactions.length + "\n";
@@ -90,15 +100,36 @@ class App extends Component {
   }
 
   hasTransactionToRedo() {
-    return this.state.mostRecentTransaction < (this.state.transactions.length-1);
+    return this.state.numRedoTransactions >= 0;
   }
 
   componentWillMount(){
     document.addEventListener("keydown", this.handleKeyDown.bind(this))
     }
 
+  redoRemoveItem = (item) => {
+    console.log("redoRemoveItem");
+    console.log("item to redo-remove: " + this.state.redoTransactions[this.state.numRedoTransactions].item.description);
+
+    this.removeItem(this.state.redoTransactions[this.state.numRedoTransactions].item);
+    let removeLast = this.state.redoTransactions;
+    removeLast.splice((removeLast.length-1),1);
+    this.setState({redoTransactions: removeLast});
+
+    //this.state.redoTransactions.splice(this.state.redoTransactions[0],1);
+    this.setState({numRedoTransactions: this.state.numRedoTransactions - 1});
+
+    
+
+
+
+
+  }
+
   undoRemoveItem = (itemToAdd) => {
+    
     console.log("undoRemoveItem: " + itemToAdd.description);
+
     newTodo.description = itemToAdd.description;
     newTodo.due_date = itemToAdd.due_date;
     newTodo.assigned_to = itemToAdd.assigned_to;
@@ -111,31 +142,44 @@ class App extends Component {
 
     var endIndex = this.state.currentList.items.length - 2;
     let listOfItems = this.state.currentList.items;
-    console.log("list of items: " + listOfItems);
-    console.log("insert index: " + insertIndex + " endindex: " + endIndex);
     for(;endIndex >= insertIndex; endIndex--){
       listOfItems[endIndex + 1].description = listOfItems[endIndex].description;
       listOfItems[endIndex + 1].due_date = listOfItems[endIndex].due_date;
       listOfItems[endIndex + 1].assigned_to = listOfItems[endIndex].assigned_to;
       listOfItems[endIndex + 1].completed = listOfItems[endIndex].completed;
-      //listOfItems[endIndex].key = listOfItems[endIndex + 1].key;
     }
     //AFTER FOR LOOP ALL ITEMS HAVE BEEN SHIFTED AND ITEMS CONTAINS A DUPLICATE 
     //AT ITEMTOADD.KEY AND ITEMTOADD.KEY+1. INSERT ITEM TO ITEMTOADD.KEY
-
-    console.log("itemtoadd description end: " + newTodo.description);
-
     listOfItems[insertIndex].description = newTodo.description;
     listOfItems[insertIndex].due_date = newTodo.due_date;
     listOfItems[insertIndex].assigned_to = newTodo.assigned_to;
-    listOfItems[insertIndex].completed = newTodo.completed;
-    //listOfItems[insertIndex].key = itemToAdd.key;
-    
+    listOfItems[insertIndex].completed = newTodo.completed;    
 
-
-
+  
 
     this.setState({currentList: this.state.currentList});
+
+    //console.log("adding to redoList: " + myTrans.item.description);
+
+    const newTodo2 = {
+      key: this.state.currentList.items[insertIndex].key,
+      description: this.state.currentList.items[insertIndex].description,
+      due_date: this.state.currentList.items[insertIndex].due_date,
+      assigned_to: this.state.currentList.items[insertIndex].assigned_to,
+      completed: this.state.currentList.items[insertIndex].completed
+    }
+
+    const myTrans = {
+      process: "removeitem",
+      item: newTodo2
+    }
+  
+    
+    this.state.redoTransactions.push(myTrans);
+        
+
+    //this.setState({redoTransactions: this.state.redoTransactions});
+
   
 
   }
@@ -150,12 +194,13 @@ class App extends Component {
         this.setState({performingUndo: true});
         let transaction = this.state.transactions[this.state.mostRecentTransaction];
         console.log("trans process: " + transaction.process);
-        
+
         if(transaction.process === "removeitem"){
           this.undoRemoveItem(transaction.item);
         }
 
         this.setState({mostRecentTransaction: this.state.mostRecentTransaction-1});
+        this.setState({numRedoTransactions: this.state.numRedoTransactions + 1});
         this.state.transactions.pop();
         this.setState({performingUndo: false});
       }
@@ -164,15 +209,40 @@ class App extends Component {
     } else if (e.ctrlKey & e.which === 89) {
       //REDO
       console.log("control-y");
-      
 
+      if(this.hasTransactionToRedo()){
+        let transaction = this.state.redoTransactions[this.state.numRedoTransactions];
+        console.log("transaction test: " + transaction.item.description);
+        if(transaction.process === "removeitem"){
+          this.redoRemoveItem();
+        }
+      }
+
+
+      //REDO
+      console.log("control-y");
+      //this.setState()
+      
     } 
 
+    this.checkForDuplicates();
+
+
+  }
+
+  checkForDuplicates = () =>{
+    //LOOP THROUGH BOTH TRANSACTIONS AND REDOTRANSACTIONS TO INSURE THAT NO 
+    //TWO ITEMS HAVE THE SAME PROCESS & ITEM. 
+    //IF THEY THERE IS A MATCH REMOVE THE LOWER INDEX (LATEST OCCURING)
+
+    
   }
 
   clearAllTransactions(){
     this.setState({transactions: []});
     this.setState({mostRecentTransaction: -1});
+    this.setState({redoTransactions: []});
+    this.setState({numRedoTransactions: -1});
   }
 
   goHome = () => {
