@@ -306,25 +306,21 @@ class App extends Component {
         let transaction = this.state.transactions[this.state.mostRecentTransaction];
         console.log("trans process: " + transaction.process);
 
-        if(transaction.process === "removeitem"){
+        if(transaction.process === "removeitem")
           this.undoRemoveItem(transaction.item);
-        }
-        else if(transaction.process === "movedown"){
+        else if(transaction.process === "movedown")
           this.undoMoveDown();
-        }
-        else if(transaction.process === "moveup"){
+        else if(transaction.process === "moveup")
           this.undoMoveUp();
-        }
-        else if(transaction.process === "newitem"){
+        else if(transaction.process === "newitem")
           this.undoNewItem();
-        }
-        else if(transaction.process === "edititem"){
+        else if(transaction.process === "edititem")
           this.undoEditItem();
-        }
+        else if(transaction.process === "editname")
+          this.undoEditName();
 
         this.setState({mostRecentTransaction: this.state.mostRecentTransaction-1});
         this.setState({numRedoTransactions: this.state.numRedoTransactions + 1});
-        //this.state.transactions.splice(this.state.mostRecentTransaction-1,1);
         this.state.transactions.pop();
         this.setState({performingUndo: false});
       }
@@ -336,35 +332,23 @@ class App extends Component {
       if(this.hasTransactionToRedo()){
         let transaction = this.state.redoTransactions[this.state.numRedoTransactions];
         console.log("transaction test: " + transaction.item.description);
-        if(transaction.process === "removeitem"){
+        if(transaction.process === "removeitem")
           this.redoRemoveItem();
-        }
-        else if(transaction.process === "moveup"){
+        else if(transaction.process === "moveup")
           this.redoMoveUp();
-        }
-        else if(transaction.process === "movedown"){
+        else if(transaction.process === "movedown")
           this.redoMoveDown();
-        }
-        else if(transaction.process === "newitem"){
+        else if(transaction.process === "newitem")
           this.redoNewItem();
-        }
-        else if(transaction.process === "edititem"){
+        else if(transaction.process === "edititem")
           this.redoEditItem();
-        }
 
-        //let removeLast = this.state.redoTransactions;
-        //removeLast.splice((removeLast.length-1),1);
-        //this.setState({redoTransactions: removeLast});
-    
-        //this.state.redoTransactions.splice(this.state.redoTransactions[0],1);
         this.state.redoTransactions.pop();
         this.setState({numRedoTransactions: this.state.numRedoTransactions - 1});
       }      
     } 
 
     this.checkForDuplicates();
-
-
   }
 
   checkForDuplicates = () =>{
@@ -405,17 +389,40 @@ class App extends Component {
 
   }
 
+  undoEditName = () => {
+    console.log("undoEditName");
+
+
+    var newName = this.state.transactions[this.state.mostRecentTransaction].item[1];
+    let cpy = this.state.currentList;
+    cpy.name = newName;
+
+    this.state.currentList.name = newName;
+    //this.setState({currentList: this.state.currentList});
+    //this.goHome();
+    //this.loadList(this.state.currentList);
+
+    //this.setState({currentList: cpy});
+
+
+
+    //this.state.redoTransactions.push(this.state.transactions[this.state.mostRecentTransaction]);
+
+  }
+
   setListName = (todoListToChange, val) => {
       console.log(val.target.value);
       console.log(todoListToChange.name);
+      var oldName = todoListToChange.name;
+
       todoListToChange.name = val.target.value;
-      /*let cpy = [...this.state.todoLists];
-      var indx = 0;
-      var item;
-      var found;*/ 
-      
-    
-      //this.setState({todoLists : cpy});
+
+      const myTrans = {
+        process: "editname",
+        item: [val.target.value, oldName]
+      }
+
+      this.addTransaction(myTrans);
   }
 
   moveUp = (listItem2) => {
