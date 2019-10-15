@@ -53,6 +53,8 @@ class App extends Component {
     this.setState({mostRecentTransaction: this.state.mostRecentTransaction+1});
     this.state.transactions.push(transaction);
     this.setState({performingDo: false});
+    //console.log("Adding Transaction (app.js: 45) (" + transaction.process + "): "
+    // + transaction.item.description)
   }
 
   toString() {
@@ -160,7 +162,7 @@ class App extends Component {
     this.resetItemsKey();
     if(test != this.state.transactions[0].item.key){
       if(this.state.currentList.items[key2] && this.state.mostRecentTransaction >= 1){
-       // console.log("doing this");
+        console.log("doing this");
         const myTrans2 = {
           process: this.state.transactions[this.state.mostRecentTransaction-1].process,
           item: this.state.currentList.items[key2]
@@ -254,6 +256,9 @@ class App extends Component {
       if(this.hasTransactionToUndo()){
         this.setState({performingUndo: true});
         let transaction = this.state.transactions[this.state.mostRecentTransaction];
+
+        //console.log("Popping transaction 259:(" + transaction.process +"): " + transaction.item.description);
+
         //console.log("trans process: " + transaction.process);
         if(transaction.process === "removeitem"){
           //console.log(this.state.transactions[0].item.key);
@@ -275,7 +280,11 @@ class App extends Component {
 
         this.setState({mostRecentTransaction: this.state.mostRecentTransaction-1});
         this.setState({numRedoTransactions: this.state.numRedoTransactions + 1});
+        //var trans = this.state.transactions.splice(0, 1);
         this.state.transactions.pop();
+
+        //console.log("Popping transaction (" + transaction.process +"): " + transaction.item.description);
+
         this.setState({performingUndo: false});
       }
     } else if (e.ctrlKey & e.which === 89) {//REDO
@@ -437,14 +446,16 @@ class App extends Component {
       this.setState({});
     }
 
-    const myItem = {
-      description: cpy[found].items[listItem.key-1].description,
-      assigned_to: cpy[found].items[listItem.key-1].assigned_to,
-      due_date: cpy[found].items[listItem.key-1].due_date,
-      completed: cpy[found].items[listItem.key-1].completed,
-      key: cpy[found].items[listItem.key-1].key
-    }
+
     if(x === 0){
+      const myItem = {
+        description: cpy[found].items[listItem.key-1].description,
+        assigned_to: cpy[found].items[listItem.key-1].assigned_to,
+        due_date: cpy[found].items[listItem.key-1].due_date,
+        completed: cpy[found].items[listItem.key-1].completed,
+        key: cpy[found].items[listItem.key-1].key
+      }
+
       const myTrans = {
         process: "moveup",
         item: myItem
@@ -502,9 +513,17 @@ class App extends Component {
       this.setState({});
     }
     if(x === 0){
+      const myItem = {
+        description: desc,
+        assigned_to: assign,
+        due_date: due,
+        completed: compl,
+        key: cpy[found].items[listItem.key+1].key
+      }
+
       const myTrans = {
         process: "movedown",
-        item: cpy[found].items[listItem.key+1]
+        item: myItem
       }
       //console.log("Adding (movedown) Transaction: " + myTrans.item.description);
       this.addTransaction(myTrans);
