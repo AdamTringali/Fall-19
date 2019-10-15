@@ -134,6 +134,8 @@ class App extends Component {
   }
 
   undoRemoveItem = (itemToAdd2) => {
+    //console.log("test: " + this.state.transactions[0].item.key);
+
     var itemToAdd = itemToAdd2;
     var x = 0;
     if(!itemToAdd2.process)
@@ -144,7 +146,6 @@ class App extends Component {
       //NOT NULL
       itemToAdd = itemToAdd2.item;
       x = 1;
-
     }
    // console.log("undoRemoveItem: " + itemToAdd.description);
     newTodo.description = itemToAdd.description;
@@ -153,7 +154,22 @@ class App extends Component {
     newTodo.completed = itemToAdd.completed;
     this.state.currentList.items.push(itemToAdd);
     var insertIndex = itemToAdd.key;
+    //console.log("test3: " + this.state.transactions[0].item.key);
+    var key2 = this.state.transactions[0].item.key;
+    var test = key2;
     this.resetItemsKey();
+    if(test != this.state.transactions[0].item.key){
+      if(this.state.currentList.items[key2] && this.state.mostRecentTransaction >= 1){
+       // console.log("doing this");
+        const myTrans2 = {
+          process: this.state.transactions[this.state.mostRecentTransaction-1].process,
+          item: this.state.currentList.items[key2]
+        }
+        this.state.transactions[this.state.mostRecentTransaction-1] = myTrans2;
+      }
+    }
+    //console.log("test4: " + this.state.transactions[0].item.key);
+
     var endIndex = this.state.currentList.items.length - 2;
     let listOfItems = this.state.currentList.items;
     for(;endIndex >= insertIndex; endIndex--){
@@ -183,7 +199,14 @@ class App extends Component {
       item: newTodo2
     }
     if(x === 0){
+     // console.log("test2: " + this.state.transactions[0].item.key);
       this.state.redoTransactions.push(myTrans);
+      //PRESERVING THE MOSTRECENTTRANS-1 TRANSACTION 
+
+
+      //myTrans.process = this.state.transactions[this.state.mostRecentTransaction-1].process;
+      //myTrans.item = this.state.currentList.items[key2];
+
     }else{
       myTrans.process = "newitem";
       this.addTransaction(myTrans);
@@ -232,8 +255,11 @@ class App extends Component {
         this.setState({performingUndo: true});
         let transaction = this.state.transactions[this.state.mostRecentTransaction];
         //console.log("trans process: " + transaction.process);
-        if(transaction.process === "removeitem")
+        if(transaction.process === "removeitem"){
+          //console.log(this.state.transactions[0].item.key);
           this.undoRemoveItem(transaction.item);
+          //console.log(this.state.transactions[0].item.key);
+        }
         else if(transaction.process === "movedown")
           this.undoMoveDown();
         else if(transaction.process === "moveup")
@@ -410,10 +436,18 @@ class App extends Component {
       
       this.setState({});
     }
+
+    const myItem = {
+      description: cpy[found].items[listItem.key-1].description,
+      assigned_to: cpy[found].items[listItem.key-1].assigned_to,
+      due_date: cpy[found].items[listItem.key-1].due_date,
+      completed: cpy[found].items[listItem.key-1].completed,
+      key: cpy[found].items[listItem.key-1].key
+    }
     if(x === 0){
       const myTrans = {
         process: "moveup",
-        item: cpy[found].items[listItem.key-1]
+        item: myItem
       }
       //console.log("Adding (moveup) Transaction: " + myTrans.item.description);
       this.addTransaction(myTrans);

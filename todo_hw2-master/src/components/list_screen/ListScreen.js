@@ -24,12 +24,12 @@ export class ListScreen extends Component {
     deleteList = () => {
         this.setState({show: !this.state.show});
        //setTimeout(this.setState({percent: "translateX(60%)"}), 1000);
-        setTimeout(() => this.setState({percent: "translateX(60%)"}), 1);
+        setTimeout(() => this.setState({percent: "translateX(60%)"}), 200);
         //this.setState({percent: "translateX(60%)"})
     }
 
     dontDelete = () =>{
-        this.setState({percent: "translateX(230%)"});
+        this.setState({percent: "translateX(240%)"});
 
         setTimeout(() => this.setState({show: !this.state.show}), 1300);
 
@@ -42,7 +42,7 @@ export class ListScreen extends Component {
 
    state = {
         show: false,
-        percent: "translateX(230%)"
+        percent: "translateX(240%)"
     }
 
     render() {
