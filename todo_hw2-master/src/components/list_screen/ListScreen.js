@@ -23,10 +23,17 @@ export class ListScreen extends Component {
 
     deleteList = () => {
         this.setState({show: !this.state.show});
+       //setTimeout(this.setState({percent: "translateX(60%)"}), 1000);
+        setTimeout(() => this.setState({percent: "translateX(60%)"}), 1);
+        //this.setState({percent: "translateX(60%)"})
     }
 
     dontDelete = () =>{
-        this.setState({show: !this.state.show});
+        this.setState({percent: "translateX(230%)"});
+
+        setTimeout(() => this.setState({show: !this.state.show}), 1300);
+
+        //this.setState({show: !this.state.show});
     }
 
     confirmDeleteList = () =>{
@@ -35,6 +42,7 @@ export class ListScreen extends Component {
 
    state = {
         show: false,
+        percent: "translateX(230%)"
     }
 
     render() {
@@ -44,7 +52,8 @@ export class ListScreen extends Component {
                 <ListTrash deleteList={this.deleteList}/>
                 <ListDeletePopup show={this.state.show}
                 confirmDeleteList={this.confirmDeleteList}
-                dontDelete={this.dontDelete} 
+                dontDelete={this.dontDelete}
+                percent={this.state.percent} 
                 />
                 
                 <div id="list_details_container">

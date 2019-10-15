@@ -7,10 +7,11 @@ export class ListDeletePopup extends Component {
         if(!this.props.show){
             return null;
         }
+        var percentage = this.props.percent;
        
         return (
             <div id="delete_list_popup" className="delete_list_popup" >
-                <div className="delete_list_popup_content" id="delete_list_popup_contents" >
+                <div className="delete_list_popup_content" id="delete_list_popup_contents" style={{transform: percentage}}>
                         <p>Delete list?</p>
                         <p><strong>Are you sure you want to delete this list?</strong></p>
 
