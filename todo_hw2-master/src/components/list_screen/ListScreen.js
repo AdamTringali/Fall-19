@@ -3,7 +3,7 @@ import ListHeading from './ListHeading'
 import ListItemsTable from './ListItemsTable'
 import ListTrash from './ListTrash'
 import ListDeletePopup from './ListDeletePopup'
-import PropTypes from 'prop-types';
+//import PropTypes from 'prop-types';
 
 export class ListScreen extends Component {
     getListName() {
@@ -21,36 +21,21 @@ export class ListScreen extends Component {
         }
     }
 
-    /*showModal = () => {
-        this.setState({ 
-            show: !this.state.show
-        })
-    }*/
-
     deleteList = () => {
         this.setState({show: !this.state.show});
     }
 
     dontDelete = () =>{
-        console.log("dontdeletelist listscreen.js");
         this.setState({show: !this.state.show});
-
     }
 
-
     confirmDeleteList = () =>{
-        console.log("confirmdeletelist listscreen js");
         this.props.confirmDeleteList();
     }
 
    state = {
         show: false,
     }
-
-
-
-
-
 
     render() {
         return (

@@ -18,7 +18,6 @@ const newTodo = {
   completed: ""
 }
 
-
 class App extends Component {
   state = {
     currentScreen: AppScreen.HOME_SCREEN,
@@ -45,43 +44,16 @@ class App extends Component {
 
   addTransaction = (transaction) => {
     this.setState({performingDo: true});
-
     if((this.state.mostRecentTransaction < 0) || (this.mostRecentTransaction < (this.state.transactions.length-1))){
       var i = transaction.length-1;
       for(; i > this.state.mostRecentTransaction; i--){
         this.state.transactions.splice(i, 1);
       }
     }
-
     this.setState({mostRecentTransaction: this.state.mostRecentTransaction+1});
-
     this.state.transactions.push(transaction);
     this.setState({performingDo: false});
-
-   // this.doTransaction();
-
-
-    console.log(this.toString());
   }
-
-  /*doTransaction = () => {
-    console.log("do transaction");
-    if (this.hasTransactionToRedo()) {
-      this.setState({performingDo: true});
-        //this.state.performingDo = true;
-        //let transaction = this.state.transactions[this.state.mostRecentTransaction+1];
-        //this.doTransactionTwo(transaction);
-        //this.state.mostRecentTransaction++;
-        this.setState({mostRecentTransaction: this.state.mostRecentTransaction+1});
-
-       // this.setState({mostRecentTransaction: this.state.mostRecentTransaction+1})
-        this.setState({performingDo: false});
-      }
-}
-
-  doTransactionTwo(){
-    console.log("dotransactionTwo");
-  }*/
 
   toString() {
     var text = "--Number of Transactions: " + this.state.transactions.length + "\n";
@@ -115,66 +87,50 @@ class App extends Component {
   }
 
   undoMoveUp = () => {
-    console.log("undoMoveUp");
-    console.log("item to undoMoveUp(movedown): " + this.state.transactions[this.state.mostRecentTransaction].item.description);
+    //console.log("undoMoveUp");
+    //console.log("item to undoMoveUp(movedown): " + this.state.transactions[this.state.mostRecentTransaction].item.description);
     let transaction = this.state.transactions[this.state.mostRecentTransaction];
     var key = transaction.item.key;
     this.moveDown(transaction);
-
     const myTrans = {
       process: "moveup",
       item: this.state.currentList.items[key+1]
     }
-  
-    console.log("item to undoMoveUp(movedown): match: " + myTrans.item.description);
-    
-    this.state.redoTransactions.push(myTrans);
-        
+    //console.log("item to undoMoveUp(movedown): match: " + myTrans.item.description);
+    this.state.redoTransactions.push(myTrans); 
   }
 
   redoMoveUp = () => {
-    console.log("redoMoveUp");
-    console.log("item to redoMoveUp(moveup): " + this.state.redoTransactions[this.state.numRedoTransactions].item.description);
+    //console.log("redoMoveUp");
+    //console.log("item to redoMoveUp(moveup): " + this.state.redoTransactions[this.state.numRedoTransactions].item.description);
     let transaction = this.state.redoTransactions[this.state.numRedoTransactions];
     this.moveUp(transaction.item);
-
   }
 
   redoMoveDown = () => {
-    console.log("redoMoveDown");
-    console.log("item to redoMoveUp(movedown): " + this.state.redoTransactions[this.state.numRedoTransactions].item.description);
+    //console.log("redoMoveDown");
+    //console.log("item to redoMoveUp(movedown): " + this.state.redoTransactions[this.state.numRedoTransactions].item.description);
     let transaction = this.state.redoTransactions[this.state.numRedoTransactions];
     this.moveDown(transaction.item);
-
   }
 
   undoMoveDown = () => {
-    console.log("undoMoveDown");
-    console.log("item to undoMoveDown(moveup): " + this.state.transactions[this.state.mostRecentTransaction].item.description);
+    //console.log("undoMoveDown");
+    //console.log("item to undoMoveDown(moveup): " + this.state.transactions[this.state.mostRecentTransaction].item.description);
     let transaction = this.state.transactions[this.state.mostRecentTransaction];
     this.moveUp(transaction);
-
     const myTrans = {
       process: "movedown",
       item: this.state.currentList.items[transaction.item.key-1]
     }
-  
-    console.log("item to undoMoveUp(movedown): match: " + myTrans.item.description);
-    
+    //console.log("item to undoMoveUp(movedown): match: " + myTrans.item.description);
     this.state.redoTransactions.push(myTrans);
   }
 
   redoRemoveItem = () => {
-    console.log("redoRemoveItem");
-    console.log("item to redo-remove: " + this.state.redoTransactions[this.state.numRedoTransactions].item.description);
-
+    //console.log("redoRemoveItem");
+    //console.log("item to redo-remove: " + this.state.redoTransactions[this.state.numRedoTransactions].item.description);
     this.removeItem(this.state.redoTransactions[this.state.numRedoTransactions].item);
- /*   let removeLast = this.state.redoTransactions;
-    removeLast.splice((removeLast.length-1),1);
-    this.setState({redoTransactions: removeLast});
-
-    //this.state.redoTransactions.splice(this.state.redoTransactions[0],1);
-    this.setState({numRedoTransactions: this.state.numRedoTransactions - 1});*/
   }
 
   undoRemoveItem = (itemToAdd2) => {
@@ -182,7 +138,7 @@ class App extends Component {
     var x = 0;
     if(!itemToAdd2.process)
     {
-      console.log("null");
+      //console.log("null");
     }
     else{
       //NOT NULL
@@ -190,19 +146,14 @@ class App extends Component {
       x = 1;
 
     }
-    
-    console.log("undoRemoveItem: " + itemToAdd.description);
-
+   // console.log("undoRemoveItem: " + itemToAdd.description);
     newTodo.description = itemToAdd.description;
     newTodo.due_date = itemToAdd.due_date;
     newTodo.assigned_to = itemToAdd.assigned_to;
     newTodo.completed = itemToAdd.completed;
     this.state.currentList.items.push(itemToAdd);
     var insertIndex = itemToAdd.key;
-
     this.resetItemsKey();
-
-
     var endIndex = this.state.currentList.items.length - 2;
     let listOfItems = this.state.currentList.items;
     for(;endIndex >= insertIndex; endIndex--){
@@ -218,12 +169,8 @@ class App extends Component {
     listOfItems[insertIndex].assigned_to = newTodo.assigned_to;
     listOfItems[insertIndex].completed = newTodo.completed;    
 
-  
-
     this.setState({currentList: this.state.currentList});
-
     //console.log("adding to redoList: " + myTrans.item.description);
-
     const newTodo2 = {
       key: this.state.currentList.items[insertIndex].key,
       description: this.state.currentList.items[insertIndex].description,
@@ -235,77 +182,56 @@ class App extends Component {
       process: "removeitem",
       item: newTodo2
     }
-
     if(x === 0){
       this.state.redoTransactions.push(myTrans);
     }else{
       myTrans.process = "newitem";
       this.addTransaction(myTrans);
     }
-
-    //this.setState({redoTransactions: this.state.redoTransactions});
-
   }
 
   undoNewItem = () => {
-    console.log("undoNewItem: " + this.state.transactions[this.state.mostRecentTransaction].item.description);
+    //console.log("undoNewItem: " + this.state.transactions[this.state.mostRecentTransaction].item.description);
     var item = this.state.transactions[this.state.mostRecentTransaction].item;
     this.removeItem(this.state.transactions[this.state.mostRecentTransaction]);
-
     const myTrans = {
       process: "newitem",
       item: item
     }
-  
-    console.log("item to undoNewItem(): " + myTrans.item.description);
-    
+    //console.log("item to undoNewItem(): " + myTrans.item.description);
     this.state.redoTransactions.push(myTrans);
   }
 
   redoNewItem = () => {
-    console.log("redoNewItem: ");
+    //console.log("redoNewItem: ");
     this.undoRemoveItem(this.state.redoTransactions[this.state.numRedoTransactions]);
   }
 
   undoEditItem = () => {
-    console.log("undoEditItem");
+    //console.log("undoEditItem");
     var newitem = this.state.transactions[this.state.mostRecentTransaction].item[1];
     let cpy = this.state.currentList;
     cpy.items[newitem.key] = newitem;
-
     this.setState({currentList: cpy});
-
-
-
     this.state.redoTransactions.push(this.state.transactions[this.state.mostRecentTransaction]);
-
   }
 
   redoEditItem = () => {
-    console.log("redoEditItem");
+   // console.log("redoEditItem");
     var newitem = this.state.redoTransactions[this.state.numRedoTransactions].item[0];
     let cpy = this.state.currentList;
     cpy.items[newitem.key] = newitem;
-
     this.setState({currentList: cpy});
-
-
-
     this.addTransaction(this.state.redoTransactions[this.state.numRedoTransactions]);
-
-
   }
 
   handleKeyDown(e) {
     if (e.ctrlKey && e.which === 90) {//UNDO
-
-       console.log("control-z");
-
+       //console.log("control-z");
       if(this.hasTransactionToUndo()){
         this.setState({performingUndo: true});
         let transaction = this.state.transactions[this.state.mostRecentTransaction];
-        console.log("trans process: " + transaction.process);
-
+        //console.log("trans process: " + transaction.process);
         if(transaction.process === "removeitem")
           this.undoRemoveItem(transaction.item);
         else if(transaction.process === "movedown")
@@ -326,14 +252,12 @@ class App extends Component {
         this.state.transactions.pop();
         this.setState({performingUndo: false});
       }
-
-        console.log(this.toString());
     } else if (e.ctrlKey & e.which === 89) {//REDO
-      console.log("control-y");
+     // console.log("control-y");
 
       if(this.hasTransactionToRedo()){
         let transaction = this.state.redoTransactions[this.state.numRedoTransactions];
-        console.log("transaction test: " + transaction.item.description);
+        //console.log("transaction test: " + transaction.item.description);
         if(transaction.process === "removeitem")
           this.redoRemoveItem();
         else if(transaction.process === "moveup")
@@ -352,8 +276,9 @@ class App extends Component {
         this.state.redoTransactions.pop();
         this.setState({numRedoTransactions: this.state.numRedoTransactions - 1});
       }      
-    } 
-
+    }
+    
+    //console.log(this.toString());
     this.checkForDuplicates();
   }
 
@@ -365,8 +290,6 @@ class App extends Component {
     //POSSIBLE OTHER SOLUTION
     //JUST CHECK TO SEE IF ITEM EXISTS IN LIST, IF IT DOES EXECUTE 
     //IF ITEM DOES NOT EXIST JUST POP THE ITEM FROM ARRAY AND DECREMENT LEN
-
-
   }
 
   clearAllTransactions(){
@@ -385,27 +308,20 @@ class App extends Component {
   loadList = (todoListToLoad) => {
     this.setState({currentScreen: AppScreen.LIST_SCREEN});
     this.setState({currentList: todoListToLoad});
-    //console.log("thislist: " + todoListToLoad.name);
-    /*console.log("currentList: " + this.state.currentList);
-    console.log("currentScreen: " + this.state.currentScreen);*/
   }
 
   setListOwner = (todoListToChange, val) => {
-      
       var oldName = todoListToChange.owner;
       todoListToChange.owner = val.target.value;
-
       const myTrans = {
         process: "editowner",
         item: [val.target.value, oldName]
       }
-
       this.addTransaction(myTrans);
   }
 
   redoEditName = (str) => {
-    console.log("redoEditName");
-
+    //console.log("redoEditName");
     var newName = this.state.redoTransactions[this.state.numRedoTransactions].item[0];
     let cpy = this.state.currentList;
     if(str === "name")
@@ -413,17 +329,13 @@ class App extends Component {
     else
       cpy.owner = newName;
     this.setState({currentList: this.state.currentList});
-
     this.setState({currentScreen: AppScreen.HOME_SCREEN});
     this.setState({currentScreen: AppScreen.LIST_SCREEN});
-
     this.addTransaction(this.state.redoTransactions[this.state.numRedoTransactions]);
   }
 
   undoEditName = (str) => {
-    console.log("undoEditName");
-
-
+   // console.log("undoEditName");
     var newName = this.state.transactions[this.state.mostRecentTransaction].item[1];
     let cpy = this.state.currentList;
     if(str === "name")
@@ -441,29 +353,26 @@ class App extends Component {
   }
 
   setListName = (todoListToChange, val) => {
-      console.log(val.target.value);
-      console.log(todoListToChange.name);
+     // console.log(val.target.value);
+    //  console.log(todoListToChange.name);
       var oldName = todoListToChange.name;
-
       todoListToChange.name = val.target.value;
-
       const myTrans = {
         process: "editname",
         item: [val.target.value, oldName]
       }
-
       this.addTransaction(myTrans);
   }
 
   moveUp = (listItem2) => {
-    console.log("moveup method app.js");
+    //console.log("moveup method app.js");
     var listItem = listItem2;
     var x = 0;
-
-    if(!listItem2.process)
-      console.log("process is null");
+    if(!listItem2.process){
+      //console.log("process is null");
+    }
     else{
-      console.log("process is NOT null");
+      //console.log("process is NOT null");
       listItem = listItem2.item;
       x = 1;
     }
@@ -481,9 +390,6 @@ class App extends Component {
           indx = cpy.length;
         }
     }
-
-    //console.log(item.description);
-
     if( listItem.key === 0){
       //console.log("first item");
       x = 1;
@@ -504,36 +410,30 @@ class App extends Component {
       
       this.setState({});
     }
-
     if(x === 0){
-
       const myTrans = {
         process: "moveup",
         item: cpy[found].items[listItem.key-1]
       }
-
-      console.log("Adding (moveup) Transaction: " + myTrans.item.description);
+      //console.log("Adding (moveup) Transaction: " + myTrans.item.description);
       this.addTransaction(myTrans);
     }
   }
 
   moveDown = (listItem2) => {
-
     var listItem = listItem2;
     var x = 0;
-
-    if(!listItem2.process)
-      console.log("process is null");
+    if(!listItem2.process){
+      //console.log("process is null");
+    }
     else{
-      console.log("process is NOT null");
+      //console.log("process is NOT null");
       listItem = listItem2.item;
       x = 1;
     }
-
-    console.log("moveDown app.js");
+    //console.log("moveDown app.js");
    // console.log(listItem.description);
    // console.log(...this.state.todoLists);
-
     let cpy = [...this.state.todoLists];
     var indx = 0;
     var item;
@@ -547,9 +447,7 @@ class App extends Component {
           indx = cpy.length;
         }
     }
-
     //console.log(item.description);
-
     if( (cpy[found].items.length-1) === listItem.key){
      // console.log("last item");
      x = 1;
@@ -567,126 +465,81 @@ class App extends Component {
       cpy[found].items[listItem.key+1].assigned_to = assign;
       cpy[found].items[listItem.key+1].due_date = due;
       cpy[found].items[listItem.key+1].completed = compl;
-      
       this.setState({});
     }
-    
     if(x === 0){
       const myTrans = {
         process: "movedown",
         item: cpy[found].items[listItem.key+1]
       }
-
-      console.log("Adding (movedown) Transaction: " + myTrans.item.description);
+      //console.log("Adding (movedown) Transaction: " + myTrans.item.description);
       this.addTransaction(myTrans);
     }
-
-
   }
 
   removeItem = (listItem2) => {
-    //listItem.stopPropagation();
-    //console.log("removeitem app.js");
     var listItem = listItem2;
     var x = 0;
-    if(!listItem2.process)
-      console.log("not n");
+    if(!listItem2.process){
+      //console.log("not n");
+    }
     else{
       x = 1;
       listItem = listItem2.item
     }
     let cpy = [...this.state.todoLists];
     var indx = 0;
-    //var item = null;
     var found = this.state.currentList.key;
-    /*for(; indx < cpy.length; indx++)
-    {
-      console.log("key : " + listItem.key + "index: " + indx);
-      if(cpy[indx].items.length > listItem.key)
-        if(cpy[indx].items[listItem.key].description === listItem.description){
-          item = cpy[indx].items[listItem.key];
-          found = indx;
-          indx = cpy.length;
-        }
-    }*/
     cpy[found].items.splice(listItem.key, 1);
-   // console.log("removing item");
-    //cpy[found].numItems = cpy[found].numItems - 1;
-   // console.log(cpy[found].items.length);
+
     for(indx = 0; indx < cpy[found].items.length; indx++)
     {
-      //console.log(indx);
       cpy[found].items[indx].key = indx;
       this.setState({});
-
     }
-    //listItem.key = -1;
     this.setState({});
-
     const myTrans = {
       process: "removeitem",
       item: listItem
     }
-
     if(x === 0){
-      console.log("Adding (removeitem) Transaction: " + listItem.description);
+      //console.log("Adding (removeitem) Transaction: " + listItem.description);
       this.addTransaction(myTrans);
     }
-    //console.log(this.toString());
   }
 
   editItem = (itemToEdit) => {
-    //event.stopPropagation();
-    console.log("edititem app.js : " + itemToEdit.description);
-
+    //console.log("edititem app.js : " + itemToEdit.description);
     newTodo.description = itemToEdit.description;
     newTodo.assigned_to = itemToEdit.assigned_to;
     newTodo.due_date = itemToEdit.due_date;
     newTodo.completed = itemToEdit.completed;
     newTodo.key = itemToEdit.key;
-
-    console.log("key app.js: " + newTodo.key); 
-
-    //this.setState({: newTodo });
-
+    //console.log("key app.js: " + newTodo.key); 
     this.addItem();
-
-    //this.resetItem();
-
   }
 
   resetItem(){
     newTodo.key = -1;
+    newTodo.description = "";
+    newTodo.due_date = "";
+    newTodo.assigned_to = "";
+    newTodo.completed = "";
   }
 
   addItem = () => {
-    console.log("additem app.js");
     this.setState({currentScreen: AppScreen.ITEM_SCREEN});
-    //this.setState({currentList: null});
-      //this.setState({currentList: todoListToLoad});
   }
 
   cancelItemChange = () =>{
-    console.log("cancelitemchange app.js");
+    //console.log("cancelitemchange app.js");
     this.setState({currentScreen: AppScreen.LIST_SCREEN});
-    console.log("todolists: " + this.props.todoLists);
-    this.resetItem();
-    //this.loadList(todoListToLoad);
+    //console.log("todolists: " + this.props.todoLists);
+    this.resetItem();  
   }
 
   submitItemChange = (item) =>{
-    console.log("submititemchange app.js");
-    //item.getElementById("item_description_textfield");
-    //console.log("item key: " + this.state.currentList.items[item.key].description);
-    //console.log("todolists: " + this.props.todoLists);
-    //console.log("currentList: " + this.state.currentList.items.length);
-    /*const original = {
-      description: this.state.currentList.items[item.key].description,
-      assigned_to: this.state.currentList.items[item.key].assigned_to,
-      due_date: this.state.currentList.items[item.key].due_date,
-      completed: this.state.currentList.items[item.key].completed,
-      key: item.key
-    }*/
+    //console.log("submititemchange app.js");
 
     const myTrans = {
       process: "itemchange",
@@ -721,37 +574,20 @@ class App extends Component {
       newItem.description = item.descrip;
       newItem.assigned_to = item.assign;
       newItem.due_date = item.dued;
-      console.log("test: " + newItem.completed);
-      console.log("test2: " + item.compl);
       newItem.completed = item.compl;
-      console.log("oldItem name: " + newItem.description);
-      console.log("newitem name: " + item.descrip)
       myTrans.process = "edititem";
       myTrans.item = [newItem, oldItem];
-      //myTrans.item[1] = newItem;
     }
     
-    
-  
-
-    //this.setState({currentList: [...this.state.currentList.items, newTodo]  });
     this.setState({currentScreen: AppScreen.LIST_SCREEN});
     this.resetItem();
-
-
-
-   // console.log("Adding (itemchange) Transaction before: " + myTrans.item[0].description);
-    //console.log("Adding (itemchange) Transaction after: " + myTrans.item[1].description);
     this.addTransaction(myTrans);
-
   }
 
   createNewList= () =>{
-    console.log("create new list app.js");
-    //this.setState({currentScreen: AppScreen.LIST_SCREEN});
-
+    //console.log("create new list app.js");
     let todos = this.state.todoLists;
-    console.log(todos.length);
+    //console.log(todos.length);
     const newTodo = {
       key: todos.length,
       items: [],
@@ -761,33 +597,26 @@ class App extends Component {
     todos.push(newTodo);
     this.setState({todoLists: todos});
     this.loadList(newTodo);
-    //this.setState({todoLists: todoLists});
-    //this.setState({todoLists: newTodo});
-  // console.log("thislist: " + todoListToLoad.name);
   }
 
   confirmDeleteList = () => {
-    console.log("confirm deletelist appjs");
-    console.log(this.state.currentList);
+    //console.log("confirm deletelist appjs");
+   //console.log(this.state.currentList);
 
       this.state.todoLists.splice(this.state.currentList.key, 1);
-      console.log("removing item");
+      //console.log("removing item");
       let cpy = [...this.state.todoLists];
       var indx = 0;
       for(; indx < this.state.todoLists.length; indx++)
       {
-        console.log(indx);
         cpy[indx].key = indx;
       }
-
       this.goHome();
   }
 
   sortByDueDate = () =>{
-    console.log("sortByDueDate appjs");
     let cpy = [...this.state.todoLists];
     let items = cpy[this.state.currentList.key].items;
-    //console.log("items before: " + items[0].description);
     if(this.state.dueDateSort === 0){
       items.sort(function(a, b){
         var x = a.due_date;
@@ -812,11 +641,8 @@ class App extends Component {
   }
 
   sortByTask = (todoList) =>{
-    console.log("sortByTask appjs");
-    //this.state.todoLists[0].items.sort();
     let cpy = [...this.state.todoLists];
     let items = cpy[this.state.currentList.key].items;
-    //console.log("items before: " + items[0].description);
     if(this.state.taskSort === 0){
       items.sort(function(a, b){
         var x = a.description;
@@ -847,15 +673,12 @@ class App extends Component {
     {
       cpy[this.state.currentList.key].items[indx].key = indx;
     }
-    //his.setState({});
-
   }
 
   sortByStatus = () =>{
     console.log("sortByStatus appjs");
     let cpy = [...this.state.todoLists];
     let items = cpy[this.state.currentList.key].items;
-    //console.log("items before: " + items[0].description);
     if(this.state.completedSort === 0){
       items.sort(function(a, b){
         var x = a.completed;
@@ -877,8 +700,6 @@ class App extends Component {
     }
     this.resetItemsKey();
     this.setState({todolists: cpy});
-
-    
   }
 
   render() {
@@ -911,7 +732,9 @@ class App extends Component {
           submitItemChange={this.submitItemChange} 
           setTextFieldPrompt={this.setTextFieldPrompt}
           setMyStateTwo={this.setMyStateTwo}
-          itemToEdit={newTodo}/>;
+          itemToEdit={newTodo}
+          resetItemToEdit={this.resetItem}
+          />;
       default:
         return <div>ERROR</div>;
     }
