@@ -317,7 +317,9 @@ class App extends Component {
         else if(transaction.process === "edititem")
           this.undoEditItem();
         else if(transaction.process === "editname")
-          this.undoEditName();
+          this.undoEditName("name");
+        else if(transaction.process === "editowner")
+          this.undoEditName("owner");
 
         this.setState({mostRecentTransaction: this.state.mostRecentTransaction-1});
         this.setState({numRedoTransactions: this.state.numRedoTransactions + 1});
@@ -342,6 +344,10 @@ class App extends Component {
           this.redoNewItem();
         else if(transaction.process === "edititem")
           this.redoEditItem();
+        else if(transaction.process === "editname")
+          this.redoEditName("name");
+        else if(transaction.process === "editowner")
+          this.redoEditName("owner");
 
         this.state.redoTransactions.pop();
         this.setState({numRedoTransactions: this.state.numRedoTransactions - 1});
@@ -385,28 +391,52 @@ class App extends Component {
   }
 
   setListOwner = (todoListToChange, val) => {
+      
+      var oldName = todoListToChange.owner;
       todoListToChange.owner = val.target.value;
 
+      const myTrans = {
+        process: "editowner",
+        item: [val.target.value, oldName]
+      }
+
+      this.addTransaction(myTrans);
   }
 
-  undoEditName = () => {
+  redoEditName = (str) => {
+    console.log("redoEditName");
+
+    var newName = this.state.redoTransactions[this.state.numRedoTransactions].item[0];
+    let cpy = this.state.currentList;
+    if(str === "name")
+      cpy.name = newName;
+    else
+      cpy.owner = newName;
+    this.setState({currentList: this.state.currentList});
+
+    this.setState({currentScreen: AppScreen.HOME_SCREEN});
+    this.setState({currentScreen: AppScreen.LIST_SCREEN});
+
+    this.addTransaction(this.state.redoTransactions[this.state.numRedoTransactions]);
+  }
+
+  undoEditName = (str) => {
     console.log("undoEditName");
 
 
     var newName = this.state.transactions[this.state.mostRecentTransaction].item[1];
     let cpy = this.state.currentList;
-    cpy.name = newName;
+    if(str === "name")
+      cpy.name = newName;
+    else
+      cpy.owner = newName;    
+    
+    this.setState({currentList: this.state.currentList});
 
-    this.state.currentList.name = newName;
-    //this.setState({currentList: this.state.currentList});
-    //this.goHome();
-    //this.loadList(this.state.currentList);
+    this.setState({currentScreen: AppScreen.HOME_SCREEN});
+    this.setState({currentScreen: AppScreen.LIST_SCREEN});
 
-    //this.setState({currentList: cpy});
-
-
-
-    //this.state.redoTransactions.push(this.state.transactions[this.state.mostRecentTransaction]);
+    this.state.redoTransactions.push(this.state.transactions[this.state.mostRecentTransaction]);
 
   }
 
