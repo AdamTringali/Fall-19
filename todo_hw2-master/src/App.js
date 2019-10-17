@@ -19,6 +19,7 @@ const newTodo = {
 }
 
 class App extends Component {
+
   state = {
     currentScreen: AppScreen.HOME_SCREEN,
     todoLists: testTodoListData.todoLists,
@@ -256,6 +257,8 @@ class App extends Component {
   }
 
   handleKeyDown(e) {
+    this.checkForDuplicates();
+
     if (e.ctrlKey && e.which === 90) {//UNDO
        //console.log("control-z");
       if(this.hasTransactionToUndo()){
@@ -291,6 +294,7 @@ class App extends Component {
         //console.log("Popping transaction (" + transaction.process +"): " + transaction.item.description);
 
         this.setState({performingUndo: false});
+
       }
     } else if (e.ctrlKey & e.which === 89) {//REDO
      // console.log("control-y");
@@ -316,13 +320,43 @@ class App extends Component {
         this.state.redoTransactions.pop();
         this.setState({numRedoTransactions: this.state.numRedoTransactions - 1});
       }      
+
     }
     
     //console.log(this.toString());
-    this.checkForDuplicates();
   }
 
   checkForDuplicates = () =>{
+    console.log("check for dup");
+    if(this.state.mostRecentTransaction >= 0)
+    {
+      var len = this.state.currentList.items.length;
+      var key = this.state.mostRecentTransaction;
+      if(len > key){
+        if(!this.state.transactions[key].item.description === this.state.currentList.items[key]){
+          console.log("There is not a match. Error");
+        }
+      }
+    }
+    //error on movedown(0), undo, remove(0), try to redo(error)
+    if(this.state.numRedoTransactions >= 0){
+      var len = this.state.currentList.items.length;
+      var key = this.state.numRedoTransactions;
+      if(len > key){
+        console.log("in here");
+        if(this.state.redoTransactions[this.state.numRedoTransactions].item.description !== this.state.currentList.items[key].description)
+        {
+          console.log("Error: index[" + this.state.numRedoTransactions + "] no longer exists."
+           + " Removing transaction");
+          this.setState({numRedoTransactions: this.state.numRedoTransactions - 1});
+          this.state.redoTransactions.pop();
+        }
+        else
+          console.log("asda");
+      }
+
+    }
+    
     //LOOP THROUGH BOTH TRANSACTIONS AND REDOTRANSACTIONS TO INSURE THAT NO 
     //TWO ITEMS HAVE THE SAME PROCESS & ITEM. 
     //IF THEY THERE IS A MATCH REMOVE THE LOWER INDEX (LATEST OCCURING)
