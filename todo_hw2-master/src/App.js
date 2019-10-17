@@ -157,19 +157,24 @@ class App extends Component {
     this.state.currentList.items.push(itemToAdd);
     var insertIndex = itemToAdd.key;
     //console.log("test3: " + this.state.transactions[0].item.key);
-    var key2 = this.state.transactions[0].item.key;
+    var key2 = null;
+    if(this.state.mostRecentTransaction >= 0)
+      key2 = this.state.transactions[0].item.key;
     var test = key2;
     this.resetItemsKey();
-    if(test != this.state.transactions[0].item.key){
-      if(this.state.currentList.items[key2] && this.state.mostRecentTransaction >= 1){
-        console.log("doing this");
-        const myTrans2 = {
-          process: this.state.transactions[this.state.mostRecentTransaction-1].process,
-          item: this.state.currentList.items[key2]
+    if(!key2){
+
+    }else
+      if(test != this.state.transactions[0].item.key){
+        if(this.state.currentList.items[key2] && this.state.mostRecentTransaction >= 1){
+          console.log("doing this");
+          const myTrans2 = {
+            process: this.state.transactions[this.state.mostRecentTransaction-1].process,
+            item: this.state.currentList.items[key2]
+          }
+          this.state.transactions[this.state.mostRecentTransaction-1] = myTrans2;
         }
-        this.state.transactions[this.state.mostRecentTransaction-1] = myTrans2;
       }
-    }
     //console.log("test4: " + this.state.transactions[0].item.key);
 
     var endIndex = this.state.currentList.items.length - 2;

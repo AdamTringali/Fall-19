@@ -30,10 +30,10 @@ export class ListItemCard extends Component {
                 <div className='list_item_card_description' onClick={this.props.editItem.bind(this, this.props.listItem)}>
                     {this.props.listItem.description}
                 </div>
-                <div className='list_item_card_assigned_to'>
+                <div className='list_item_card_assigned_to' onClick={this.props.editItem.bind(this, this.props.listItem)}>
                     Assigned To: <strong>{this.props.listItem.assigned_to}</strong>
                 </div>
-                <div className='list_item_card_due_date'>
+                <div className='list_item_card_due_date' onClick={this.props.editItem.bind(this, this.props.listItem)}>
                     {this.props.listItem.due_date}
                 </div>
                 <div className={statuscss} >
