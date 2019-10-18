@@ -70,6 +70,46 @@ class App extends Component {
     return text;
   }
 
+  /*checkForDuplicates = () =>{
+    console.log("check for dup");
+    if(this.state.mostRecentTransaction >= 0)
+    {
+      var len = this.state.currentList.items.length;
+      var key = this.state.mostRecentTransaction;
+      if(len > key){
+        if(!this.state.transactions[key].item.description === this.state.currentList.items[key]){
+          console.log("There is not a match. Error");
+        }
+      }
+    }
+    //error on movedown(0), undo, remove(0), try to redo(error)
+    if(this.state.numRedoTransactions >= 0){
+      var len = this.state.currentList.items.length;
+      var key = this.state.numRedoTransactions;
+      if(len > key){
+        console.log("in here");
+        if(this.state.redoTransactions[this.state.numRedoTransactions].item.description !== this.state.currentList.items[key].description)
+        {
+          console.log("Error: index[" + this.state.numRedoTransactions + "] no longer exists."
+           + " Removing transaction");
+          this.setState({numRedoTransactions: this.state.numRedoTransactions - 1});
+          this.state.redoTransactions.pop();
+        }
+        else
+          console.log("asda");
+      }
+
+    }
+    
+    //LOOP THROUGH BOTH TRANSACTIONS AND REDOTRANSACTIONS TO INSURE THAT NO 
+    //TWO ITEMS HAVE THE SAME PROCESS & ITEM. 
+    //IF THEY THERE IS A MATCH REMOVE THE LOWER INDEX (LATEST OCCURING)
+
+    //POSSIBLE OTHER SOLUTION
+    //JUST CHECK TO SEE IF ITEM EXISTS IN LIST, IF IT DOES EXECUTE 
+    //IF ITEM DOES NOT EXIST JUST POP THE ITEM FROM ARRAY AND DECREMENT LEN
+  }*/
+
   hasTransactionToUndo() {
     if(this.state.mostRecentTransaction >= 0)
       if(!this.state.transactions[this.state.mostRecentTransaction].item)
@@ -79,9 +119,51 @@ class App extends Component {
   }
 
   hasTransactionToRedo() {
-    if (this.state.numRedoTransactions >= 0)
+
+    if (this.state.numRedoTransactions >= 0){
+      if(this.state.redoTransactions[this.state.numRedoTransactions].process === "editname" ||
+      this.state.redoTransactions[this.state.numRedoTransactions].process === "editowner" ||
+      this.state.redoTransactions[this.state.numRedoTransactions].process === "newitem")
+        return true;
       if(!this.state.redoTransactions[this.state.numRedoTransactions].item)
         console.log("item is null-redo");
+        var len = this.state.currentList.items.length;
+        var key = this.state.redoTransactions[this.state.numRedoTransactions].item.key;
+        //console.log("len " + len + " key: " + key);
+        if(len > key){
+        // console.log("in here");
+          if(this.state.redoTransactions[this.state.numRedoTransactions].process === "moveup" ||
+            this.state.redoTransactions[this.state.numRedoTransactions].process === "movedown")
+            if(this.state.redoTransactions[this.state.numRedoTransactions].item.description !== this.state.currentList.items[key].description)
+            {
+              console.log("Error: index[" + key + "] no longer exists."
+                + " Removing transaction");
+              this.setState({numRedoTransactions: this.state.numRedoTransactions - 1});
+              this.state.redoTransactions.pop();
+              return false;
+            }
+      }
+      else{
+        if(this.state.redoTransactions[this.state.numRedoTransactions].process !== "sort"){
+          console.log("Error. Key is larger than length. Removing transaction");
+          this.setState({numRedoTransactions: this.state.numRedoTransactions - 1});
+          this.state.redoTransactions.pop();
+          return false;
+        }else if(this.state.redoTransactions[this.state.numRedoTransactions].process === "sort"){
+          if(this.state.redoTransactions[this.state.numRedoTransactions].item.length != 
+            this.state.currentList.items.length){
+              console.log("There exists a different number of items since last time sort was used. Removing transaction");
+              this.setState({numRedoTransactions: this.state.numRedoTransactions - 1});
+              this.state.redoTransactions.pop();
+            }
+        }
+      }
+    }
+
+
+         
+    
+        
     return this.state.numRedoTransactions >= 0;
   }
 
@@ -256,8 +338,45 @@ class App extends Component {
     this.addTransaction(this.state.redoTransactions[this.state.numRedoTransactions]);
   }
 
+  undoSort = () => {
+
+    var itemcpy = this.state.transactions[this.state.mostRecentTransaction].item;
+    var cpy = this.state.currentList;
+    const copy = [...cpy.items];
+    const myTrans = {
+      process: "sort",
+      item: copy
+    }
+
+    cpy.items = itemcpy;
+    this.resetItemsKey();
+    this.setState({currentList: cpy});
+    this.state.redoTransactions.push(myTrans);
+    //push to redotransactions
+
+  }
+
+  
+  redoSort = () => {
+
+    var itemcpy = this.state.redoTransactions[this.state.numRedoTransactions].item;
+    var cpy = this.state.currentList;
+    const copy = [...cpy.items];
+    const myTrans = {
+      process: "sort",
+      item: copy
+    }
+
+    cpy.items = itemcpy;
+    this.resetItemsKey();
+    this.setState({currentList: cpy});
+    this.addTransaction(myTrans);
+    //push to redotransactions
+
+  }
+
   handleKeyDown(e) {
-    this.checkForDuplicates();
+    //this.checkForDuplicates();
 
     if (e.ctrlKey && e.which === 90) {//UNDO
        //console.log("control-z");
@@ -285,6 +404,8 @@ class App extends Component {
           this.undoEditName("name");
         else if(transaction.process === "editowner")
           this.undoEditName("owner");
+        else if(transaction.process === "sort")
+          this.undoSort();
 
         this.setState({mostRecentTransaction: this.state.mostRecentTransaction-1});
         this.setState({numRedoTransactions: this.state.numRedoTransactions + 1});
@@ -316,6 +437,8 @@ class App extends Component {
           this.redoEditName("name");
         else if(transaction.process === "editowner")
           this.redoEditName("owner");
+        else if(transaction.process === "sort")
+          this.redoSort();
 
         this.state.redoTransactions.pop();
         this.setState({numRedoTransactions: this.state.numRedoTransactions - 1});
@@ -326,45 +449,7 @@ class App extends Component {
     //console.log(this.toString());
   }
 
-  checkForDuplicates = () =>{
-    console.log("check for dup");
-    if(this.state.mostRecentTransaction >= 0)
-    {
-      var len = this.state.currentList.items.length;
-      var key = this.state.mostRecentTransaction;
-      if(len > key){
-        if(!this.state.transactions[key].item.description === this.state.currentList.items[key]){
-          console.log("There is not a match. Error");
-        }
-      }
-    }
-    //error on movedown(0), undo, remove(0), try to redo(error)
-    if(this.state.numRedoTransactions >= 0){
-      var len = this.state.currentList.items.length;
-      var key = this.state.numRedoTransactions;
-      if(len > key){
-        console.log("in here");
-        if(this.state.redoTransactions[this.state.numRedoTransactions].item.description !== this.state.currentList.items[key].description)
-        {
-          console.log("Error: index[" + this.state.numRedoTransactions + "] no longer exists."
-           + " Removing transaction");
-          this.setState({numRedoTransactions: this.state.numRedoTransactions - 1});
-          this.state.redoTransactions.pop();
-        }
-        else
-          console.log("asda");
-      }
-
-    }
-    
-    //LOOP THROUGH BOTH TRANSACTIONS AND REDOTRANSACTIONS TO INSURE THAT NO 
-    //TWO ITEMS HAVE THE SAME PROCESS & ITEM. 
-    //IF THEY THERE IS A MATCH REMOVE THE LOWER INDEX (LATEST OCCURING)
-
-    //POSSIBLE OTHER SOLUTION
-    //JUST CHECK TO SEE IF ITEM EXISTS IN LIST, IF IT DOES EXECUTE 
-    //IF ITEM DOES NOT EXIST JUST POP THE ITEM FROM ARRAY AND DECREMENT LEN
-  }
+  
 
   clearAllTransactions(){
     this.setState({transactions: []});
@@ -438,8 +523,15 @@ class App extends Component {
       this.addTransaction(myTrans);
   }
 
-  moveUp = (listItem2) => {
+  moveUp = (listItem2, e) => {
+   // e.stopPropagation();
     //console.log("moveup method app.js");
+    if(!e)
+    {
+      //
+    }
+    else
+      e.stopPropagation();
     var listItem = listItem2;
     var x = 0;
     if(!listItem2.process){
@@ -504,11 +596,19 @@ class App extends Component {
     }
   }
 
-  moveDown = (listItem2) => {
+  moveDown = (listItem2, e) => {
+   // e.stopPropagation();
+   if(!e)
+   {
+     //
+   }
+   else
+     e.stopPropagation();
     var listItem = listItem2;
     var x = 0;
     if(!listItem2.process){
       //console.log("process is null");
+
     }
     else{
       //console.log("process is NOT null");
@@ -569,7 +669,13 @@ class App extends Component {
     }
   }
 
-  removeItem = (listItem2) => {
+  removeItem = (listItem2, e) => {
+    if(!e)
+    {
+      //
+    }
+    else
+      e.stopPropagation();
     var listItem = listItem2;
     var x = 0;
     if(!listItem2.process){
@@ -709,6 +815,12 @@ class App extends Component {
   sortByDueDate = () =>{
     let cpy = [...this.state.todoLists];
     let items = cpy[this.state.currentList.key].items;
+    const copy = [...items];
+    const myTrans = {
+      process: "sort",
+      item: copy
+    }
+    this.addTransaction(myTrans);
     if(this.state.dueDateSort === 0){
       items.sort(function(a, b){
         var x = a.due_date;
@@ -728,6 +840,7 @@ class App extends Component {
         });
         this.setState({dueDateSort: 0});
     }
+
     this.resetItemsKey();
     this.setState({todolists: cpy});
   }
@@ -735,6 +848,12 @@ class App extends Component {
   sortByTask = (todoList) =>{
     let cpy = [...this.state.todoLists];
     let items = cpy[this.state.currentList.key].items;
+    const copy = [...items];
+    const myTrans = {
+      process: "sort",
+      item: copy
+    }
+    this.addTransaction(myTrans);
     if(this.state.taskSort === 0){
       items.sort(function(a, b){
         var x = a.description;
@@ -771,6 +890,12 @@ class App extends Component {
     console.log("sortByStatus appjs");
     let cpy = [...this.state.todoLists];
     let items = cpy[this.state.currentList.key].items;
+    const copy = [...items];
+    const myTrans = {
+      process: "sort",
+      item: copy
+    }
+    this.addTransaction(myTrans);
     if(this.state.completedSort === 0){
       items.sort(function(a, b){
         var x = a.completed;

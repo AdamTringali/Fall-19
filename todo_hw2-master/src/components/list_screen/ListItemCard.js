@@ -26,14 +26,14 @@ export class ListItemCard extends Component {
 
 
         return (
-            <div className='list_item_card' >
-                <div className='list_item_card_description' onClick={this.props.editItem.bind(this, this.props.listItem)}>
+            <div className='list_item_card' onClick={this.props.editItem.bind(this, this.props.listItem)} >
+                <div className='list_item_card_description' >
                     {this.props.listItem.description}
                 </div>
-                <div className='list_item_card_assigned_to' onClick={this.props.editItem.bind(this, this.props.listItem)}>
+                <div className='list_item_card_assigned_to' >
                     Assigned To: <strong>{this.props.listItem.assigned_to}</strong>
                 </div>
-                <div className='list_item_card_due_date' onClick={this.props.editItem.bind(this, this.props.listItem)}>
+                <div className='list_item_card_due_date'>
                     {this.props.listItem.due_date}
                 </div>
                 <div className={statuscss} >

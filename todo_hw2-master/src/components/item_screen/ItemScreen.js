@@ -33,7 +33,7 @@ export class ItemScreen extends Component {
 
         if(this.props.itemToEdit.key === -1)
         {
-            console.log("creating new item");
+            //console.log("creating new item");
             this.props.resetItemToEdit();
         }
 
