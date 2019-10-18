@@ -123,7 +123,8 @@ class App extends Component {
     if (this.state.numRedoTransactions >= 0){
       if(this.state.redoTransactions[this.state.numRedoTransactions].process === "editname" ||
       this.state.redoTransactions[this.state.numRedoTransactions].process === "editowner" ||
-      this.state.redoTransactions[this.state.numRedoTransactions].process === "newitem")
+      this.state.redoTransactions[this.state.numRedoTransactions].process === "newitem" || 
+      this.state.redoTransactions[this.state.numRedoTransactions].process === "edititem")
         return true;
       if(!this.state.redoTransactions[this.state.numRedoTransactions].item)
         console.log("item is null-redo");
