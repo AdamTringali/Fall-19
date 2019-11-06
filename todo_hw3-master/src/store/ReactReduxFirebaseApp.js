@@ -14,7 +14,7 @@ class ReactReduxFirebaseApp extends React.Component {
         super(props);
 
         // We enhance compose in order to use Redux DevTools extension
-        // https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd
+        //https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd
         const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
         // Create config for rrfProps object. We need this to pass it in the ReactReduxFirebaseProvider component

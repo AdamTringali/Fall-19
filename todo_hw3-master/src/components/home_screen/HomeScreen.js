@@ -4,16 +4,38 @@ import { compose } from 'redux';
 import { NavLink, Redirect } from 'react-router-dom';
 import { firestoreConnect } from 'react-redux-firebase';
 import TodoListLinks from './TodoListLinks'
+import { getFirestore } from 'redux-firestore';
 
 class HomeScreen extends Component {
+    state = {
+        newList: false,
+        lid: "0",
+    }
 
-    render() {
+    async goToNewList(props){
+        const fireStore = getFirestore();
+        let result = await fireStore.collection('todoLists').add({
+                name: "Unknown", owner: "Unknown",
+                // items: 
+            });
+        props.history.push('todoList/'+result.id);
+    }
+    
+    handleNewList = () =>{
+        console.log("handleNewList homescreen.js");
+        this.goToNewList(this.props);
+
+    }
+
+
+    render() { 
         if (!this.props.auth.uid) {
             return <Redirect to="/login" />;
         }
+    
 
         return (
-            <div className="dashboard_container">
+            <div className="dashboard container">
                 <div className="row">
                     <div className="col s12 m4">
                         <TodoListLinks />
