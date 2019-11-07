@@ -29,7 +29,7 @@ class ListScreen extends Component {
 
         return (
             <div className="container white">
-                <div class="row">
+                <div className="row">
                     <h5 className="grey-text text-darken-3">Todo List</h5>
                     <div className="input-field col s6">
                         <label className="active" htmlFor="email">Name</label>

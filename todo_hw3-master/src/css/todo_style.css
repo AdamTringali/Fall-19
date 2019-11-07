@@ -33,6 +33,7 @@ div.banner {
 }
 
 .home_new_list_button {
+  inline-size: -webkit-fill-available;
   font-size: 32pt;
 }
 .home_new_list_button:hover {
