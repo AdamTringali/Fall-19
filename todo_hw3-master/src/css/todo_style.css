@@ -9,13 +9,13 @@
   --swatch-complement:    #E1E4CB; /* USED IN FORGROUND OF PRIMARY FOR TEXT AND BORDERS */
   --swatch_contrast:      #111111; /* USED IN MOUSE-OVER SELECTION OF LARGE ELEMENTS */
   --swatch-accent:        #669966; /* USED IN MOUSE-OVER SELECTION OF TEXT AND BORDERS */    
-  --my-font-family:          "Robaaaoto";
+  --my-font-family:          "Lexend Exa";
   --bounceEasing: cubic-bezier(0.51, 0.92, 0.24, 1.15);
 }
 
 body {
   background-color: var(--swatch-foundation);
-  font-family: 'Lexend Exa';
+  
 }
 
 div.banner {

@@ -7,10 +7,8 @@ import TodoListLinks from './TodoListLinks'
 import { getFirestore } from 'redux-firestore';
 
 class HomeScreen extends Component {
-    state = {
-        newList: false,
-        lid: "0",
-    }
+    
+
 
     async goToNewList(props){
         const fireStore = getFirestore();
@@ -28,16 +26,68 @@ class HomeScreen extends Component {
     }
 
 
+
     render() { 
         if (!this.props.auth.uid) {
             return <Redirect to="/login" />;
         }
-    
+       
+            const fireStore = getFirestore();
+            const oldItem = {
+                owner: "",
+                name: "",
+                items: [],
+                key: ""
+            }
 
+            const oldItemtwo = {
+                owner: "",
+                name: "",
+                items: [],
+                key: ""
+            }
+            let onlyOne = 0;
+            let docid = 0;
+            let docidtwo = 0;
+            fireStore.collection('todoLists').get().then(function(querySnapshot){
+                querySnapshot.forEach(function(doc) {
+                    let listKey = doc.data().key;
+                    
+                    if(onlyOne === 0){
+                        onlyOne = 1;
+                        docid = doc.id;
+                        oldItem.items = doc.data().items;
+                        oldItem.owner = doc.data().owner;
+                        oldItem.name = doc.data().name;
+                    }
+                    if( listKey === 0){               
+                        docidtwo = doc.id;
+                        oldItemtwo.owner = doc.data().owner;
+                        oldItemtwo.name = doc.data().name;
+                        oldItemtwo.items = doc.data().items;
+                    }         
+                })
+      
+                fireStore.collection('todoLists').doc(docid).update({owner: oldItemtwo.owner});
+                fireStore.collection('todoLists').doc(docid).update({name: oldItemtwo.name});
+                if(!oldItemtwo.items)
+                    fireStore.collection('todoLists').doc(docid).update({items: []});
+                else
+                    fireStore.collection('todoLists').doc(docid).update({items: oldItemtwo.items});
+                
+                fireStore.collection('todoLists').doc(docidtwo).update({owner: oldItem.owner});
+                fireStore.collection('todoLists').doc(docidtwo).update({name: oldItem.name});
+                if(!oldItem.items)
+                    fireStore.collection('todoLists').doc(docidtwo).update({items: []});
+                else
+                    fireStore.collection('todoLists').doc(docidtwo).update({items: oldItem.items});
+            });
+        
         return (
             <div className="dashboard container">
                 <div className="row">
-                    <div className="col s12 m4">
+                    <div className="col s12 m4" >
+                        
                         <TodoListLinks />
                     </div>
 
