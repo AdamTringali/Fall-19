@@ -13,18 +13,130 @@ import { Redirect } from 'react-router-dom'
 class ItemsList extends React.Component {
 
     state = {
+        taskSort: 1,
+        dueDateSort: 1,
+        completedSort: 1,
         keySet: false,
         newItem: false
     }
 
     sortByCompleted = () => {
-        console.log("sortByCompleted, itemlist.js")
+        console.log("sortByCompleted, itemlist.js");
+        const fireStore = getFirestore();
+        var todoListref = fireStore.collection('todoLists').doc(this.props.todoList.id);
+        let items = this.props.todoList.items
+       
+        if(this.state.completedSort === 1)
+            items.sort(function(a, b){
+                var x = a.completed;
+                var y = b.completed;
+                if (x < y) {return 1;}
+                if (x > y) {return -1;}
+                return 0;
+            });
+        else
+            items.sort(function(b, a){
+                var x = a.completed;
+                var y = b.completed;
+                if (x < y) {return 1;}
+                if (x > y) {return -1;}
+                return 0;
+            });
+        
+        this.setState({completedSort: this.state.completedSort*(-1)});
+        var x = 0;
+        for(; x > items.length; x++){
+            items[x].key = x;
+        }
+
+        todoListref.update({
+            items: items
+        });
+
+        //this.reKey();
+        
+    }
+
+    reKey = () => {
+        const fireStore = getFirestore();
+        var todoListref = fireStore.collection('todoLists').doc(this.props.todoList.id);
+        let items = this.props.todoList.items;
+        var x = 0;
+        for(; x > items.length; x++){
+            items[x].key = x;
+        }
+       
+
+        todoListref.update({
+            items: items
+        });
+
     }
     sortByDate = () => {
         console.log("sortByDate, itemlist.js")
+
+        const fireStore = getFirestore();
+        var todoListref = fireStore.collection('todoLists').doc(this.props.todoList.id);
+        let items = this.props.todoList.items
+        console.log("testing: " + this.props.todoList.items);
+        var i = 0;
+       
+        if(this.state.dueDateSort === 1)
+            items.sort(function(a, b){
+                var x = a.due_date;
+                var y = b.due_date;
+                if (x < y) {return 1;}
+                if (x > y) {return -1;}
+                return 0;
+            });
+        else
+            items.sort(function(b, a){
+                var x = a.due_date;
+                var y = b.due_date;
+                if (x < y) {return 1;}
+                if (x > y) {return -1;}
+                return 0;
+            });
+        
+        this.setState({dueDateSort: this.state.dueDateSort*(-1)});
+
+
+        todoListref.update({
+            items: items
+        });
     }
     sortByTask = () => {
-        console.log("sortByTask, itemlist.js")
+        console.log("sortByTask, itemlist.js");
+        const fireStore = getFirestore();
+        var todoListref = fireStore.collection('todoLists').doc(this.props.todoList.id);
+        let items = this.props.todoList.items
+        console.log("testing: " + this.props.todoList.items);
+        var i = 0;
+       
+        if(this.state.taskSort === 1)
+            items.sort(function(a, b){
+                var x = a.description;
+                var y = b.description;
+                if (x < y) {return 1;}
+                if (x > y) {return -1;}
+                return 0;
+            });
+        else
+            items.sort(function(b, a){
+                var x = a.description;
+                var y = b.description;
+                if (x < y) {return 1;}
+                if (x > y) {return -1;}
+                return 0;
+            });
+        
+        this.setState({taskSort: this.state.taskSort*(-1)});
+
+
+        todoListref.update({
+            items: items
+        });
+
     }
 
     addNewItem = () =>{
