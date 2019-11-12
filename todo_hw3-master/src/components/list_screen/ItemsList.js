@@ -5,12 +5,16 @@ import ItemCard from './ItemCard';
 import { firestoreConnect } from 'react-redux-firebase';
 import { getFirestore } from 'redux-firestore';
 import { firestore } from 'firebase';
+import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom'
+
 
 
 class ItemsList extends React.Component {
 
     state = {
-        keySet: false
+        keySet: false,
+        newItem: false
     }
 
     sortByCompleted = () => {
@@ -25,6 +29,11 @@ class ItemsList extends React.Component {
 
     addNewItem = () =>{
         console.log("adding new item");
+        let list = this.props.todoList;
+        console.log("listid:" + list.id);
+        console.log("list2: " + list.items.length)
+         this.setState({newItem: true});
+        
     }
 
     render() {
@@ -44,6 +53,12 @@ class ItemsList extends React.Component {
         })
         });
 
+        if(this.state.newItem)
+        {
+            let str = '/todoLists/' + todoList.id + '/' + items.length;
+            return <Redirect to={str} />
+        }
+
         return (
             
             <div className="todo-lists section">
@@ -56,11 +71,15 @@ class ItemsList extends React.Component {
                 {items && items.map(function(item) {
                     item.id = item.key;
                     return (
-                        <ItemCard todoList={todoList} item={item} key={item.key} />
+                        <Link to={'/todoLists/' + todoList.id + '/' + item.key} key={item.key} item={item}>
+                            <ItemCard todoList={todoList} item={item} key={item.key} />
+                        </Link>
+                        
                     );})
                 }
+
                 <div className="row">
-                    <i className="medium material-icons col s6 offset-s5" onClick={this.addNewItem} >add_box</i>
+                        <i className="medium material-icons col s6 offset-s5" onClick={this.addNewItem} >add_box</i>
                 </div>
 
             </div>
