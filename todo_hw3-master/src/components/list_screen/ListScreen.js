@@ -88,8 +88,9 @@ class ListScreen extends Component {
         const auth = this.props.auth;
         const todoList = this.props.todoList;
 
-
     
+        if(!todoList)
+            return <React.Fragment />
 
         if (!auth.uid) {
             return <Redirect to="/" />;
@@ -148,8 +149,12 @@ const mapStateToProps = (state, ownProps) => {
   const { id } = ownProps.match.params;
   const { todoLists } = state.firestore.data;
   const todoList = todoLists ? todoLists[id] : null;
-  todoList.id = id;
 
+  //
+  if(todoList)
+    todoList.id = id;
+
+//
   return {
     todoList,
     auth: state.firebase.auth,
