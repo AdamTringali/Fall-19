@@ -174,8 +174,8 @@ class EditScreen extends Component {
                 <div className="row" >
 
                     <div className="input-field col">
-                        <input id="assigned_to" type="text" className="active" onChange={this.onChange} defaultValue={assigned_to}/>
-                        <label htmlFor="assigned_to">Assigned To</label>
+                        <input id="assigned_to" type="text" className="validate" onChange={this.onChange} defaultValue={assigned_to}/>
+                        <label className="active" htmlFor="assigned_to">Assigned To</label>
                     </div>
                 </div>
                 <div className="row" >
