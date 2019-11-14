@@ -39,7 +39,7 @@ class EditScreen extends Component {
 
 
         if(this.props.item){
-            let date;
+         let date;
             if(this.state.due_date === "")
                 date = this.props.item.due_date;
             else
@@ -67,14 +67,14 @@ class EditScreen extends Component {
             if(newItem.assigned_to !== "")
                 item.assigned_to = newItem.assigned_to;
 
-            item.completed = newItem.completed;
+            item.completed = newItem.completed; 
 
-
+ 
 
             todoListref.update({
                 items: this.props.todoList.items
             });
-
+ 
     
     
            
@@ -173,9 +173,9 @@ class EditScreen extends Component {
                 </div>
                 <div className="row" >
 
-                    <div className="active input-field col">
-                        <input id="assigned_to" type="text" className="validate" onChange={this.onChange} defaultValue={assigned_to}/>
-                        <label className="active" htmlFor="assigned_to">Assigned To</label>
+                    <div className="input-field col">
+                        <input id="assigned_to" type="text" className="active" onChange={this.onChange} defaultValue={assigned_to}/>
+                        <label htmlFor="assigned_to">Assigned To</label>
                     </div>
                 </div>
                 <div className="row" >
@@ -234,10 +234,11 @@ const mapStateToProps = (state, ownProps) => {
 
     //console.log("todoList: " + todoList + ", items: " + todoList.items);
     //console.log("key: " +key + ", id: " + id ) ;
-
+//
+    if(!todoList)
+        return <React.Fragment />
   
-
-
+////
     return {
         todoList,
         id,
