@@ -4,7 +4,6 @@ import { compose } from 'redux';
 import ItemCard from './ItemCard';
 import { firestoreConnect } from 'react-redux-firebase';
 import { getFirestore } from 'redux-firestore';
-import { firestore } from 'firebase';
 import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router-dom'
 import { Button } from 'react-materialize'
@@ -21,7 +20,6 @@ class ItemsList extends React.Component {
     }
 
     sortByCompleted = () => {
-        console.log("sortByCompleted, itemlist.js");
         const fireStore = getFirestore();
         var todoListref = fireStore.collection('todoLists').doc(this.props.todoList.id);
         let items = this.props.todoList.items
@@ -74,13 +72,10 @@ class ItemsList extends React.Component {
 
     }
     sortByDate = () => {
-        console.log("sortByDate, itemlist.js")
 
         const fireStore = getFirestore();
         var todoListref = fireStore.collection('todoLists').doc(this.props.todoList.id);
         let items = this.props.todoList.items
-        console.log("testing: " + this.props.todoList.items);
-        var i = 0;
        
         if(this.state.dueDateSort === 1)
             items.sort(function(a, b){
@@ -108,12 +103,9 @@ class ItemsList extends React.Component {
         });
     }
     sortByTask = () => {
-        console.log("sortByTask, itemlist.js");
         const fireStore = getFirestore();
         var todoListref = fireStore.collection('todoLists').doc(this.props.todoList.id);
         let items = this.props.todoList.items
-        console.log("testing: " + this.props.todoList.items);
-        var i = 0;
        
         if(this.state.taskSort === 1)
             items.sort(function(a, b){
@@ -143,12 +135,7 @@ class ItemsList extends React.Component {
     }
 
     addNewItem = () =>{
-        console.log("adding new item");
-        let list = this.props.todoList;
-        console.log("listid:" + list.id);
-        console.log("list2: " + list.items.length)
-         this.setState({newItem: true});
-        
+         this.setState({newItem: true});        
     }
 
     render() {
@@ -170,7 +157,14 @@ class ItemsList extends React.Component {
 
         if(this.state.newItem)
         {
-            let str = '/todoLists/' + todoList.id + '/' + items.length;
+            let str = "";
+            if(!items){
+                console.log("null items");
+                str = '/todoLists/' + todoList.id + '/' + 0;
+
+            }
+            else
+                str = '/todoLists/' + todoList.id + '/' + items.length;
             return <Redirect to={str} />
         }
 
@@ -178,22 +172,26 @@ class ItemsList extends React.Component {
             
             <div className="todo-lists section">
                 <div className="row green darken-1">
-                    <div className="col s4 push-s1"><span className="flow-text" onClick={this.sortByTask}>Task</span></div>
-                    <div className="col s4 push-s1"><span className="flow-text" onClick={this.sortByDate}>Due Date</span></div>
-                    <div className="col s4 push-s1"><span className="flow-text" onClick={this.sortByCompleted}>Completed</span></div>
+                    <div className="col s4 push-s1"><span className="flow-text" onClick={this.sortByTask}><h4><b>Task</b></h4></span></div>
+                    <div className="col s4 push-s1"><span className="flow-text" onClick={this.sortByDate}><h4><b>Due Date</b></h4></span></div>
+                    <div className="col s4 push-s1"><span className="flow-text" onClick={this.sortByCompleted}><h4><b>Completed</b></h4></span></div>
                 </div>
 
-               
-
+            
                 {items && items.map(function(item) {
 /*                     REMOVED :: item.id = item.key;*/     
-            item.key = item.key 
+            //item.key = item.key;
+            let disableDown = false;
+            let disableUp = false;
+            if(item.key+1 === items.length)
+                    disableDown = true;
+
+            if(item.key === 0)
+                    disableUp = true;
+
             function moveUp (){
                 if(item.key === 0)
                     return;
-                console.log("doing this");
-                console.log("item.key : " + item.key );
-                console.log("length: " + items.length);
 
                 const itemTwo = {
                     description: item.description,
@@ -218,9 +216,6 @@ class ItemsList extends React.Component {
                 items[item.key-1].assigned_to = itemTwo.assigned_to;
                 items[item.key-1].completed = itemTwo.completed;
                 
-
-                console.log("oldItem: descrip: " + oldItem.description )
-
                 const fireStore = getFirestore();
                 var todoListref = fireStore.collection('todoLists').doc(todoList.id);
                 let items2 = todoList.items;
@@ -228,7 +223,6 @@ class ItemsList extends React.Component {
                 for(; x < items2.length; x++){
                     items2[x].key = x;
                 }
-               
         
                 todoListref.update({
                     items: items2
@@ -237,10 +231,7 @@ class ItemsList extends React.Component {
             function moveDown (){
                 if(items.length === (item.key+1))
                     return;
-                console.log("doing this");
-                console.log("item.key : " + item.key );
-                console.log("length: " + items.length);
-
+            
                 const itemTwo = {
                     description: item.description,
                     due_date: item.due_date,
@@ -264,9 +255,6 @@ class ItemsList extends React.Component {
                 items[item.key+1].assigned_to = itemTwo.assigned_to;
                 items[item.key+1].completed = itemTwo.completed;
                 
-
-                console.log("oldItem: descrip: " + oldItem.description )
-
                 const fireStore = getFirestore();
                 var todoListref = fireStore.collection('todoLists').doc(todoList.id);
                 let items2 = todoList.items;
@@ -281,7 +269,6 @@ class ItemsList extends React.Component {
                 });
             }
             function deleteItem (){
-                console.log("deleteItem index: " + item.key);
                 
                 const fireStore = getFirestore();
                 var todoListref = fireStore.collection('todoLists').doc(todoList.id);
@@ -312,12 +299,11 @@ class ItemsList extends React.Component {
                                 <Button 
                                     floating
                                     fab={{direction: 'left'}}
-                                    large
-                                    >
+                                    large >
 
-                                    <Button  floating icon={<i className="medium material-icons ">close</i>} className="red" onClick={deleteItem}/>
-                                    <Button  floating icon={<i className="medium material-icons">arrow_upward</i>} className="yellow darken-1" onClick={moveUp}  />
-                                    <Button floating icon={<i className="medium material-icons">arrow_downward</i>} className="blue" onClick={moveDown} />
+                                    <Button floating icon={<i className="medium material-icons ">close</i>} className="red" onClick={deleteItem}/>
+                                    <Button disabled={disableUp} floating icon={<i className="medium material-icons">arrow_upward</i>} className="yellow darken-1" onClick={moveUp}  />
+                                    <Button disabled={disableDown} floating icon={<i className="medium material-icons">arrow_downward</i>} className="blue" onClick={moveDown} />
                                 </Button> 
                             </div>
                         </div>

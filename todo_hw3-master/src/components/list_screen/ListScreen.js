@@ -3,9 +3,9 @@ import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import ItemsList from './ItemsList.js';
-import { firestoreConnect, firebase } from 'react-redux-firebase';
+import { firestoreConnect } from 'react-redux-firebase';
 import { getFirestore } from 'redux-firestore';
-import { Modal, Button } from 'react-materialize';
+import { Modal } from 'react-materialize';
 
 
 

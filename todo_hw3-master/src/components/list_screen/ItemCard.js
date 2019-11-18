@@ -1,6 +1,4 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom'
-import { Modal, Button, Icon, Container, Link, Fab } from 'react-materialize';
     
 
 
@@ -18,42 +16,12 @@ class ItemCard extends React.Component {
         this.setState({color: "card z-depth-0 todo-list-link green lighten-3"});
     }
 
-   
-
-    mouseEnterFAB = () => {
-        console.log("entering the fab");
-    }
-
-    mouseLeaveFAB = () => {
-        console.log("leaving the fab");
-    }
-
-    moveUp = (e) => {
-        e.stopPropagation();
-
-
-
-        console.log("MoveUp");
-
-    }
-
-    moveDown = (e) => {
-        console.log("MoveDown");
-    }
-
-    deleteItem = (e) => {
-        console.log("deleteItem");
-    }
-
-
     render() {
         const { item } = this.props;  
         let completed = "Pending";
         if(item.completed === true){
             completed = "Completed";
         }
-        let str = "/todoList/" + this.props.todoList.id + "/" + this.props.todoList.key;
-
 
         return (
             <div className={this.state.color} onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave} >

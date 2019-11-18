@@ -6,7 +6,6 @@ import { getFirestore } from 'redux-firestore';
 import { Link } from 'react-router-dom';
 import { Checkbox } from 'react-materialize';
 import DatePicker from 'react-materialize/lib/DatePicker';
-import { defaultCoreCipherList } from 'constants';
 
 
 class EditScreen extends Component {
@@ -140,7 +139,7 @@ class EditScreen extends Component {
         
 
          if(!this.props.item){
-             if(due_date != ""){
+             if(due_date !== ""){
                 due_date = due_date.toISOString().substring(0,due_date.toISOString().indexOf('T'));
              }
             /*console.log("ome");
@@ -247,6 +246,10 @@ const mapStateToProps = (state, ownProps) => {
 //
     if(!todoList)
         return <React.Fragment />
+
+    if(!todoList.items)
+        return <React.Fragment />
+
   
 ////
     return {

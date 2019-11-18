@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { NavLink, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { firestoreConnect } from 'react-redux-firebase';
 import TodoListLinks from './TodoListLinks'
 import { getFirestore } from 'redux-firestore';
@@ -13,8 +13,7 @@ class HomeScreen extends Component {
     async goToNewList(props){
         const fireStore = getFirestore();
         let result = await fireStore.collection('todoLists').add({
-                name: "Unknown", owner: "Unknown",
-                // items: 
+                name: "Unknown", owner: "Unknown", items: []
             });
         props.history.push('todoList/'+result.id);
     }
@@ -62,7 +61,7 @@ class HomeScreen extends Component {
                 querySnapshot.forEach(function(doc) {
                     let listKey = doc.data().key;
     
-                    if(listKey == -1){
+                    if(listKey === -1){
                         fireStore.collection('todoLists').doc(doc.id).delete();
                     }
                     else {
