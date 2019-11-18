@@ -21,7 +21,7 @@ body {
 }
 
 .fixed-action-btn {
-  position: absolute;
+  position: relative;
 }
 
 div.banner {

@@ -65,23 +65,7 @@ class ItemCard extends React.Component {
                     <div className="col s4 push-s1"><span className="flow-text">{item.due_date}</span></div>
                     <div className="col s4 push-s1"><span className="flow-text">{completed}</span></div>
             
-            <div className="row">
-                    <div className="fixed-action-btn col s11.5">
-                        <Button
-                            floating
-                            fab={{direction: 'left'}}
-                            large
-                            >
 
-                            <Button floating icon={<i className="medium material-icons ">close</i>} className="red" onClick={this.deleteItem}/>
-                            <Button floating icon={<i className="medium material-icons">arrow_upward</i>} className="yellow darken-1" onClick={this.moveUp} />
-                            <Button floating icon={<i className="medium material-icons">arrow_downward</i>} className="blue" onClick={this.moveDown} />
-                        </Button> 
-                      
-                      
-                    </div>
-            </div>
-              
 
                  
                 </div>

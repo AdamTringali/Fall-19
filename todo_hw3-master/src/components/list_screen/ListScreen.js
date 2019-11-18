@@ -41,9 +41,7 @@ class ListScreen extends Component {
     }
     
 
-    removeList = () =>{
-        //console.log("remove list");
-    }
+   
 
 
     async doThis() {
@@ -105,7 +103,7 @@ class ListScreen extends Component {
                     <div className="row">
                         <h3 className="grey-text text-darken-3 col s11 ">Todo List</h3>
                         <Modal header="Delete List" open={this.state.open} trigger={
-                            <i className="medium material-icons  col s1" onClick={this.removeList}>
+                            <i className="medium material-icons  col s1" >
                                    delete_forever   </i>} >
 
                                    <h5> <p>Are you sure you want to delete this list?
