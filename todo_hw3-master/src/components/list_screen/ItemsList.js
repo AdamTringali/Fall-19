@@ -44,16 +44,17 @@ class ItemsList extends React.Component {
             });
         
         this.setState({completedSort: this.state.completedSort*(-1)});
-        var x = 0;
-        for(; x > items.length; x++){
+       /* var x = 0;
+        for(; x < items.length; x++){
             items[x].key = x;
-        }
+        }*/
+
+        this.reKey();
 
         todoListref.update({
             items: items
         });
 
-        //this.reKey();
         
     }
 
@@ -62,7 +63,7 @@ class ItemsList extends React.Component {
         var todoListref = fireStore.collection('todoLists').doc(this.props.todoList.id);
         let items = this.props.todoList.items;
         var x = 0;
-        for(; x > items.length; x++){
+        for(; x < items.length; x++){
             items[x].key = x;
         }
        
@@ -100,6 +101,7 @@ class ItemsList extends React.Component {
         
         this.setState({dueDateSort: this.state.dueDateSort*(-1)});
 
+        this.reKey();
 
         todoListref.update({
             items: items
@@ -132,6 +134,7 @@ class ItemsList extends React.Component {
         
         this.setState({taskSort: this.state.taskSort*(-1)});
 
+        this.reKey();
 
         todoListref.update({
             items: items

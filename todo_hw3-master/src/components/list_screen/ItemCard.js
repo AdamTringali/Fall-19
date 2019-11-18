@@ -1,13 +1,13 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom'
-
+import { Modal, Button, Icon, Container, Link, Fab } from 'react-materialize';
+    
 
 
 
 class ItemCard extends React.Component {
     state = {
         color: "card z-depth-0 todo-list-link green lighten-3",
-        clicked: false
     }
 
     mouseEnter = () => {
@@ -18,10 +18,31 @@ class ItemCard extends React.Component {
         this.setState({color: "card z-depth-0 todo-list-link green lighten-3"});
     }
 
-    onClick = ( e, ss) => {
-        console.log("clicking item card: " + e.description);
-        this.setState({clicked: true});
+   
 
+    mouseEnterFAB = () => {
+        console.log("entering the fab");
+    }
+
+    mouseLeaveFAB = () => {
+        console.log("leaving the fab");
+    }
+
+    moveUp = (e) => {
+        e.stopPropagation();
+
+
+
+        console.log("MoveUp");
+
+    }
+
+    moveDown = (e) => {
+        console.log("MoveDown");
+    }
+
+    deleteItem = (e) => {
+        console.log("deleteItem");
     }
 
 
@@ -33,22 +54,34 @@ class ItemCard extends React.Component {
         }
         let str = "/todoList/" + this.props.todoList.id + "/" + this.props.todoList.key;
 
-        if(this.state.clicked){
-            console.log("redirecting");
-            //return <Redirect to={str} />;
-        }
 
         return (
-            <div className={this.state.color} onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave} onClick={this.onClick.bind(this)}>
+            <div className={this.state.color} onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave} >
                 <div className="row card-content grey-text text-darken-3">
+                  
                     <div className="col s4 "><span className="flow-text">{item.description}</span>
                     <h6 className="grey-text text-darken-3">Assigned To: {item.assigned_to}</h6>
                     </div>
                     <div className="col s4 push-s1"><span className="flow-text">{item.due_date}</span></div>
                     <div className="col s4 push-s1"><span className="flow-text">{completed}</span></div>
+            
+            <div className="row">
+                    <div className="fixed-action-btn col s11.5">
+                        <Button
+                            floating
+                            fab={{direction: 'left'}}
+                            large
+                            >
 
-
-
+                            <Button floating icon={<i className="medium material-icons ">close</i>} className="red" onClick={this.deleteItem}/>
+                            <Button floating icon={<i className="medium material-icons">arrow_upward</i>} className="yellow darken-1" onClick={this.moveUp} />
+                            <Button floating icon={<i className="medium material-icons">arrow_downward</i>} className="blue" onClick={this.moveDown} />
+                        </Button> 
+                      
+                      
+                    </div>
+            </div>
+              
 
                  
                 </div>

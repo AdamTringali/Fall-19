@@ -20,6 +20,10 @@ body {
   top: 5%;
 }
 
+.fixed-action-btn {
+  position: absolute;
+}
+
 div.banner {
   padding: 20px;
   margin-top: 60px;

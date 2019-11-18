@@ -6,9 +6,11 @@ import { getFirestore } from 'redux-firestore';
 import { Link } from 'react-router-dom';
 import { Checkbox } from 'react-materialize';
 import DatePicker from 'react-materialize/lib/DatePicker';
+import { defaultCoreCipherList } from 'constants';
 
 
 class EditScreen extends Component {
+
 
     
 
@@ -17,8 +19,9 @@ class EditScreen extends Component {
         description: "",
         assigned_to: "",
         due_date: "",
-        completed: false,
+        completed: false
     }
+
    
     cancelChange = () =>
     {
@@ -92,9 +95,6 @@ class EditScreen extends Component {
             let testId = this.props.id + "/items/" + this.props.todoList.items.length + "/";
             console.log("testid: " + testId);
 
-            // Atomically add a new region to the "regions" array field.
-
-
 
             todoListref.update({
                 items: fireStore.FieldValue.arrayUnion(newItem)
@@ -110,6 +110,7 @@ class EditScreen extends Component {
    
 
     onChange = (e) => {
+        this.setState({loaded: true});
         if(e.target.id === "completed"){
             console.log("completed: " + e.target.checked)
             this.setState({ [e.target.id]: e.target.checked});
@@ -123,9 +124,11 @@ class EditScreen extends Component {
             this.setState({ [e.target.id]: e.target.value});
     }
 
-    dateChange = due_date => {this.setState({ due_date })
+    dateChange = due_date => {
+    this.setState({ due_date });
+    this.setState({loaded: true});
 
-    console.log("state: " + this.state.due_date);
+    //console.log("state: " + this.state.due_date);
     }
     
     render() {
@@ -136,20 +139,27 @@ class EditScreen extends Component {
         let completed = this.state.completed;
         
 
-        if(!this.props.item){
+         if(!this.props.item){
+             if(due_date != ""){
+                due_date = due_date.toISOString().substring(0,due_date.toISOString().indexOf('T'));
+             }
+            /*console.log("ome");
              description = "";
              assigned_to = "";
              due_date = "";
-             completed = false;
+             completed = false;*/
         }
         else{
+            //console.log("two + completed: ");
+
             let newd = new Date(this.props.item.due_date);
-            console.log("newd: " + newd);
+            //console.log("newd: " + newd);
              description = this.props.item.description;
              assigned_to = this.props.item.assigned_to;
              due_date = newd.toISOString().substring(0,newd.toISOString().indexOf('T'));
-             completed = this.props.item.compelted;
-
+             if(!this.state.loaded)
+                completed = this.props.item.completed;   
+        
         }
     
 
@@ -198,7 +208,7 @@ class EditScreen extends Component {
                             label="Completed"
                             value="Red"
                             onChange={this.onChange}
-                            defaultChecked={completed}
+                            checked={completed}
                             />
                 
                 </div>
