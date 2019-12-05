@@ -7,22 +7,34 @@ import { getFirestore } from 'redux-firestore';
 import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router-dom'
 import { Button } from 'react-materialize'
+import { Draggable, Droppable } from 'react-drag-and-drop'
 
-import { DragDropContext } from 'react-dnd'
-import HTML5Backend from 'react-dnd-html5-backend'
 
 class ItemsList extends React.Component {
 
     state = {
         items: [
-            { id: 1, name: 'Item 1' },
-            { id: 2, name: 'Item 2' },
-            { id: 3, name: 'Item 3' },
+            { id: 1, name: 'Container', type: '_container' },
+            { id: 2, name: 'Label', type: '_label' },
+            { id: 3, name: 'Button', type: '_button' },
+            { id: 4, name: 'Textfield' , type:'_textfield' }
             
         ]
     }
 
-  
+    onDrop = (e) => {
+        if(e._container)
+            console.log("container drop")
+        if(e._label)
+            console.log("label drop");
+        if(e._textfield)
+            console.log("textfield drop");
+        if(e._button)
+            console.log("button drop");
+
+        // => banana 
+    }
+
 
     render() {
         const wireframe = this.props.wireframe;
@@ -42,11 +54,17 @@ class ItemsList extends React.Component {
                         <i className="material-icons col s3">zoom_out</i>
                     </div>
 
-                    <div className="item-container">
+                    <div className="item-container ">
 
                         {this.state.items.map((item, index) => 
-                            <div className="groove_border" key={item.id}>{item.name}<br/><br/></div>)}
+                            <div className="center-align" key={item.id}>
+                                <Draggable className="groove_border " key={item.id} type={item.type}><br/><br/></Draggable>
+                                {item.name}
+                            </div>
 
+                        )}
+                        
+ 
                     </div>
                     <br/>
                     <br/>
@@ -66,7 +84,13 @@ class ItemsList extends React.Component {
                 </div>
 
                 {/* CENTER COLUMN */}
-                <div className="groove_border col s6 "> <p>target</p> 
+                <div className="target groove_border col s6 "> <p>target</p> 
+                                <Droppable className="wireframe-target groove_border"
+                                    types={['_container','_label','_button','_textfield']}// <= allowed drop types
+                                    onDrop={this.onDrop.bind(this)}>
+                                 
+
+                                </Droppable>
 
 
                 </div>
@@ -97,7 +121,7 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
-export default DragDropContext(HTML5Backend)(ItemsList); compose(
+export default compose(
     connect(mapStateToProps),
     firestoreConnect([
         { collection: 'wireframes' },

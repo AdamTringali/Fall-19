@@ -42,3 +42,11 @@ div.banner {
 .home_new_list_button:hover {
   box-shadow: 1px 2px;
 }
+.target{
+  height: 500px;
+}
+
+.wireframe-target{
+  height: 80%;
+  
+}

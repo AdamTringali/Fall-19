@@ -1,6 +1,9 @@
 ### -- ADAM TRINGALI --- TO RUN
 npm install
-npm install --save react-dnd react-dnd-html5-backend
+npm install --save react-dnd react-dnd-html5-backend??
+
+npm install react-drag-and-drop
+
 
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
