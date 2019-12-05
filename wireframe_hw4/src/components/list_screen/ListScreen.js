@@ -81,80 +81,70 @@ class ListScreen extends Component {
     }
 
     render() {
-        console.log("list screen");
+        //console.log("list screen");
+        //console.log(this.props);
 
         const auth = this.props.auth;
-        const todoList = this.props.todoList;
+        const wireframe = this.props.wireframe;
 
     
-        if(!todoList)
+        if(!wireframe)
             return <React.Fragment />
 
         if (!auth.uid) {
             return <Redirect to="/" />;
         }
 
-        if(this.state.removed)
-            return <Redirect to="/" />;
-
         return (
             <div className="container white">
                 <div className="row" >
                     <div className="row">
-                        <h3 className="grey-text text-darken-3 col s11 ">Todo List</h3>
-                        <Modal header="Delete List" open={this.state.open} trigger={
-                            <i className="medium material-icons  col s1" >
-                                   delete_forever   </i>} >
+                        <div className="input-field col s12">
+                            <input id="title" type="text" className="validate center-align" onChange={this.onChange} defaultValue={wireframe.title}/>
+                            <label className="active" htmlFor="title">Title</label>
 
-                                   <h5> <p>Are you sure you want to delete this list?
-                                <br />
-                                <br />
-                                    The list will not be retreivable.
-                                <br />
-                            </p>
-                            </h5>
 
-                            <div className="row">
-
-                                <a className="waves-effect waves-light btn col s2" onClick={this.deleteList}>Yes</a>
-                                <p className="col s1"></p>
-                                <a className="waves-effect waves-light btn col s2" onClick={this.keepList}>No</a>
-
-                            </div>
-                        </Modal>
+                        </div>
                     </div>
-                    <div className="input-field col s6">
-                        <label className="active" htmlFor="email">Name</label>
-                        <input  type="text" name="name" id="name" onChange={this.handleChange} defaultValue={todoList.name} />
-                    </div>
-                    <div className="input-field col s6">
-                        <label className="active" htmlFor="password">Owner</label>
-                        <input type="text" name="owner" id="owner" onChange={this.handleChange} defaultValue={todoList.owner} />
-                    </div>
+                    <ItemsList wireframe={wireframe} />
+
                 </div>
-                <ItemsList todoList={todoList} />
+               
 
-             
-
-             
             </div>
         );
     }
-}
+} 
 
 const mapStateToProps = (state, ownProps) => {
 
-  const { id } = ownProps.match.params;
-  const { todoLists } = state.firestore.data;
-  const todoList = todoLists ? todoLists[id] : null;
+    if(!state.wireframe[0])
+        return <React.Fragment />
 
-  //
-  if(todoList)
-    todoList.id = id;
 
-//
+
+  const { key } = ownProps.match.params;
+  const wireframes = state.wireframe[0].wireframes;
+  const wireframe = wireframes[key];
+  const items = wireframe.items;
+  /*console.log("wireframes: ");
+  console.log(wireframes)
+  console.log("key: ")
+  console.log(key);
+  console.log("wireframe");
+  console.log(wireframe);
+  console.log("items");
+  console.log(items);*/
+
+
+
+ /* if(wireframe)
+    wireframe.id = id;*/
+
   return {
-    todoList,
+    wireframes,
+    key,
+    wireframe,
     auth: state.firebase.auth,
   };
 };
@@ -164,6 +154,6 @@ export default compose(
   connect(mapStateToProps),
   
   firestoreConnect([
-    { collection: 'todoLists' },
+    { collection: 'wireframes' },
   ]),
 )(ListScreen);

@@ -11,6 +11,7 @@ export const REGISTER_ERROR = 'REGISTER_ERROR';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_ERROR = 'LOGIN_ERROR';
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
+export const LOAD_WIREFRAMES = 'LOAD_WIREFRAMES';
 
 // THESE CREATORS MAKE ACTIONS ASSOCIATED WITH USER ACCOUNTS
 
@@ -31,15 +32,23 @@ export function logoutSuccess() {
 };
 
 // THESE CREATORS MAKE ACTIONS FOR ASYNCHRONOUS TODO LIST UPDATES
-export function createTodoList(todoList) {
+export function loadWireframes(wireframes) {
+    console.log("here");
     return {
-        type: 'CREATE_TODO_LIST',
-        todoList
+        type: 'LOAD_WIREFRAMES',
+        wireframes
+    }
+}
+
+export function createTodoList(wireframe) {
+    return {
+        type: 'CREATE_WIREFRAME',
+        wireframe
     }
 }
 export function createTodoListError(error) {
     return {
-        type: 'CREATE_TODO_LIST_ERROR',
+        type: 'CREATE_WIREFRAME_ERROR',
         error
     }
 }

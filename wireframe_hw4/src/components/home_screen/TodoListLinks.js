@@ -3,33 +3,43 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import TodoListCard from './TodoListCard';
-/*
 
-{todoLists && todoLists.map(todoList => (
-    /*<Link to={'/todoList/' + todoList.id} key={todoList.id}>
-        <TodoListCard todoList={todoList} />
-    </Link>*/
-//))}
-//*/
+
+
 class TodoListLinks extends React.Component {
+
     render() {
-        //console.log("todolistLinks");
+        const wireframes = this.props.wireframes;
+
+        if(this.props.wireframes)
+            this.props.loadWireframes(this.props.wireframes);
+        
+
 
         return (
             <div className="todo-lists section">
-
+                {wireframes && wireframes.map(wireframe => (
+                    <Link to={'/wireframe/' + wireframe.key} key={wireframe.key} >
+                        <TodoListCard wireframe={wireframe} />
+                    </Link>
+                ))}
             </div>
         );
     }
 }
 
-const mapStateToProps = (state) => {
-    //console.log("map state to props todolistlink");
-    console.log(state);
-    
+const mapStateToProps = (state, ownProps) => {
+    const wireframes  = ownProps.wireframes;
+  
     return {
+        wireframes,
         auth: state.firebase.auth,
     };
 };
 
-export default compose(connect(mapStateToProps))(TodoListLinks);
+const mapDispatchToProps = (dispatch) => ({
+    loadWireframes: (wireframes) => {dispatch({type: "LOAD_WIREFRAMES", wireframes: wireframes} )},
+   
+  });
+
+export default compose(connect(mapStateToProps, mapDispatchToProps))(TodoListLinks);

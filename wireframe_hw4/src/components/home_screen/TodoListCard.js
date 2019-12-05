@@ -17,13 +17,13 @@ class TodoListCard extends React.Component {
     }
 
     render() {
-        const { todoList } = this.props;
+        const { wireframe } = this.props;
         //console.log("todolistcard.js TodoListCard, todoList.id: " + todoList.id);
         return (
             <div className={this.state.color} onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave} >
                 <div className="card-content grey-text text-darken-3" >
 
-                    <span className="card-title">{todoList.name}</span>
+                    <span className="card-title">{wireframe.title}</span>
                 </div>
             </div>
         );
