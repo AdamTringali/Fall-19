@@ -8,18 +8,48 @@ import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router-dom'
 import { Button } from 'react-materialize'
 import { Draggable, Droppable } from 'react-drag-and-drop'
+import ResizableRect from 'react-resizable-rotatable-draggable'
 
 
 class ItemsList extends React.Component {
 
     state = {
+        zoomable: '',
+        test: [
+            { id: 1, type: 'button'}
+        ],
         items: [
             { id: 1, name: 'Container', type: '_container' },
             { id: 2, name: 'Label', type: '_label' },
             { id: 3, name: 'Button', type: '_button' },
             { id: 4, name: 'Textfield' , type:'_textfield' }
-            
-        ]
+        ],
+        style: {
+            border: "",
+            position: "inherit",
+        }
+    }
+
+    submitChange = () => {
+        let newFrames = this.props.wireframes;
+        let myTitle = this.props.wireframe.title;
+        let key = this.props.wireframe.key;
+        
+        const fireStore = getFirestore();
+        fireStore.collection('user_wireframes').get().then(function(querySnapshot){
+            querySnapshot.forEach(function(doc) {
+                if(doc.data().wireframes.length > key){
+                    if(doc.data().wireframes[key].title === myTitle)
+                    {
+                        fireStore.collection('user_wireframes').doc(doc.id).update({wireframes: newFrames});
+                    }
+                }
+            })
+        })
+    }
+
+    cancelChange = () => {
+        console.log("cancel");
     }
 
     onDrop = (e) => {
@@ -32,12 +62,24 @@ class ItemsList extends React.Component {
         if(e._button)
             console.log("button drop");
 
-        // => banana 
     }
 
+    selectControl = () => {
+        console.log("selecting control");
+        this.setState({zoomable: 'nw, ne, sw, se'})
+    }
+
+    handleDrag = (deltaX, deltaY) => {
+        console.log("handledrag")
+        this.setState({
+          left: this.state.left + deltaX,
+          top: this.state.top + deltaY
+        })
+      }
 
     render() {
         const wireframe = this.props.wireframe;
+
         
 
         return (
@@ -69,12 +111,12 @@ class ItemsList extends React.Component {
                     <br/>
                     <br/>
                     <div className="row">
-                        <button className="btn col s12" type="submit" name="action">Submit
+                        <button className="btn col s12" type="submit" name="action" onClick={this.submitChange}>Submit
                             <i className="material-icons right">send</i>
                         </button>
                         <br/>
                         <br/>
-                        <button className="btn col s12" type="submit" name="action">Cancel
+                        <button className="btn col s12" type="submit" name="action" onClick={this.cancelChange}>Close
                             <i className="material-icons right">close</i>
                         </button>
                        
@@ -88,16 +130,27 @@ class ItemsList extends React.Component {
                                 <Droppable className="wireframe-target groove_border"
                                     types={['_container','_label','_button','_textfield']}// <= allowed drop types
                                     onDrop={this.onDrop.bind(this)}>
-                                 
-
+                                        
+                                    {wireframe.items.map((item, index) => 
+                                        <ItemCard z-index={0} key={item.key} item={item} draggable="true" type="_button" onClick={this.onDrop} onDrop={this.onDrop} />
+                                        
+                                    )}
+                                   
                                 </Droppable>
-
 
                 </div>
 
                 {/* RIGHT COLUMN */}
-                <div className="groove_border col s3 "> <p>S12 M4.3</p> 
-                
+                <div className="groove_border col s3 "> <p className="center-align">Properties</p> 
+                <p className="center-align">Value: </p><input type="text" name="FirstName" defaultValue="def_value1"/>
+
+
+                    <p className="center-align">Font Size: </p><input type="text" name="FirstName" defaultValue="def_value"/>
+
+
+
+
+
                 </div>
 
 
@@ -114,12 +167,17 @@ class ItemsList extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
     const wireframe = ownProps.wireframe;
+    const key = wireframe.key
+    const wireframes = state.wireframe[0].wireframes;
 
     return {
+        wireframes, 
+        key,
         wireframe,
         auth: state.firebase.auth,
     };
 };
+
 
 export default compose(
     connect(mapStateToProps),

@@ -179,6 +179,7 @@ class ItemsList extends React.Component {
 
             
                 {items && items.map(function(item) {
+                    
 /*                     REMOVED :: item.id = item.key;*/     
             //item.key = item.key;
             let disableDown = false;

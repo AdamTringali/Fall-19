@@ -10,10 +10,10 @@ class DatabaseTester extends React.Component {
     // TO LOG IN
     handleClear = () => {
         const fireStore = getFirestore();
-        fireStore.collection('wireframes').get().then(function(querySnapshot){
+        fireStore.collection('user_wireframes').get().then(function(querySnapshot){
             querySnapshot.forEach(function(doc) {
                 console.log("deleting " + doc.id);
-                fireStore.collection('wireframes').doc(doc.id).delete();
+                fireStore.collection('user_wireframes').doc(doc.id).delete();
             })
         });
     }

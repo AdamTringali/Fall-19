@@ -127,6 +127,7 @@ const mapStateToProps = (state, ownProps) => {
   const wireframes = state.wireframe[0].wireframes;
   const wireframe = wireframes[key];
   const items = wireframe.items;
+  
   /*console.log("wireframes: ");
   console.log(wireframes)
   console.log("key: ")

@@ -13,8 +13,6 @@ class TodoListLinks extends React.Component {
 
         if(this.props.wireframes)
             this.props.loadWireframes(this.props.wireframes);
-        
-
 
         return (
             <div className="todo-lists section">
@@ -30,7 +28,7 @@ class TodoListLinks extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
     const wireframes  = ownProps.wireframes;
-  
+
     return {
         wireframes,
         auth: state.firebase.auth,

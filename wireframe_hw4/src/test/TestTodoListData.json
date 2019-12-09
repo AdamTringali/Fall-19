@@ -20,11 +20,13 @@
                       "color":"red",
                       "text":"text one",
                       "font_size":1,
-                      "border":2
+                      "border":2,
+                      "top":10,
+                      "left":10
                    },
                    { 
                       "key":1,
-                      "element":"text field",
+                      "element":"button",
                       "x":0,
                       "y":10,
                       "height":3,
@@ -33,7 +35,9 @@
                       "color":"blue",
                       "text":"text field text",
                       "font_size":4,
-                      "border":2
+                      "border":2,
+                      "top":20,
+                      "left":20
                    },
                    { 
                       "key":2,
@@ -46,7 +50,9 @@
                       "color":"white",
                       "text":"label test",
                       "font_size":20,
-                      "border":2
+                      "border":2,
+                      "top":"30px",
+                      "left":"30px"
                    }
                 ]
              },
@@ -189,7 +195,9 @@
             "lastName":"SECOND",
             "wireframes":[
                 {
-                    "name":"asdasd"
+                  "key":0,
+                  "title":"SOMETHING",
+                  "items":[ ]
                 }
             ]
         }

@@ -12,6 +12,7 @@ export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_ERROR = 'LOGIN_ERROR';
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
 export const LOAD_WIREFRAMES = 'LOAD_WIREFRAMES';
+export const SUBMIT_CHANGES = 'SUBMIT_CHANGES';
 
 // THESE CREATORS MAKE ACTIONS ASSOCIATED WITH USER ACCOUNTS
 
@@ -32,6 +33,15 @@ export function logoutSuccess() {
 };
 
 // THESE CREATORS MAKE ACTIONS FOR ASYNCHRONOUS TODO LIST UPDATES
+
+export function submitChanges(wireframes) {
+    console.log("here22");
+    return {
+        type: 'SUBMIT_CHANGES',
+        wireframes
+    }
+}
+
 export function loadWireframes(wireframes) {
     console.log("here");
     return {

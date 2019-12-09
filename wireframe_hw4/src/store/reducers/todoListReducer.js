@@ -13,7 +13,11 @@ const todoListReducer = (state = initState, action) => {
                 {...state, wireframes: action.wireframes}
             ]
             break;
+        case "SUBMIT_CHANGES":
+            console.log("case: SUBMIT_CHANGES");
+            break;
         /* IF YOU HAVE ANY TODO LIST EDITING REDUCERS ADD THEM HERE */ 
+
         default:
             return state;
             break;

@@ -48,5 +48,9 @@ div.banner {
 
 .wireframe-target{
   height: 80%;
-  
+}
+
+.item_card{
+  position: relative;
+  top: 10px;
 }
