@@ -6,6 +6,7 @@ import ItemsList from './ItemsList.js';
 import { firestoreConnect } from 'react-redux-firebase';
 import { getFirestore } from 'redux-firestore';
 import { Modal } from 'react-materialize';
+import {Rnd} from 'react-rnd';
 
 
 

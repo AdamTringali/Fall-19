@@ -15,6 +15,7 @@ npm install --save re-resizable
 npm i moveable
 
 npm install react-draggable
+npm install --save react-resizable
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

@@ -9,6 +9,7 @@ import { Redirect } from 'react-router-dom'
 import { Button } from 'react-materialize'
 import { Draggable, Droppable } from 'react-drag-and-drop'
 import ResizableRect from 'react-resizable-rotatable-draggable'
+import {Rnd} from 'react-rnd';
 
 
 class ItemsList extends React.Component {
@@ -26,8 +27,7 @@ class ItemsList extends React.Component {
             { id: 4, name: 'Textfield' , type:'_textfield' }
         ],
         style: {
-            border: "",
-            position: "inherit",
+            background:"red"
         }
     }
 
@@ -55,17 +55,6 @@ class ItemsList extends React.Component {
 
     }
 
-    onDrop = (e) => {
-        if(e._container)
-            console.log("container drop")
-        if(e._label)
-            console.log("label drop");
-        if(e._textfield)
-            console.log("textfield drop");
-        if(e._button)
-            console.log("button drop");
-
-    }
 
     selectControl = () => {
         console.log("selecting control");
@@ -131,16 +120,16 @@ class ItemsList extends React.Component {
 
                 {/* CENTER COLUMN */}
                 <div className="target groove_border col s6 "> <p>target</p> 
-                                <Droppable className="wireframe-target groove_border"
-                                    types={['_container','_label','_button','_textfield']}// <= allowed drop types
-                                    onDrop={this.onDrop.bind(this)}>
+                                <div className="wireframe-target groove_border">
                                         
                                     {wireframe.items.map((item, index) => 
-                                        <ItemCard z-index={0} key={item.key} item={item} draggable="true" type="_button" onClick={this.onDrop} onDrop={this.onDrop} />
+                                  
+                                        
+                                         <ItemCard z-index={0} key={item.key} item={item} />
                                         
                                     )}
                                    
-                                </Droppable>
+                                </div>
 
                 </div>
 
