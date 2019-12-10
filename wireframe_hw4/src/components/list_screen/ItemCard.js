@@ -3,11 +3,10 @@ import { relative } from 'path';
 import ResizableRect from 'react-resizable-rotatable-draggable'
 import Moveable from "react-moveable";
 import Draggable from 'react-draggable';
+import Resizable from "re-resizable";
 
 
 class ItemCard extends React.Component {
-
- 
 
     state = {
         new: true,
@@ -16,7 +15,8 @@ class ItemCard extends React.Component {
         style: {
             position: "relative",
             top: this.props.item.top,
-            left: this.props.item.left
+            left: this.props.item.left,
+            fontSize: this.props.item.font_size
         },
 
         style2: {
@@ -43,11 +43,11 @@ class ItemCard extends React.Component {
 
       }
 
-      handleStop = (deltaX, deltaY) => {
-          console.log("handle stop");
-          //console.log(this.state.style)
-          var lastX = deltaY.lastX;
-            var lastY = deltaY.lastY;
+    handleStop = (deltaX, deltaY) => {
+        console.log("handle stop");
+        //console.log(this.state.style)
+        var lastX = deltaY.lastX;
+        var lastY = deltaY.lastY;
 
         //console.log("lastx: " + lastX + " lastY: " + lastY) 
 
@@ -58,13 +58,12 @@ class ItemCard extends React.Component {
 
         this.props.item.left = lastX;
         this.props.item.top = lastY;
-      }
-
-
+    }
 
     onClick= () => {
         console.log("on click");
     }
+
     render() {
         const { item } = this.props;  
         //console.log(item);
@@ -74,23 +73,31 @@ class ItemCard extends React.Component {
         else
             style = this.state.style2;
 
-
-      
             if(item.element === 'button'){
-                
-                return    <Draggable
-                            onDrag={this.handleDrag}
-                            onStop={this.handleStop}
-                            >
-                        <button className="aa" style={style}>asd</button>
+            
+                return    (
+                    <Draggable
+                        onDrag={this.handleDrag}
+                        onStop={this.handleStop}>
+                            <button className="aa" style={style}>asd</button>
                     </Draggable>
+                    
                    
-                
+                )
              }
 
              if(item.element === 'label'){
-                //console.log("button")
-                
+                //console.log("label")
+                return (
+                    <Draggable
+                            onDrag={this.handleDrag}
+                            onStop={this.handleStop}>
+                                <div>
+                                    <label style={style}>Male</label>
+                                </div>
+                        </Draggable>
+
+                )
              }
 
              if(item.element === 'textfield'){

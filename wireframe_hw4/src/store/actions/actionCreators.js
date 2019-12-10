@@ -46,7 +46,8 @@ export function loadWireframes(wireframes) {
     console.log("here");
     return {
         type: 'LOAD_WIREFRAMES',
-        wireframes
+        wireframes,
+        id: "asd"
     }
 }
 

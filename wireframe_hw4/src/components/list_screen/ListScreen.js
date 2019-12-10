@@ -14,75 +14,33 @@ class ListScreen extends Component {
 
     
     state = {
-        name: '',
-        owner: '',
+        title: '',
         key: '',
         open: false,
         removed: false,
         clicked: false
     }
 
-    handleChange = (e) => {
+    changeTitle = (e) => {
 
         const { target } = e;
         
-        this.setState(state => ({
-            ...state,
-            [target.id]: target.value,
-            
-        })); 
-        const fireStore = getFirestore();
-        const str = [target.id][0];
 
-        if(str === "owner")
-            fireStore.collection('todoLists').doc(this.props.todoList.id).update({owner: target.value});
-        else
-            fireStore.collection('todoLists').doc(this.props.todoList.id).update({name: target.value});
-    }
-    
+        let newFrames = this.props.wireframes;
 
-   
-
-
-    async doThis() {
-        console.log("todoListid: " + this.props.todoList.id);
-        const constid =  this.props.todoList.id;
-        var newkey = 0;
+        newFrames[this.props.wireframe.key].title = target.value;
 
         const fireStore = getFirestore();
-        await fireStore.collection('todoLists').get().then(function(querySnapshot){
-            querySnapshot.forEach(function(doc) {
+        fireStore.collection('user_wireframes').doc(this.props.id).update({wireframes: newFrames});
 
-                if(constid === doc.id){
-                    //console.log("key to -1 " + constid);
-                    fireStore.collection('todoLists').doc(doc.id).update({key: -1});
-                }
-                else{
-                    fireStore.collection('todoLists').doc(doc.id).update({key: newkey++});
-                    
-                }
+        
 
-            })
-        });
-       
+      
     }
 
-    deleteList = () =>{
-        console.log("delete list");
-        this.setState({open: false});
-        this.setState({removed: true});
-       
-        this.doThis();
-
-    }
-    keepList = () =>{
-        console.log("keep list");
-        this.setState({open: false});
-    }
 
     render() {
-        //console.log("list screen");
-        //console.log(this.props);
+       
 
         const auth = this.props.auth;
         const wireframe = this.props.wireframe;
@@ -100,7 +58,7 @@ class ListScreen extends Component {
                 <div className="row" >
                     <div className="row">
                         <div className="input-field col s12">
-                            <input id="title" type="text" className="validate center-align" onChange={this.onChange} defaultValue={wireframe.title}/>
+                            <input id="title" type="text" className="validate center-align" onChange={this.changeTitle} defaultValue={wireframe.title}/>
                             <label className="active" htmlFor="title">Title</label>
 
 
@@ -123,11 +81,12 @@ const mapStateToProps = (state, ownProps) => {
 
 
 
+    const { id } = ownProps.match.params;
   const { key } = ownProps.match.params;
   const wireframes = state.wireframe[0].wireframes;
   const wireframe = wireframes[key];
-  const items = wireframe.items;
-  
+  //const items = wireframe.items;
+
   /*console.log("wireframes: ");
   console.log(wireframes)
   console.log("key: ")
@@ -143,6 +102,8 @@ const mapStateToProps = (state, ownProps) => {
     wireframe.id = id;*/
 
   return {
+      id,
+    wireframeList: state.firestore.ordered.user_wireframes,
     wireframes,
     key,
     wireframe,

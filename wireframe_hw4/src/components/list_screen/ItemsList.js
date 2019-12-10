@@ -14,6 +14,7 @@ import ResizableRect from 'react-resizable-rotatable-draggable'
 class ItemsList extends React.Component {
 
     state = {
+        goHome: false,
         zoomable: '',
         test: [
             { id: 1, type: 'button'}
@@ -50,6 +51,8 @@ class ItemsList extends React.Component {
 
     cancelChange = () => {
         console.log("cancel");
+        this.setState({goHome: true});
+
     }
 
     onDrop = (e) => {
@@ -80,7 +83,8 @@ class ItemsList extends React.Component {
     render() {
         const wireframe = this.props.wireframe;
 
-        
+        if(this.state.goHome)
+            return <Redirect to="/" />;
 
         return (
             

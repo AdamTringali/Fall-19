@@ -54,3 +54,8 @@ div.banner {
   position: relative;
   top: 10px;
 }
+
+.delete_frame{
+  position: relative;
+  top: 35px;
+}
