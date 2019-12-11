@@ -33,7 +33,7 @@
                       "width":50,
                       "background_color":"red",
                       "color":"blue",
-                      "text":"text field text",
+                      "text":"button_text",
                       "font_size":4,
                       "border":2,
                       "top":20,
@@ -207,6 +207,7 @@
             { 
                "key":0,
                "title":"adam_one",
+               "selected": -1,
                "items":[ 
                   { 
                      "key":0,
@@ -217,7 +218,7 @@
                      "width":6,
                      "background_color":"blue",
                      "color":"red",
-                     "text":"text one",
+                     "text":"myFirstButton",
                      "font_size":10,
                      "border":2,
                      "top":10,
@@ -232,7 +233,7 @@
                      "width":15,
                      "background_color":"red",
                      "color":"blue",
-                     "text":"text field text",
+                     "text":"button_text",
                      "font_size":20,
                      "border":2,
                      "top":20,
@@ -258,6 +259,7 @@
             { 
                "key":1,
                "title":"testing_two",
+               "selected": -1,
                "items":[ 
                   { 
                      "key":0,
@@ -339,6 +341,7 @@
             { 
                "key":2,
                "title":"testing_three",
+               "selected": -1,
                "items":[ 
                   { 
                      "key":0,

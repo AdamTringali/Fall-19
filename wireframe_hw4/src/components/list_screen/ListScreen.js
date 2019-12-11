@@ -22,6 +22,7 @@ class ListScreen extends Component {
         clicked: false
     }
 
+
     changeTitle = (e) => {
 
         const { target } = e;
@@ -55,7 +56,7 @@ class ListScreen extends Component {
         }
 
         return (
-            <div className="container white">
+            <div className="container white" style={{width: "100%"}}>
                 <div className="row" >
                     <div className="row">
                         <div className="input-field col s12">
@@ -65,7 +66,7 @@ class ListScreen extends Component {
 
                         </div>
                     </div>
-                    <ItemsList wireframe={wireframe} />
+                    <ItemsList wireframe={wireframe} id={this.props.id}/>
 
                 </div>
                

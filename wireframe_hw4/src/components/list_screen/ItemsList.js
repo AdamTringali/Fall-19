@@ -10,11 +10,28 @@ import { Button } from 'react-materialize'
 import { Draggable, Droppable } from 'react-drag-and-drop'
 import ResizableRect from 'react-resizable-rotatable-draggable'
 import {Rnd} from 'react-rnd';
+import {DirectLink, Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
 
 
 class ItemsList extends React.Component {
 
     state = {
+        removing: false,
+        target2: {
+            position: 'relative',
+            height: '520px',
+            overflow: 'auto',
+            marginBottom: '100px',
+            
+        },
+        item: {
+            text: "",
+            font_size: "",
+        },
+        wireframe_size: {
+            width: "500px",
+            height: "600px",
+        },
         goHome: false,
         zoomable: '',
         test: [
@@ -29,6 +46,77 @@ class ItemsList extends React.Component {
         style: {
             background:"red"
         }
+    }
+
+    
+    componentDidMount(){
+        document.addEventListener("keydown", this.deleteControl, false);
+    }
+
+
+
+    deleteControl = (e) => {
+        if (e.repeat) { return }
+        let {wireframe} = this.props;
+        let {id} = this.props;
+        let selected = wireframe.selected;
+        let newItems = wireframe.items;
+        let key = wireframe.key;
+
+        if(e.keyCode === 8){                    
+            console.log("delete, selected: " + selected);
+
+            if(selected >= 0){
+                this.setState({removing: true});
+                if(!wireframe.items[selected]){
+                    this.setState({removing: false});
+                    return;
+                }
+                console.log("deleting control text: " + wireframe.items[selected].text + " key: " + selected);
+                console.log(newItems);
+                newItems.splice(selected,1);
+                console.log(newItems);
+                console.log("key: " + key);
+
+                for(var i = 0; i < newItems.length; i++){
+                    newItems[i].key = i;
+                }
+                wireframe.items = newItems;
+                wireframe.selected = -1;
+
+
+                
+
+                //const fireStore = getFirestore();
+                //fireStore.collection('user_wireframes').doc(id).update({wireframes: cpy});
+                /* fireStore.collection('user_wireframes').get().then(function(querySnapshot){
+                querySnapshot.forEach(function(doc) {
+                        let data = doc.data();
+                        if(data.firstName === user.firstName && data.lastName === user.lastName)
+                        {
+                            console.log(data);
+                            let cpy = data.wireframes;
+                            let item = {
+                                title: "Unknown",
+                                key: cpy.length,
+                                items: []                
+                            }
+                            cpy.push(item)
+                            fireStore.collection('user_wireframes').doc(doc.id).update({wireframes: cpy});
+                        }
+            
+                        
+                    })
+                }) */
+            }
+            else
+            {
+
+            }
+        }
+        
+        this.setState({removing: false});
+
     }
 
     submitChange = () => {
@@ -55,25 +143,85 @@ class ItemsList extends React.Component {
 
     }
 
-
-    selectControl = () => {
-        console.log("selecting control");
-        this.setState({zoomable: 'nw, ne, sw, se'})
+    selectControl = () =>{
+        console.log("selecting control")
     }
 
-    handleDrag = (deltaX, deltaY) => {
-        console.log("handledrag")
-        this.setState({
-          left: this.state.left + deltaX,
-          top: this.state.top + deltaY
-        })
-      }
+    changeText = (e) => {
+        
+            const { target } = e;
+        // console.log("changing text" );
+            console.log(target.value);
+            let newItem = this.state.item;
+            newItem.text = target.value;
+
+            this.setState({item: newItem})
+    }
+
+    changeFontSize = (e) => {
+        
+        const { target } = e;
+        console.log(target.value);
+        let newItem = this.state.item;
+        newItem.font_size = target.value;
+
+        this.setState({item: newItem})
+    }
+
+    checkSelected = () => {
+        const wireframe = this.props.wireframe;
+
+        if(wireframe.selected >= 0){
+            this.setState({item: wireframe.items[wireframe.selected]});
+        }   
+    }
+
+    unselectControl = () => {
+        console.log("unselect me now");
+    }
+
+    changeWireframeHeight = (e) => {
+
+        const { target } = e;
+        var wireframe_size = {...this.state.wireframe_size};
+        wireframe_size.height = target.value;
+
+        this.setState({wireframe_size})
+
+    }   
+    
+    changeWireframeWidth = (e) => {
+
+        const { target } = e;
+        var wireframe_size = {...this.state.wireframe_size};
+        wireframe_size.width = target.value;
+
+        this.setState({wireframe_size})
+
+    }   
+
+    addControl = (control, e2) => {
+        console.log("add control: " + control);
+    }
 
     render() {
         const wireframe = this.props.wireframe;
 
         if(this.state.goHome)
             return <Redirect to="/" />;
+
+        //let item = this.state.item;
+        var item;
+        if(wireframe.selected >= 0)
+            item = wireframe.items[wireframe.selected];
+        else
+            item = this.state.item;
+       
+    
+        if(this.state.removing)
+            return <React.Fragment />
+
+    
 
         return (
             
@@ -82,7 +230,7 @@ class ItemsList extends React.Component {
                 <div className="row">
 
                 {/* LEFT COLUMN */}
-                <div className="groove_border col s3" > <p className="right-align"></p> 
+                <div className="groove_border col s2" > <p className="right-align"></p> 
                 
                     <div className="row">
                         <i className="material-icons col s3">zoom_in</i>
@@ -90,26 +238,45 @@ class ItemsList extends React.Component {
                     </div>
 
                     <div className="item-container ">
+                        <div className="row">
 
-                        {this.state.items.map((item, index) => 
-                            <div className="center-align" key={item.id}>
-                                <Draggable className="groove_border " key={item.id} type={item.type}><br/><br/></Draggable>
-                                {item.name}
+                            <div className="groove_border col s12 offset-s1" onClick={this.addControl.bind(this, 'container')}
+                            style={{width: "80%", height:"70px"}}>
+                            </div>
+                            <br/>
+                            <p className="center-align">Container</p>
+                            <br/>
+
+
+                            <div className="center-align">
+                                <label className="center-align" style={{fontSize: "15px", color:"black"}}>Prompt for Input</label>
+                            </div>
+                            <div className="center-align">
+                                <label className="" style={{fontSize: "15px", color:"black"}} onClick={this.addControl.bind(this, 'label')}>Label</label>
                             </div>
 
-                        )}
+
+                                <div className="input-field col s12">
+                                    <label >Border Radius</label>
+                                </div>
+                                <div className="input-field col s12">
+                                    <input id="border_radius" type="text" className="validate"/>
+                                </div>
+                        </div>
+
+
                         
- 
+
                     </div>
                     <br/>
                     <br/>
                     <div className="row">
-                        <button className="btn col s12" type="submit" name="action" onClick={this.submitChange}>Submit
+                        <button className="btn col s10" type="submit" name="action" onClick={this.submitChange}>Submit
                             <i className="material-icons right">send</i>
                         </button>
                         <br/>
                         <br/>
-                        <button className="btn col s12" type="submit" name="action" onClick={this.cancelChange}>Close
+                        <button className="btn col s10" type="submit" name="action" onClick={this.cancelChange}>Close
                             <i className="material-icons right">close</i>
                         </button>
                        
@@ -119,35 +286,65 @@ class ItemsList extends React.Component {
                 </div>
 
                 {/* CENTER COLUMN */}
-                <div className="target groove_border col s6 "> <p>target</p> 
-                                <div className="wireframe-target groove_border">
-                                        
+                <div className="target groove_border col s7 "> <p>target</p> 
+                                <div className=" groove_border" 
+                                 style={this.state.wireframe_size} onClick = {this.checkSelected}
+                                  >        
                                     {wireframe.items.map((item, index) => 
-                                  
-                                        
-                                         <ItemCard z-index={0} key={item.key} item={item} />
-                                        
+                                   
+                                    
+                                         <ItemCard z-index={0} wireframe={wireframe} key={item.key} item={item} onClick={this.selectControl} /> 
                                     )}
                                    
-                                </div>
-
+                                </div>                             
                 </div>
 
                 {/* RIGHT COLUMN */}
-                <div className="groove_border col s3 "> <p className="center-align">Properties</p> 
-                <p className="center-align">Value: </p><input type="text" name="FirstName" defaultValue="def_value1"/>
-
-
-                    <p className="center-align">Font Size: </p><input type="text" name="FirstName" defaultValue="def_value"/>
-
-
-
-
+                <div className="groove_border col s3 ">
+                    <h5 className="center-align">Wireframe</h5>
+                    <div className="row">
+                        <div className="input-field col s4">
+                            <label >Height</label>
+                        </div>
+                        <div className="input-field col s8">
+                            <input id="height" type="text" className="validate" defaultValue={this.state.wireframe_size.height} onChange={this.changeWireframeHeight}/>
+                        </div>
+                        <div className="input-field col s4">
+                            <label >Width</label>
+                        </div>
+                        <div className="input-field col s8">
+                            <input id="width" type="text" className="validate" defaultValue={this.state.wireframe_size.width} onChange={this.changeWireframeWidth} />
+                        </div>
+                    </div>
+                    <h5 className="center-align">Control</h5>
+                    <div className="row">
+                        <div className="input-field col s4">
+                            <label >Text</label>
+                        </div>
+                        <div className="input-field col s8">
+                            <input id="height" type="text" className="validate" value={item.text} onChange={this.changeText}/>
+                        </div>
+                        <div className="input-field col s4">
+                            <label >Font Size</label>
+                        </div>
+                        <div className="input-field col s8">
+                            <input id="width" type="text" className="validate" value={item.font_size} onChange={this.changeFontSize}/>
+                        </div>
+                        <div className="input-field col s4">
+                            <label >Border Radius</label>
+                        </div>
+                        <div className="input-field col s8">
+                            <input id="border_radius" type="text" className="validate"/>
+                        </div>
+                        <div className="input-field col s4">
+                            <label >Border Thickness</label>
+                        </div>
+                        <div className="input-field col s8">
+                            <input id="thickness" type="text" className="validate"/>
+                        </div>
+                    </div>
 
                 </div>
-
-
-
 
 
                 </div>
@@ -160,10 +357,13 @@ class ItemsList extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
     const wireframe = ownProps.wireframe;
+    const id = ownProps.id;
     const key = wireframe.key
     const wireframes = state.wireframe[0].wireframes;
+    
 
     return {
+        id,
         wireframes, 
         key,
         wireframe,

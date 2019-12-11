@@ -5,21 +5,17 @@ import Moveable from "react-moveable";
 import Draggable from 'react-draggable';
 import { Resizable, ResizableBox } from 'react-resizable';
 import { Rnd } from 'react-rnd';
+import { getFirestore } from 'redux-firestore';
 
 
 class ItemCard extends React.Component {
 
     state = {
-        new: true,
-        color: "card z-depth-0 todo-list-link green lighten-3",
-        test: ['s'],
-        width: 50,
-        height: 50,
+        selected: -1,
         rndStyle: {
             x:this.props.item.x,
             y:this.props.item.y,
             background: "gray"
-
         },
 
         style2: {
@@ -27,21 +23,22 @@ class ItemCard extends React.Component {
             left: this.props.item.left,
             fontSize: this.props.item.font_size,
             background: this.props.item.background_color,
-
-            //transform: `translate( 10px ,10px )`
-
         }
         
     
     }
 
-    selectControl = () => {
-        console.log("selecting control");
-        this.setState({zoomable: 'nw, ne, sw, se'})
+
+    stopFocus = () => {
+        console.log("stopping focus?");
+        /*let {wireframe} = this.props;
+        //let title = wireframe.title;
+        wireframe.selected = -1;
+        this.setState({selected: -1});*/
+
     }
 
     handleDrag = (deltaX, deltaY) => {
-        this.setState({new: false});
 
         console.log("handledrag ")
         //console.log(deltaY);
@@ -81,70 +78,82 @@ class ItemCard extends React.Component {
 
     }
 
+    selectControl = (test, key) => {
+        console.log("selecting control");
+
+        this.setState({selected: test});
+
+        let {wireframe} = this.props;
+        let title = wireframe.title;
+        
+        const fireStore = getFirestore();
+        fireStore.collection('user_wireframes').get().then(function(querySnapshot){
+            querySnapshot.forEach(function(doc) {
+                for(var i = 0; i < doc.data().wireframes.length; i++){
+                    if(doc.data().wireframes[i].title === title){
+                        let cpy = doc.data().wireframes;
+                        cpy[i].selected = test;
+                        fireStore.collection('user_wireframes').doc(doc.id).update({wireframes: cpy});
+
+
+                    }
+                }                 
+            })
+        })
+        wireframe.selected = test;
+    }
+
+    /*
+    onDragStop={(e, d) => { this.setState({ x: d.x, y: d.y }) }}
+
+    onResizeStop={(e, direction, ref, delta, position) => {
+        this.setState({
+        width: ref.style.width,
+        height: ref.style.height,
+        ...position,
+        });
+    }}
+  */
     render() {
         const { item } = this.props;  
-        //console.log(item);
-        var style;
-        if(this.state.new === true)
-            style = this.state.style;
-        else
-            style = this.state.style2;
+
+  
 
             if(item.element === 'button'){
-            
-                return    (
+                return(
                     <Rnd
-                    className="top-left"
-                    style={this.state.rndStyle}
-                    key={item.key}
-                    onResizeStop={this.onResizeStop.bind(this)}
-                    onDragStop={this.onDragStop.bind(this)}
-                    default={{
+                    style={{position: "sticky"}}
+                      default={{
                         x: this.state.rndStyle.x,
-                        y: this.state.rndStyle.y,
-                       
-                        
-                    }}
-                    bounds="parent"
-                    
-                    >
-                    <button className="button_card" style={this.state.style2}>asd</button>    
+                        y: this.state.rndStyle.y,}}
+                      bounds="parent" >
+                    <button onBlur={this.stopFocus} id={item.key} 
+                    style={{ height: '100%', width:'100%', fontSize: item.font_size + 'px'}} 
+                    onClick={this.selectControl.bind(this, item.key)}>
+                    {item.text}</button>
                     </Rnd>
-                   
                 )
              }
 
              if(item.element === 'label'){
-                //console.log("label")
-                /*return (
-                        <label >Male</label>
-                       
-
-                )*/
+                return (   
+                    <Rnd
+                    style={{position: "sticky", background:"gray"}}
+                      default={{
+                        x: this.state.rndStyle.x,
+                        y: this.state.rndStyle.y, }}
+                      bounds="parent">
+                     <span 
+                     style={{ height: '100%',textAlign:"justify", width:'100%', fontSize: item.font_size + 'px'}}
+                      onClick={this.selectControl.bind(this, item.key)}>
+                          {item.text}
+                          </span>
+                    </Rnd>
+                )
              }
 
              if(item.element === 'textfield'){
                 console.log("textfield")
-                return(
-                  <div>nn</div>
-                        
-                 
-                )
-               /* return (
-                <Draggable>
-                    <div className='resizable' style={style} >
-                        <div className='resizers'>
-                            <button  style={style}>asd</button>
-
-                            <div className='resizer top-left'></div>
-                            <div className='resizer top-right'></div>
-                            <div className='resizer bottom-left'></div>
-                            <div className='resizer bottom-right'></div>
-
-                        </div>
-                    </div>
-              </Draggable>
-)*/
                 
                 
              }
@@ -157,20 +166,6 @@ class ItemCard extends React.Component {
 
              return <React.Fragment />
 
-        
-            return (
-                <ResizableRect
-                
-                height={100}
-                width={100}
-                position={relative}
-                onResize={this.handleResize}
-                >
-                    <button className="aa" style={this.state.style}>asd</button>
-
-                </ResizableRect>
-                
-            );
        
        
     }

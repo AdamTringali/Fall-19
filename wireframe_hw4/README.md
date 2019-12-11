@@ -17,6 +17,11 @@ npm i moveable
 npm install react-draggable
 npm install --save react-resizable
 
+~~ Switched to PC ~~~
+
+npm install
+npm install react-scroll
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
