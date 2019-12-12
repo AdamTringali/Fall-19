@@ -27,10 +27,13 @@ class ItemsList extends React.Component {
         item: {
             text: "",
             font_size: "",
+            border_radius: 0,
+            border_thickness: 0,
         },
         wireframe_size: {
             width: "500px",
             height: "600px",
+            position: "relative"
         },
         goHome: false,
         zoomable: '',
@@ -159,13 +162,16 @@ class ItemsList extends React.Component {
     }
 
     changeFontSize = (e) => {
-        
-        const { target } = e;
-        console.log(target.value);
-        let newItem = this.state.item;
-        newItem.font_size = target.value;
+        //let res = this.checkSelected();
 
-        this.setState({item: newItem})
+        if(e){
+            console.log("valid");
+            const { target } = e;
+            console.log(target.value);
+            let newItem = this.state.item;
+            newItem.font_size = target.value;
+            this.setState({item: newItem})
+        }
     }
 
     checkSelected = () => {
@@ -173,11 +179,18 @@ class ItemsList extends React.Component {
 
         if(wireframe.selected >= 0){
             this.setState({item: wireframe.items[wireframe.selected]});
-        }   
-    }
+            return true;
+        }
+        else
+        {
+            let newItem= {
+                text: "",
+                font_size: "",
+            };
+            this.setState({item: newItem});
+            return false;
 
-    unselectControl = () => {
-        console.log("unselect me now");
+        }
     }
 
     changeWireframeHeight = (e) => {
@@ -203,6 +216,24 @@ class ItemsList extends React.Component {
     addControl = (control, e2) => {
         console.log("add control: " + control);
     }
+    
+    clicking = (e) => {
+        
+        console.log("unselect me now")
+    }
+
+    changeRadius = (e) => {
+        const { target } = e;
+
+        let newItem = this.state.item;
+        newItem.border_radius = target.value;
+
+        this.setState({item: newItem})
+    }
+
+    changeThickness = () => {
+        console.log("changing thickness")
+    }
 
     render() {
         const wireframe = this.props.wireframe;
@@ -225,12 +256,12 @@ class ItemsList extends React.Component {
 
         return (
             
-            <div className="todo-lists section">
+            <div className="todo-lists section" style={{height:"900px"}}>
 
-                <div className="row">
+                <div className="row" style={{height:"90%"}}>
 
                 {/* LEFT COLUMN */}
-                <div className="groove_border col s2" > <p className="right-align"></p> 
+                <div className="groove_border col s2" style={{height: "80%"}} > <p className="right-align"></p> 
                 
                     <div className="row">
                         <i className="material-icons col s3">zoom_in</i>
@@ -241,7 +272,7 @@ class ItemsList extends React.Component {
                         <div className="row">
 
                             <div className="groove_border col s12 offset-s1" onClick={this.addControl.bind(this, 'container')}
-                            style={{width: "80%", height:"70px"}}>
+                            style={{width: "80%", height:"70px", border:"groove #969696"}}>
                             </div>
                             <br/>
                             <p className="center-align">Container</p>
@@ -249,19 +280,30 @@ class ItemsList extends React.Component {
 
 
                             <div className="center-align">
-                                <label className="center-align" style={{fontSize: "15px", color:"black"}}>Prompt for Input</label>
+                                <label className="center-align" style={{fontSize: "15px", color:"black"}} onClick={this.addControl.bind(this, 'label')}>Prompt for Input</label>
                             </div>
                             <div className="center-align">
-                                <label className="" style={{fontSize: "15px", color:"black"}} onClick={this.addControl.bind(this, 'label')}>Label</label>
+                                <label className="" style={{fontSize: "15px", color:"black"}} >Label</label>
                             </div>
+                            <br/>
+                            <br/>
 
 
-                                <div className="input-field col s12">
-                                    <label >Border Radius</label>
+                                <div className="center-align">
+                                    <button style={{width: "100px", height: "25px"}} onClick={this.addControl.bind(this, 'button')} >Submit</button>
                                 </div>
-                                <div className="input-field col s12">
-                                    <input id="border_radius" type="text" className="validate"/>
+                                <div className="center-align">
+                                    Button
                                 </div>
+                                <br/>
+                                <br/>
+
+                                <div className="center-align">
+                                 <input  type="text" style={{border: "groove", height: "25px", width:"80%", borderRadius: "5px", color:"gray"}} value="Item" readOnly={true} onClick={this.addControl.bind(this, 'textfield')}/>
+                                 <div className="center-align" className="" style={{fontSize: "15px"}}>Textfield</div>
+                                </div>
+                                
+                                
                         </div>
 
 
@@ -286,9 +328,9 @@ class ItemsList extends React.Component {
                 </div>
 
                 {/* CENTER COLUMN */}
-                <div className="target groove_border col s7 "> <p>target</p> 
+                <div className="target groove_border col s7 " style={{paddingLeft:"40px", paddingBottom:"40px", height:"100%"}}> <p>target</p> 
                                 <div className=" groove_border" 
-                                 style={this.state.wireframe_size} onClick = {this.checkSelected}
+                                 style={this.state.wireframe_size} onClick={this.checkSelected} 
                                   >        
                                     {wireframe.items.map((item, index) => 
                                    
@@ -300,47 +342,47 @@ class ItemsList extends React.Component {
                 </div>
 
                 {/* RIGHT COLUMN */}
-                <div className="groove_border col s3 ">
+                <div className="groove_border col s3 " style={{height: "90%"}}>
                     <h5 className="center-align">Wireframe</h5>
                     <div className="row">
                         <div className="input-field col s4">
-                            <label >Height</label>
+                            <label style={{top: "-5px", color: "black"}}>Height</label>
                         </div>
                         <div className="input-field col s8">
-                            <input id="height" type="text" className="validate" defaultValue={this.state.wireframe_size.height} onChange={this.changeWireframeHeight}/>
+                            <input id="height" type="text"  style={{border: "groove", height: "30px", borderRadius: "5px"}} defaultValue={this.state.wireframe_size.height} onChange={this.changeWireframeHeight}/>
                         </div>
                         <div className="input-field col s4">
-                            <label >Width</label>
+                            <label style={{top: "-5px", color: "black"}} >Width</label>
                         </div>
                         <div className="input-field col s8">
-                            <input id="width" type="text" className="validate" defaultValue={this.state.wireframe_size.width} onChange={this.changeWireframeWidth} />
+                            <input id="width" type="text"  style={{border: "groove", height: "30px", borderRadius: "5px"}} defaultValue={this.state.wireframe_size.width} onChange={this.changeWireframeWidth} />
                         </div>
                     </div>
                     <h5 className="center-align">Control</h5>
                     <div className="row">
                         <div className="input-field col s4">
-                            <label >Text</label>
+                            <label style={{top: "-5px", color: "black"}}>Text</label>
                         </div>
                         <div className="input-field col s8">
-                            <input id="height" type="text" className="validate" value={item.text} onChange={this.changeText}/>
+                            <input  type="text" style={{border: "groove", height: "30px", borderRadius: "5px"}} value={item.text} onChange={this.changeText}/>
                         </div>
                         <div className="input-field col s4">
-                            <label >Font Size</label>
+                            <label style={{top: "-5px", color: "black"}}>Font Size</label>
                         </div>
                         <div className="input-field col s8">
-                            <input id="width" type="text" className="validate" value={item.font_size} onChange={this.changeFontSize}/>
+                            <input  type="text" style={{border: "groove", height: "30px", borderRadius: "5px"}} value={item.font_size} onChange={this.changeFontSize}/>
                         </div>
                         <div className="input-field col s4">
-                            <label >Border Radius</label>
+                            <label style={{top: "-18px", color: "black"}} >Border Radius</label>
                         </div>
                         <div className="input-field col s8">
-                            <input id="border_radius" type="text" className="validate"/>
+                            <input id="border_radius" type="text" style={{border: "groove", height: "30px", borderRadius: "5px"}} value={item.border_radius} onChange={this.changeRadius} />
                         </div>
                         <div className="input-field col s4">
-                            <label >Border Thickness</label>
+                            <label style={{top: "-18px", color: "black"}}>Border Thickness</label>
                         </div>
                         <div className="input-field col s8">
-                            <input id="thickness" type="text" className="validate"/>
+                            <input id="thickness" type="text" style={{ border: "groove", height: "30px", borderRadius: "5px"}} value={item.border_thickness} onChange={this.changeThickness}/>
                         </div>
                     </div>
 

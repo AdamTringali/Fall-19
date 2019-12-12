@@ -56,7 +56,7 @@ class ListScreen extends Component {
         }
 
         return (
-            <div className="container white" style={{width: "100%"}}>
+            <div className="container white" style={{width: "100%", minWidth:"1000px"}}>
                 <div className="row" >
                     <div className="row">
                         <div className="input-field col s12">

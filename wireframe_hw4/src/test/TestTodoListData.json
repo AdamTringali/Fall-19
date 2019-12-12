@@ -4,6 +4,7 @@
           "user_id":0,
           "firstName":"secondpassword",
           "lastName":"secondpassword",
+          "admin":false,
           "wireframes":[ 
              { 
                 "key":0,
@@ -12,48 +13,59 @@
                    { 
                       "key":0,
                       "element":"button",
-                      "x":0,
-                      "y":0,
-                      "height":"30px",
-                      "width":"50px",
+                      "x":129,
+                      "y":251,
+                      "height":"109px",
+                      "width":"222px",
                       "background_color":"black",
                       "color":"red",
                       "text":"text one",
-                      "font_size":1,
-                      "border":2,
-                      "top":10,
-                      "left":10
+                      "font_size":30,
+                      "border_radius":2,
+                      "border_thickness":2
                    },
                    { 
                       "key":1,
-                      "element":"button",
-                      "x":0,
-                      "y":10,
-                      "height":30,
-                      "width":50,
+                      "element":"textfield",
+                      "x":194,
+                      "y":164,
+                      "height":"57px",
+                      "width":"247px",
                       "background_color":"red",
                       "color":"blue",
-                      "text":"button_text",
-                      "font_size":4,
-                      "border":2,
-                      "top":20,
-                      "left":20
+                      "text":"Username",
+                      "font_size":20,
+                      "border_radius":2,
+                      "border_thickness":2
                    },
                    { 
                       "key":2,
-                      "element":"label",
-                      "x":30,
-                      "y":30,
-                      "height":10,
-                      "width":20,
+                      "element":"container",
+                      "x":33,
+                      "y":34,
+                      "height":"425px",
+                      "width":"425px",
                       "background_color":"blue",
                       "color":"white",
-                      "text":"label test",
-                      "font_size":20,
-                      "border":2,
-                      "top":30,
-                      "left":30
-                   }
+                      "text":"",
+                      "font_size":0,
+                      "border_radius":2,
+                      "border_thickness":2
+                   },
+                   { 
+                     "key":3,
+                     "element":"label",
+                     "x":73,
+                     "y":177,
+                     "height":"32px",
+                     "width":"97px",
+                     "background_color":"green",
+                     "color":"white",
+                     "text":"Username",
+                     "font_size":20,
+                     "border_radius":2,
+                     "border_thickness":2
+                  }
                 ]
              },
              { 
@@ -71,9 +83,8 @@
                       "color":"black",
                       "text":"search",
                       "font_size":12,
-                      "border":2,
-                      "top":10,
-                      "left":10
+                      "border_radius":2,
+                      "border_thickness":2
                    },
                    { 
                       "key":1,
@@ -86,9 +97,8 @@
                       "color":"black",
                       "text":"first name",
                       "font_size":12,
-                      "border":2,
-                      "top":20,
-                      "left":20
+                      "border_radius":2,
+                      "border_thickness":2
                    },
                    { 
                       "key":2,
@@ -101,9 +111,8 @@
                       "color":"black",
                       "text":"last name",
                       "font_size":12,
-                      "border":2,
-                      "top":30,
-                      "left":30
+                      "border_radius":2,
+                      "border_thickness":2
                    },
                    { 
                       "key":3,
@@ -116,9 +125,8 @@
                       "color":"",
                       "text":"",
                       "font_size":0,
-                      "border":0,
-                      "top":40,
-                      "left":40
+                      "border_radius":0,
+                      "border_thickness":2
                    },
                    { 
                       "key":4,
@@ -131,9 +139,8 @@
                       "color":"blue",
                       "text":"Friend App",
                       "font_size":12,
-                      "border":2,
-                      "top":50,
-                      "left":50
+                      "border_radius":2,
+                      "border_thickness":2
                    }
                 ]
              },
@@ -152,7 +159,8 @@
                       "color":"black",
                       "text":"search",
                       "font_size":12,
-                      "border":2
+                      "border_radius":2,
+                      "border_thickness":2
                    },
                    { 
                       "key":1,
@@ -165,7 +173,8 @@
                       "color":"black",
                       "text":"TextFieldText",
                       "font_size":12,
-                      "border":2
+                      "border_radius":2,
+                     "border_thickness":2
                    },
                    { 
                       "key":2,
@@ -178,7 +187,8 @@
                       "color":"",
                       "text":"",
                       "font_size":0,
-                      "border":0
+                      "border_radius":2,
+                      "border_thickness":2
                    },
                    { 
                       "key":3,
@@ -191,7 +201,8 @@
                       "color":"blue",
                       "text":"",
                       "font_size":12,
-                      "border":2
+                      "border_radius":2,
+                     "border_thickness":2
                    }
                 ]
              }
@@ -203,6 +214,7 @@
          "user_id":1,
          "firstName":"adam",
          "lastName":"tringali",
+         "admin":true,
          "wireframes":[ 
             { 
                "key":0,
@@ -212,48 +224,63 @@
                   { 
                      "key":0,
                      "element":"button",
-                     "x":0,
-                     "y":0,
-                     "height":2,
-                     "width":6,
-                     "background_color":"blue",
+                     "x":129,
+                     "y":251,
+                     "height":"109px",
+                     "width":"222px",
+                     "background_color":"black",
                      "color":"red",
-                     "text":"myFirstButton",
-                     "font_size":10,
-                     "border":2,
-                     "top":10,
-                     "left":10
+                     "text":"Search",
+                     "font_size":30,
+                     "border_radius":2,
+                     "border_thickness":2
+                     
                   },
                   { 
                      "key":1,
-                     "element":"button",
-                     "x":50,
-                     "y":50,
-                     "height":3,
-                     "width":15,
+                     "element":"textfield",
+                     "x":194,
+                     "y":164,
+                     "height":"57px",
+                     "width":"247px",
                      "background_color":"red",
                      "color":"blue",
-                     "text":"button_text",
+                     "text":"Username",
                      "font_size":20,
-                     "border":2,
-                     "top":20,
-                     "left":20
+                     "border_radius":2,
+                     "border_thickness":2
+
+                     
                   },
                   { 
                      "key":2,
-                     "element":"label",
-                     "x":80,
-                     "y":90,
-                     "height":10,
-                     "width":20,
+                     "element":"container",
+                     "x":33,
+                     "y":34,
+                     "height":"425px",
+                     "width":"425px",
                      "background_color":"blue",
                      "color":"white",
-                     "text":"label test",
-                     "font_size":25,
-                     "border":2,
-                     "top":30,
-                     "left":30
-                  }
+                     "text":"",
+                     "font_size":0,
+                     "border_radius":2,
+                     "border_thickness":2
+
+                  },
+                  { 
+                    "key":3,
+                    "element":"label",
+                    "x":73,
+                    "y":177,
+                    "height":"32px",
+                    "width":"97px",
+                    "background_color":"green",
+                    "color":"white",
+                    "text":"Username",
+                    "font_size":20,
+                    "border_radius":2,
+                    "border_thickness":2
+                 }
                ]
             },
             { 
@@ -272,9 +299,8 @@
                      "color":"black",
                      "text":"search",
                      "font_size":12,
-                     "border":2,
-                     "top":10,
-                     "left":10
+                     "border_radius":2,
+                     "border_thickness":2
                   },
                   { 
                      "key":1,
@@ -287,9 +313,8 @@
                      "color":"black",
                      "text":"first name",
                      "font_size":12,
-                     "border":2,
-                     "top":20,
-                     "left":20
+                     "border_radius":2,
+                     "border_thickness":2
                   },
                   { 
                      "key":2,
@@ -302,9 +327,8 @@
                      "color":"black",
                      "text":"last name",
                      "font_size":12,
-                     "border":2,
-                     "top":30,
-                     "left":30
+                     "border_radius":2,
+                     "border_thickness":2
                   },
                   { 
                      "key":3,
@@ -317,9 +341,8 @@
                      "color":"",
                      "text":"",
                      "font_size":0,
-                     "border":0,
-                     "top":40,
-                     "left":30
+                     "border_radius":0,
+                     "border_thickness":2
                   },
                   { 
                      "key":4,
@@ -332,9 +355,8 @@
                      "color":"blue",
                      "text":"Friend App",
                      "font_size":12,
-                     "border":2,
-                     "top":50,
-                     "left":50
+                     "border_radius":2,
+                     "border_thickness":2
                   }
                ]
             },
@@ -354,7 +376,8 @@
                      "color":"black",
                      "text":"search",
                      "font_size":12,
-                     "border":2
+                     "border_radius":2,
+                     "border_thickness":2
                   },
                   { 
                      "key":1,
@@ -367,7 +390,8 @@
                      "color":"black",
                      "text":"TextFieldText",
                      "font_size":12,
-                     "border":2
+                     "border_radius":2,
+                     "border_thickness":2
                   },
                   { 
                      "key":2,
@@ -380,7 +404,8 @@
                      "color":"",
                      "text":"",
                      "font_size":0,
-                     "border":0
+                     "border_radius":2,
+                     "border_thickness":2
                   },
                   { 
                      "key":3,
@@ -393,7 +418,8 @@
                      "color":"blue",
                      "text":"",
                      "font_size":12,
-                     "border":2
+                     "border_radius":2,
+                     "border_thickness":2
                   }
                ]
             }
