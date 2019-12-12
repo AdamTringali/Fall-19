@@ -22,6 +22,9 @@ npm install --save react-resizable
 npm install
 npm install react-scroll
 
+-- 
+npm install react-color --save
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

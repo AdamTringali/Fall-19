@@ -43,6 +43,7 @@ div.banner {
   box-shadow: 1px 2px;
 }
 .target{
+  padding-right: 40px;
   height: 600px;
   overflow: scroll;
 }

@@ -19,22 +19,14 @@ class ItemCard extends React.Component {
             height:this.props.item.height,
             style: {
                // position: "relative", 
-                background:"gray", 
                 overflow:"hidden",
                 zIndex: "6",
-                "borderRadius":`${this.props.item.border_radius}px`,
-                "borderThickness":`${this.props.item.border_thickness}px`,
+                //"borderRadius":`${this.props.checkItem.border_radius}px`,
+                //"borderThickness":`${this.props.item.border_thickness}px`,
 
 
 
             }
-        },
-
-        style2: {
-            top: this.props.item.top,
-            left: this.props.item.left,
-            fontSize: this.props.item.font_size,
-            background: this.props.item.background_color,
         }
         
     
@@ -51,34 +43,7 @@ class ItemCard extends React.Component {
     }
 
 
-    handleDrag = (deltaX, deltaY) => {
 
-        console.log("handledrag ")
-        //console.log(deltaY);
-       
-
-      }
-
-  /*  handleStop = (deltaX, deltaY) => {
-        console.log("handle stop");
-        //console.log(this.state.style)
-        var lastX = deltaY.lastX;
-        var lastY = deltaY.lastY;
-
-        //console.log("lastx: " + lastX + " lastY: " + lastY) 
-
-        var style2 = {...this.state.style2}
-        style2.left = lastX;
-        style2.top = lastY;
-        this.setState({style2});
-
-        this.props.item.left = lastX;
-        this.props.item.top = lastY;
-    }
-
-    onClick= () => {
-        console.log("on click");
-    }*/
 
     onDragStop = (test, info) => {
        // console.log("ondragstop");
@@ -88,11 +53,15 @@ class ItemCard extends React.Component {
         newCoord.y = info.y;
         this.setState({rnd: newCoord})
 
-        this.props.item.x = newCoord.x;
-        this.props.item.y = newCoord.y;
+
+        this.props.item.x =  newCoord.x;
+        this.props.item.y =  newCoord.y;
+
+
        // console.log("newinfo: x: " + newCoord.x + ", y: " + newCoord.y);
 
     }
+
 
     onResizeStop = (test, info, ref) => {
         console.log("onresizestop");
@@ -148,6 +117,7 @@ class ItemCard extends React.Component {
   */
     render() {
         const { item } = this.props;  
+        //this.checkBorder();
 
   
 
@@ -166,7 +136,13 @@ class ItemCard extends React.Component {
                       onResizeStop={this.onResizeStop.bind(this)}> 
                     <button id={item.key} 
                     onBlur={this.stopFocus}
-                    style={{ height: '100%', width:'100%', fontSize: item.font_size + 'px', position:"relative"}} 
+                    style={{ height: '100%', width:'100%', fontSize: item.font_size + 'px', 
+                    position:"relative",
+                    borderStyle:"solid",
+                    borderColor:this.props.item.border_color,
+                    borderWidth:this.props.item.border_thickness + 'px',
+                    background: this.props.item.background_color,
+                    borderRadius:this.props.item.border_radius + 'px'}} 
                     onClick={this.selectControl.bind(this, item.key)}>
                     {item.text}</button>
                     </Rnd>
@@ -188,7 +164,13 @@ class ItemCard extends React.Component {
                       onResizeStop={this.onResizeStop.bind(this)}>
                      <div
                      onBlur={this.stopFocus}
-                     style={{ height: '100%',textAlign:"justify", width:'100%', fontSize: item.font_size + 'px'}}
+                     style={{ height: '100%',textAlign:"-webkit-center", width:'100%', 
+                     fontSize: item.font_size + 'px',
+                     borderStyle:"solid",
+                     borderColor:this.props.item.border_color,
+                     borderWidth:this.props.item.border_thickness + 'px',
+                     background: this.props.item.background_color,
+                     borderRadius:this.props.item.border_radius + 'px'}}
                       onClick={this.selectControl.bind(this, item.key)}
                        tabIndex="0"
                       >
@@ -202,8 +184,7 @@ class ItemCard extends React.Component {
                 //console.log("textfield?")
                 return (
                     <Rnd
-                    style={{ border:"groove ",
-                    overflow:"hidden",
+                    style={{ 
                     zIndex: "6"
 
                     }}
@@ -217,8 +198,16 @@ class ItemCard extends React.Component {
                       onResizeStop={this.onResizeStop.bind(this)}>
                 
                         
-                    <input id="inp" style={{height: '100%', width:'100%', fontSize: item.font_size + 'px', cursor:"grab" }}
-                    onClick={this.selectControl.bind(this, item.key)} placeholder={item.text} >
+                    <input id="inp" style={{height: '100%', width:'100%', fontSize: item.font_size + 'px', 
+                    cursor:"grab",
+                    background: this.props.item.background_color,
+                    borderStyle:"solid",
+                    paddingLeft:"10px",
+                    borderColor:this.props.item.border_color,
+                    borderWidth:this.props.item.border_thickness + 'px',
+                    borderRadius:this.props.item.border_radius + 'px' }}
+                    onClick={this.selectControl.bind(this, item.key)} placeholder={item.text} 
+                    onBlur={this.stopFocus}>
                        
                     </input>
                     
@@ -230,11 +219,11 @@ class ItemCard extends React.Component {
              }
 
              if(item.element === 'container'){
-                console.log("container")
+                //console.log("container")
 
                return (
                 <Rnd
-                style={{ border:"groove #969696",
+                style={{
                 overflow:"hidden",
                 zIndex: "3"
                 }}
@@ -248,9 +237,15 @@ class ItemCard extends React.Component {
                 onResizeStop={this.onResizeStop.bind(this)}>
 
                     <div 
+                    onBlur={this.stopFocus}
                     onClick={this.selectControl.bind(this, item.key)}
                     tabIndex="0"
-                    style={{width: "100%", height:"100px"}}>
+                    style={{width: "100%", height:"100%",
+                    background: this.props.item.background_color,
+                    borderStyle:"solid",
+                    borderColor:this.props.item.border_color,
+                    borderWidth:this.props.item.border_thickness + 'px',
+                    borderRadius:this.props.item.border_radius + 'px'}}>
                     </div>
                 
                 </Rnd>

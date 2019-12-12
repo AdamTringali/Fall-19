@@ -11,24 +11,18 @@ import { Draggable, Droppable } from 'react-drag-and-drop'
 import ResizableRect from 'react-resizable-rotatable-draggable'
 import {Rnd} from 'react-rnd';
 import {DirectLink, Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
+import { SketchPicker, CirclePicker, EditableInput } from 'react-color';
 
 
 class ItemsList extends React.Component {
 
     state = {
         removing: false,
-        target2: {
-            position: 'relative',
-            height: '520px',
-            overflow: 'auto',
-            marginBottom: '100px',
-            
-        },
         item: {
             text: "",
             font_size: "",
-            border_radius: 0,
-            border_thickness: 0,
+            border_radius: "",
+            border_thickness: "",
         },
         wireframe_size: {
             width: "500px",
@@ -36,19 +30,6 @@ class ItemsList extends React.Component {
             position: "relative"
         },
         goHome: false,
-        zoomable: '',
-        test: [
-            { id: 1, type: 'button'}
-        ],
-        items: [
-            { id: 1, name: 'Container', type: '_container' },
-            { id: 2, name: 'Label', type: '_label' },
-            { id: 3, name: 'Button', type: '_button' },
-            { id: 4, name: 'Textfield' , type:'_textfield' }
-        ],
-        style: {
-            background:"red"
-        }
     }
 
     
@@ -186,6 +167,8 @@ class ItemsList extends React.Component {
             let newItem= {
                 text: "",
                 font_size: "",
+                border_radius: "",
+                border_thickness: "",
             };
             this.setState({item: newItem});
             return false;
@@ -231,9 +214,18 @@ class ItemsList extends React.Component {
         this.setState({item: newItem})
     }
 
-    changeThickness = () => {
-        console.log("changing thickness")
+    changeThickness = (e) => {
+        const { target } = e;
+
+        let newItem = this.state.item;
+        newItem.border_thickness = target.value;
+
+        this.setState({item: newItem})    
     }
+
+    onColorPickerInfoChange = color => {
+        console.log("Main Color Change", color);
+      };
 
     render() {
         const wireframe = this.props.wireframe;
@@ -242,11 +234,7 @@ class ItemsList extends React.Component {
             return <Redirect to="/" />;
 
         //let item = this.state.item;
-        var item;
-        if(wireframe.selected >= 0)
-            item = wireframe.items[wireframe.selected];
-        else
-            item = this.state.item;
+        var item = this.state.item;
        
     
         if(this.state.removing)
@@ -332,10 +320,10 @@ class ItemsList extends React.Component {
                                 <div className=" groove_border" 
                                  style={this.state.wireframe_size} onClick={this.checkSelected} 
                                   >        
-                                    {wireframe.items.map((item, index) => 
+                                    {wireframe.items.map((item2, index) => 
                                    
                                     
-                                         <ItemCard z-index={0} wireframe={wireframe} key={item.key} item={item} onClick={this.selectControl} /> 
+                                         <ItemCard z-index={0} wireframe={wireframe} key={item2.key} item={item2} checkItem={item} onClick={this.selectControl} /> 
                                     )}
                                    
                                 </div>                             
@@ -384,6 +372,15 @@ class ItemsList extends React.Component {
                         <div className="input-field col s8">
                             <input id="thickness" type="text" style={{ border: "groove", height: "30px", borderRadius: "5px"}} value={item.border_thickness} onChange={this.changeThickness}/>
                         </div>
+
+
+                        <div className="input-field col s4">
+                            <label style={{top: "-18px", color: "black"}}>Background Color</label>
+                        </div>
+                        <div className="col s8">
+                            {/* <CirclePicker style={{width:"66%", float:"right"}} className="" colors={["#f44336"]} /> */}
+                        </div>
+
                     </div>
 
                 </div>

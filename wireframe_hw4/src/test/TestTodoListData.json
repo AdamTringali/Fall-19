@@ -22,7 +22,8 @@
                       "text":"text one",
                       "font_size":30,
                       "border_radius":2,
-                      "border_thickness":2
+                      "border_thickness":2,
+                      "border_color": "black"
                    },
                    { 
                       "key":1,
@@ -36,7 +37,8 @@
                       "text":"Username",
                       "font_size":20,
                       "border_radius":2,
-                      "border_thickness":2
+                      "border_thickness":2,
+                      "border_color": "black"
                    },
                    { 
                       "key":2,
@@ -50,7 +52,8 @@
                       "text":"",
                       "font_size":0,
                       "border_radius":2,
-                      "border_thickness":2
+                      "border_thickness":2,
+                      "border_color": "black"
                    },
                    { 
                      "key":3,
@@ -64,7 +67,8 @@
                      "text":"Username",
                      "font_size":20,
                      "border_radius":2,
-                     "border_thickness":2
+                     "border_thickness":2,
+                     "border_color": "black"
                   }
                 ]
              },
@@ -84,7 +88,8 @@
                       "text":"search",
                       "font_size":12,
                       "border_radius":2,
-                      "border_thickness":2
+                      "border_thickness":2,
+                      "border_color": "black"
                    },
                    { 
                       "key":1,
@@ -98,7 +103,8 @@
                       "text":"first name",
                       "font_size":12,
                       "border_radius":2,
-                      "border_thickness":2
+                      "border_thickness":2,
+                      "border_color": "black"
                    },
                    { 
                       "key":2,
@@ -112,7 +118,8 @@
                       "text":"last name",
                       "font_size":12,
                       "border_radius":2,
-                      "border_thickness":2
+                      "border_thickness":2,
+                      "border_color": "black"
                    },
                    { 
                       "key":3,
@@ -126,7 +133,8 @@
                       "text":"",
                       "font_size":0,
                       "border_radius":0,
-                      "border_thickness":2
+                      "border_thickness":2,
+                      "border_color": "black"
                    },
                    { 
                       "key":4,
@@ -140,7 +148,8 @@
                       "text":"Friend App",
                       "font_size":12,
                       "border_radius":2,
-                      "border_thickness":2
+                      "border_thickness":2,
+                      "border_color": "black"
                    }
                 ]
              },
@@ -160,7 +169,8 @@
                       "text":"search",
                       "font_size":12,
                       "border_radius":2,
-                      "border_thickness":2
+                      "border_thickness":2,
+                      "border_color": "black"
                    },
                    { 
                       "key":1,
@@ -174,7 +184,8 @@
                       "text":"TextFieldText",
                       "font_size":12,
                       "border_radius":2,
-                     "border_thickness":2
+                     "border_thickness":2,
+                     "border_color": "black"
                    },
                    { 
                       "key":2,
@@ -188,7 +199,8 @@
                       "text":"",
                       "font_size":0,
                       "border_radius":2,
-                      "border_thickness":2
+                      "border_thickness":2,
+                      "border_color": "black"
                    },
                    { 
                       "key":3,
@@ -202,7 +214,8 @@
                       "text":"",
                       "font_size":12,
                       "border_radius":2,
-                     "border_thickness":2
+                     "border_thickness":2,
+                     "border_color": "black"
                    }
                 ]
              }
@@ -228,12 +241,13 @@
                      "y":251,
                      "height":"109px",
                      "width":"222px",
-                     "background_color":"black",
+                     "background_color":"#c4c4c4",
                      "color":"red",
                      "text":"Search",
                      "font_size":30,
                      "border_radius":2,
-                     "border_thickness":2
+                     "border_thickness":2,
+                     "border_color": "black"
                      
                   },
                   { 
@@ -243,12 +257,13 @@
                      "y":164,
                      "height":"57px",
                      "width":"247px",
-                     "background_color":"red",
+                     "background_color":"white",
                      "color":"blue",
                      "text":"Username",
                      "font_size":20,
                      "border_radius":2,
-                     "border_thickness":2
+                     "border_thickness":2,
+                     "border_color": "black"
 
                      
                   },
@@ -259,12 +274,13 @@
                      "y":34,
                      "height":"425px",
                      "width":"425px",
-                     "background_color":"blue",
+                     "background_color":"#949494",
                      "color":"white",
                      "text":"",
                      "font_size":0,
                      "border_radius":2,
-                     "border_thickness":2
+                     "border_thickness":2,
+                     "border_color": "black"
 
                   },
                   { 
@@ -274,12 +290,13 @@
                     "y":177,
                     "height":"32px",
                     "width":"97px",
-                    "background_color":"green",
+                    "background_color":"",
                     "color":"white",
                     "text":"Username",
                     "font_size":20,
                     "border_radius":2,
-                    "border_thickness":2
+                    "border_thickness":2,
+                    "border_color": "black"
                  }
                ]
             },
@@ -300,7 +317,8 @@
                      "text":"search",
                      "font_size":12,
                      "border_radius":2,
-                     "border_thickness":2
+                     "border_thickness":2,
+                     "border_color": "black"
                   },
                   { 
                      "key":1,
@@ -314,7 +332,8 @@
                      "text":"first name",
                      "font_size":12,
                      "border_radius":2,
-                     "border_thickness":2
+                     "border_thickness":2,
+                     "border_color": "black"
                   },
                   { 
                      "key":2,
@@ -328,7 +347,8 @@
                      "text":"last name",
                      "font_size":12,
                      "border_radius":2,
-                     "border_thickness":2
+                     "border_thickness":2,
+                     "border_color": "black"
                   },
                   { 
                      "key":3,
@@ -342,7 +362,8 @@
                      "text":"",
                      "font_size":0,
                      "border_radius":0,
-                     "border_thickness":2
+                     "border_thickness":2,
+                     "border_color": "black"
                   },
                   { 
                      "key":4,
@@ -356,7 +377,8 @@
                      "text":"Friend App",
                      "font_size":12,
                      "border_radius":2,
-                     "border_thickness":2
+                     "border_thickness":2,
+                     "border_color": "black"
                   }
                ]
             },
@@ -377,7 +399,8 @@
                      "text":"search",
                      "font_size":12,
                      "border_radius":2,
-                     "border_thickness":2
+                     "border_thickness":2,
+                     "border_color": "black"
                   },
                   { 
                      "key":1,
@@ -391,7 +414,8 @@
                      "text":"TextFieldText",
                      "font_size":12,
                      "border_radius":2,
-                     "border_thickness":2
+                     "border_thickness":2,
+                     "border_color": "black"
                   },
                   { 
                      "key":2,
@@ -405,7 +429,8 @@
                      "text":"",
                      "font_size":0,
                      "border_radius":2,
-                     "border_thickness":2
+                     "border_thickness":2,
+                     "border_color": "black"
                   },
                   { 
                      "key":3,
@@ -419,7 +444,8 @@
                      "text":"",
                      "font_size":12,
                      "border_radius":2,
-                     "border_thickness":2
+                     "border_thickness":2,
+                     "border_color": "black"
                   }
                ]
             }
