@@ -46,20 +46,14 @@ class ItemCard extends React.Component {
 
 
     onDragStop = (test, info) => {
-       // console.log("ondragstop");
-        //console.log("oldinfo: x: " + this.state.rnd.x + ", y: " + this.state.rnd.y);
+
         let newCoord = {...this.state.rnd};
         newCoord.x = info.x;
         newCoord.y = info.y;
         this.setState({rnd: newCoord})
 
-
         this.props.item.x =  newCoord.x;
         this.props.item.y =  newCoord.y;
-
-
-       // console.log("newinfo: x: " + newCoord.x + ", y: " + newCoord.y);
-
     }
 
 
@@ -104,17 +98,6 @@ class ItemCard extends React.Component {
         //e.stopPropagation();
     }
 
-    /*
-    onDragStop={(e, d) => { this.setState({ x: d.x, y: d.y }) }}
-
-    onResizeStop={(e, direction, ref, delta, position) => {
-        this.setState({
-        width: ref.style.width,
-        height: ref.style.height,
-        ...position,
-        });
-    }}
-  */
     render() {
         const { item } = this.props;  
         //this.checkBorder();
@@ -139,6 +122,7 @@ class ItemCard extends React.Component {
                     style={{ height: '100%', width:'100%', fontSize: item.font_size + 'px', 
                     position:"relative",
                     borderStyle:"solid",
+                    color:this.props.item.color,
                     borderColor:this.props.item.border_color,
                     borderWidth:this.props.item.border_thickness + 'px',
                     background: this.props.item.background_color,
@@ -167,6 +151,7 @@ class ItemCard extends React.Component {
                      style={{ height: '100%',textAlign:"-webkit-center", width:'100%', 
                      fontSize: item.font_size + 'px',
                      borderStyle:"solid",
+                     color:this.props.item.color,
                      borderColor:this.props.item.border_color,
                      borderWidth:this.props.item.border_thickness + 'px',
                      background: this.props.item.background_color,
@@ -203,10 +188,11 @@ class ItemCard extends React.Component {
                     background: this.props.item.background_color,
                     borderStyle:"solid",
                     paddingLeft:"10px",
+                    color:this.props.item.color,
                     borderColor:this.props.item.border_color,
                     borderWidth:this.props.item.border_thickness + 'px',
                     borderRadius:this.props.item.border_radius + 'px' }}
-                    onClick={this.selectControl.bind(this, item.key)} placeholder={item.text} 
+                    onClick={this.selectControl.bind(this, item.key)} value={item.text} readOnly={true}
                     onBlur={this.stopFocus}>
                        
                     </input>
@@ -243,6 +229,7 @@ class ItemCard extends React.Component {
                     style={{width: "100%", height:"100%",
                     background: this.props.item.background_color,
                     borderStyle:"solid",
+                    color:this.props.item.color,
                     borderColor:this.props.item.border_color,
                     borderWidth:this.props.item.border_thickness + 'px',
                     borderRadius:this.props.item.border_radius + 'px'}}>

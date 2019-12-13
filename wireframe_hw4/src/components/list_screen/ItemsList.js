@@ -17,12 +17,18 @@ import { SketchPicker, CirclePicker, EditableInput } from 'react-color';
 class ItemsList extends React.Component {
 
     state = {
+        displayColorPicker1: false,
+        displayColorPicker2: false,
+        displayColorPicker3: false,
         removing: false,
         item: {
             text: "",
             font_size: "",
             border_radius: "",
             border_thickness: "",
+            background_color: "",
+            border_color:"",
+            color: ""
         },
         wireframe_size: {
             width: "500px",
@@ -36,8 +42,6 @@ class ItemsList extends React.Component {
     componentDidMount(){
         document.addEventListener("keydown", this.deleteControl, false);
     }
-
-
 
     deleteControl = (e) => {
         if (e.repeat) { return }
@@ -111,9 +115,18 @@ class ItemsList extends React.Component {
         const fireStore = getFirestore();
         fireStore.collection('user_wireframes').get().then(function(querySnapshot){
             querySnapshot.forEach(function(doc) {
-                if(doc.data().wireframes.length > key){
-                    if(doc.data().wireframes[key].title === myTitle)
+                if(doc.data().wireframes.length > key){//failsafe
+                    if(doc.data().wireframes[key].title === myTitle)//confirm
                     {
+                        console.log("testing")
+                        if(JSON.stringify( newFrames[key].items) == JSON.stringify( doc.data().wireframes[key].items))
+                            console.log("no changes")
+                        else{
+                            console.log(newFrames[key].items)
+                            console.log("changes?")
+                            console.log(doc.data().wireframes[key].items)
+
+                        }
                         fireStore.collection('user_wireframes').doc(doc.id).update({wireframes: newFrames});
                     }
                 }
@@ -124,6 +137,8 @@ class ItemsList extends React.Component {
     cancelChange = () => {
         console.log("cancel");
         this.setState({goHome: true});
+
+        
 
     }
 
@@ -197,7 +212,87 @@ class ItemsList extends React.Component {
     }   
 
     addControl = (control, e2) => {
-        console.log("add control: " + control);
+    
+        let items = this.props.wireframe.items;
+        let key = items.length;
+        var newX = 0;
+        var newY = 0;
+        for(var j = 0; j < 4; j++){
+            //UNNCECESSARY FOR LOOP.
+            //USED FOR DOUBLE CHECKING FOR MATCHING COORD'S
+            for(var i = 0; i < key; i++ ){
+                if(items[i].x == newX)
+                    newX += 60;
+                if(items[i].y == newY)
+                    newY += 60
+            }
+        }
+
+  
+        
+        const newItem = {
+            "key":key,
+            "element":"",
+            "x":newX,
+            "y":newY,
+            "height":"60px",
+            "width":"100px",
+            "background_color":"#ffffff",
+            "color":"#ffffff",
+            "text":"",
+            "font_size":20,
+            "border_radius":2,
+            "border_thickness":2,
+            "border_color": "black"
+             
+        }
+        //container, button, label, textfield
+        switch(control){
+            case 'container':
+                console.log("container")
+                newItem.element = "container";
+                break;
+            case 'button':
+                console.log("creating new button")
+                newItem.element = "button";
+                newItem.text = "Button"
+                newItem.height= "35px"
+                newItem.width = "90px"
+                newItem.color = "black"
+                newItem.background_color = "gray"
+                newItem.border_radius = 5;
+
+                //text
+                break;
+            case 'label': 
+                console.log("creating new label")
+                newItem.element = "label";
+                newItem.text = "Prompt for Input"
+                newItem.width = "165px"
+                newItem.height = "35px";
+                newItem.color = "black";
+                newItem.font_size = 20;
+                //text
+                break;
+            case 'textfield':
+                console.log("creating new TF")
+                newItem.element = "textfield";
+                newItem.text = "Input"
+                newItem.width = "110px"
+                newItem.height = "30px";
+                newItem.color = "black";
+                newItem.font_size = 15;
+                newItem.border_thickness = 1;
+                //text
+                break;
+            default:
+                console.log("should not be here :(")
+                break;
+        }
+
+        items.push(newItem);
+        this.setState({item: newItem})
+        this.props.wireframe.items = items;
     }
     
     clicking = (e) => {
@@ -223,9 +318,47 @@ class ItemsList extends React.Component {
         this.setState({item: newItem})    
     }
 
-    onColorPickerInfoChange = color => {
-        console.log("Main Color Change", color);
-      };
+    handleClick = (id) => {
+        if(id == 1)
+            this.setState({ displayColorPicker1: !this.state.displayColorPicker1 })
+        else if(id == 2)
+            this.setState({ displayColorPicker2: !this.state.displayColorPicker2 })
+        else if(id == 3)
+            this.setState({ displayColorPicker3: !this.state.displayColorPicker3 })
+
+
+    };
+
+    handleClose = (id) => {
+        if(id == 1)
+            this.setState({ displayColorPicker1: false })
+        else if(id == 2)
+            this.setState({ displayColorPicker2: false })
+        else if(id == 3)
+            this.setState({ displayColorPicker3: false })
+
+    };
+
+    handleChange = (whichColor, color2) => {
+        let newitem = this.state.item;
+
+
+        if(whichColor === 'color'){
+            newitem.color = color2.hex;
+        }
+        else if(whichColor === 'background'){
+            newitem.background_color = color2.hex;
+        }
+        else if(whichColor === 'border'){
+            newitem.border_color = color2.hex;
+
+        }
+
+
+
+        this.setState({ item: newitem })
+
+    };
 
     render() {
         const wireframe = this.props.wireframe;
@@ -240,7 +373,24 @@ class ItemsList extends React.Component {
         if(this.state.removing)
             return <React.Fragment />
 
-    
+            const styles = {
+                  swatch: {
+                    display: 'inline-block',
+                    cursor: 'pointer',
+                  },
+                  popover: {
+                    position: 'absolute',
+                    zIndex: '2',
+                  },
+                  cover: {
+                    position: 'fixed',
+                    top: '0px',
+                    right: '0px',
+                    bottom: '0px',
+                    left: '0px',
+                  },
+           
+              };
 
         return (
             
@@ -330,7 +480,7 @@ class ItemsList extends React.Component {
                 </div>
 
                 {/* RIGHT COLUMN */}
-                <div className="groove_border col s3 " style={{height: "90%"}}>
+                <div className="groove_border col s3 " style={{height: "100%"}}>
                     <h5 className="center-align">Wireframe</h5>
                     <div className="row">
                         <div className="input-field col s4">
@@ -373,13 +523,106 @@ class ItemsList extends React.Component {
                             <input id="thickness" type="text" style={{ border: "groove", height: "30px", borderRadius: "5px"}} value={item.border_thickness} onChange={this.changeThickness}/>
                         </div>
 
+                        <div className="input-field col s8">
+                            <label style={{top: "-18px", color: "black"}}>Text Color</label>
+                        </div>
+                        <div className="col s4">
+                        <div style={ styles.swatch } onClick={ this.handleClick.bind(this, 1) }>
+                            <div style={{ width: '50px',
+                                    height: '50px',
+                                    borderStyle:'solid',
+                                    borderWidth:'2px',
+                                    borderRadius: '50%',
+                                    background: item.color,}} />
+                        </div>
+                            { 
+                            this.state.displayColorPicker1 ? <div style={ styles.popover }>
+                            <div style={ styles.cover } onClick={ this.handleClose.bind(this, 1) }></div>
+                            <SketchPicker color={ item.color } onChange={ this.handleChange.bind(this, 'color') }  >  </SketchPicker>
+                            
+                            </div> : null 
+                            }
+                        </div>
 
-                        <div className="input-field col s4">
+                        <div className="input-field col s8">
+                            <label style={{top: "-18px", color: "black"}}>Background Color</label>
+                        </div>
+                        <div className="col s4">
+                        <div style={ styles.swatch } onClick={ this.handleClick.bind(this, 2) }>
+                            <div style={{ width: '50px',
+                                    height: '50px',
+                                    borderStyle:'solid',
+                                    borderWidth:'2px',
+                                    borderRadius: '50%',
+                                    background: item.background_color,}} />
+                        </div>
+                            { 
+                            this.state.displayColorPicker2 ? <div style={ styles.popover }>
+                            <div style={ styles.cover } onClick={ this.handleClose.bind(this, 2) }></div>
+                            <SketchPicker color={ item.background_color } onChange={ this.handleChange.bind(this, 'background') }  >  </SketchPicker>
+                            
+                            </div> : null 
+                            }
+                        </div>
+
+                        <div className="input-field col s8">
+                            <label style={{top: "-18px", color: "black"}}>Background Color</label>
+                        </div>
+                        <div className="col s4">
+                        <div style={ styles.swatch } onClick={ this.handleClick.bind(this, 3) }>
+                            <div style={{ width: '50px',
+                                    height: '50px',
+                                    borderStyle:'solid',
+                                    borderWidth:'2px',
+                                    borderRadius: '50%',
+                                    background: item.border_color,}} />
+                        </div>
+                            { 
+                            this.state.displayColorPicker3 ? <div style={ styles.popover }>
+                            <div style={ styles.cover } onClick={ this.handleClose.bind(this, 3) }></div>
+                            <SketchPicker color={ item.border_color } onChange={ this.handleChange.bind(this, 'border') }  >  </SketchPicker>
+                            
+                            </div> : null 
+                            }
+                        </div>
+
+{/*                         <div className="input-field col s4">
                             <label style={{top: "-18px", color: "black"}}>Background Color</label>
                         </div>
                         <div className="col s8">
-                            {/* <CirclePicker style={{width:"66%", float:"right"}} className="" colors={["#f44336"]} /> */}
+                        <div style={ styles.swatch } onClick={ this.handleClick2 }>
+                            <div style={{ width: '40px',
+                                    height: '40px',
+                                    borderRadius: '50%',
+                                    background: item.background_color,}} />
                         </div>
+                            { 
+                            this.state.displayColorPicker ? <div style={ styles.popover }>
+                            <div style={ styles.cover } onClick={ this.handleClose }></div>
+                            <SketchPicker color={ this.state.color } onChange={ this.handleChange }  >  </SketchPicker>
+                            
+                            </div> : null 
+                            }
+                        </div>
+
+                        <div className="input-field col s4">
+                            <label style={{top: "-18px", color: "black"}}>Border Color</label>
+                        </div>
+                        <div className="col s8">
+                        <div style={ styles.swatch } onClick={ this.handleClick2 }>
+                            <div style={{ width: '40px',
+                                    height: '40px',
+                                    borderRadius: '50%',
+                                    background: item.border_color,}} />
+                        </div>
+                            { 
+                            this.state.displayColorPicker ? <div style={ styles.popover }>
+                            <div style={ styles.cover } onClick={ this.handleClose }></div>
+                            <SketchPicker color={ this.state.color } onChange={ this.handleChange }  >  </SketchPicker>
+                            
+                            </div> : null 
+                            }
+                        </div> */}
 
                     </div>
 
