@@ -36,13 +36,10 @@ class ItemCard extends React.Component {
     stopFocus = () => {
         console.log("stopping focus?");
         let {wireframe} = this.props;
-        //let title = wireframe.title;
         wireframe.selected = -1;
         this.setState({selected: -1});
 
     }
-
-
 
 
     onDragStop = (test, info) => {

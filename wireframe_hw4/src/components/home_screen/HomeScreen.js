@@ -11,6 +11,7 @@ import { firestore } from 'firebase';
 class HomeScreen extends Component {
 
     state = {
+        newList: false,
         firstName: "",
         lastName: "",
     }
@@ -24,12 +25,13 @@ class HomeScreen extends Component {
             let data = doc.data();
             if(data.firstName === user.firstName && data.lastName === user.lastName)
             {
-                console.log(data);
+                //console.log(data);
                 let cpy = data.wireframes;
                 let item = {
-                    title: "Unknown",
+                    items: [],
                     key: cpy.length,
-                    items: []                
+                    selected: -1,
+                    title: "Unknown",
                 }
                 cpy.push(item)
                 fireStore.collection('user_wireframes').doc(doc.id).update({wireframes: cpy});
@@ -38,6 +40,10 @@ class HomeScreen extends Component {
             
         })
     })
+ 
+
+
+    return(result);
     
 
     //props.history.push('wireframe/'+3);
@@ -48,12 +54,17 @@ class HomeScreen extends Component {
         console.log("handleNewList homescreen.js");
         //console.log("current user " + user.firstName + " " + user.lastName)
 
-        setTimeout(this.goToNewList(this.props),100)
-        
+        this.goToNewList(this.props)
+       // this.setState({newList: true});
+        const oldNum = this.props.wireframe.wireframes.length;
+        this.props.history.push(this.props.wireframe.id+'/'+ oldNum);
+        //console.log(this.props)
+    
 
+      
        
-     
-        this.props.history.push("wireframe"+'/'+3);
+        //setTimeout(this.props.history.push(this.props.wireframe.id+'/'+3),1000);
+
 
     }
 
@@ -68,6 +79,12 @@ class HomeScreen extends Component {
         if(!this.props.wireframeList)
             return <React.Fragment />
 
+        if(this.state.newList){
+            console.log("newlist")
+            setTimeout(function(){},1000)
+            const oldNum = this.props.wireframe.wireframes.length;
+            this.props.history.push(this.props.wireframe.id+'/'+ oldNum);
+        }
        
         if(this.props.user.firstName !== "" && this.props.user.firstName)
         {
@@ -126,9 +143,19 @@ const mapStateToProps = (state) => {
     }
     userV.firstName = state.firebase.profile.firstName;
     userV.lastName = state.firebase.profile.lastName;
-    //const userList = state.firebase.ordered.users;
 
+    const wireframeList = state.firestore.ordered.user_wireframes;
+    let wireframe = null;
+    if(wireframeList)
+        for(var i = 0; i < wireframeList.length; i++){
+            if(wireframeList[i].firstName === userV.firstName && wireframeList[i].lastName === userV.lastName)
+               wireframe = wireframeList[i]
+        }
+
+    
+    
     return {
+        wireframe,
         user: userV,
         userList: state.firestore.ordered.users,
         wireframeList: state.firestore.ordered.user_wireframes,

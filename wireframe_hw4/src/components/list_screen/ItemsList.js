@@ -12,11 +12,13 @@ import ResizableRect from 'react-resizable-rotatable-draggable'
 import {Rnd} from 'react-rnd';
 import {DirectLink, Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
 import { SketchPicker, CirclePicker, EditableInput } from 'react-color';
+import { Modal } from 'react-materialize';
 
 
 class ItemsList extends React.Component {
 
     state = {
+        displayCloseModal: false,
         displayColorPicker1: false,
         displayColorPicker2: false,
         displayColorPicker3: false,
@@ -46,10 +48,8 @@ class ItemsList extends React.Component {
     deleteControl = (e) => {
         if (e.repeat) { return }
         let {wireframe} = this.props;
-        let {id} = this.props;
         let selected = wireframe.selected;
         let newItems = wireframe.items;
-        let key = wireframe.key;
 
         if(e.keyCode === 8){                    
             console.log("delete, selected: " + selected);
@@ -60,50 +60,48 @@ class ItemsList extends React.Component {
                     this.setState({removing: false});
                     return;
                 }
-                console.log("deleting control text: " + wireframe.items[selected].text + " key: " + selected);
-                console.log(newItems);
                 newItems.splice(selected,1);
-                console.log(newItems);
-                console.log("key: " + key);
-
                 for(var i = 0; i < newItems.length; i++){
                     newItems[i].key = i;
                 }
                 wireframe.items = newItems;
                 wireframe.selected = -1;
-
-
-                
-
-                //const fireStore = getFirestore();
-                //fireStore.collection('user_wireframes').doc(id).update({wireframes: cpy});
-                /* fireStore.collection('user_wireframes').get().then(function(querySnapshot){
-                querySnapshot.forEach(function(doc) {
-                        let data = doc.data();
-                        if(data.firstName === user.firstName && data.lastName === user.lastName)
-                        {
-                            console.log(data);
-                            let cpy = data.wireframes;
-                            let item = {
-                                title: "Unknown",
-                                key: cpy.length,
-                                items: []                
-                            }
-                            cpy.push(item)
-                            fireStore.collection('user_wireframes').doc(doc.id).update({wireframes: cpy});
-                        }
-            
-                        
-                    })
-                }) */
-            }
-            else
-            {
-
+                this.setState({removing: false});
             }
         }
+        if(e.ctrlKey && e.which === 68)
+        {
+            e.preventDefault();
+            console.log("control d?")
+            if(selected >= 0){
+                //add item to 
+                //newItems = items;
+                //let key = items.length;
+                
+                const newItem = {
+                    "background_color":newItems[selected].background_color,
+                    "border_color":newItems[selected].border_color,
+                    "border_radius":newItems[selected].border_radius,
+                    "border_thickness":newItems[selected].border_thickness,
+                    "color":newItems[selected].color,
+                    "element":newItems[selected].element,
+                    "font_size":newItems[selected].font_size,
+                    "height":newItems[selected].height,
+                    "key":newItems.length,
+                    "text":newItems[selected].text,
+                    "width":newItems[selected].width,
+                    "x":newItems[selected].x+100,
+                    "y":newItems[selected].y+100
+                     
+                }
+
+                newItems.push(newItem);
+                this.setState({item: newItem})
+                this.props.wireframe.items = newItems;
+            }
+
+        }
         
-        this.setState({removing: false});
 
     }
 
@@ -118,13 +116,11 @@ class ItemsList extends React.Component {
                 if(doc.data().wireframes.length > key){//failsafe
                     if(doc.data().wireframes[key].title === myTitle)//confirm
                     {
-                        console.log("testing")
                         if(JSON.stringify( newFrames[key].items) == JSON.stringify( doc.data().wireframes[key].items))
                             console.log("no changes")
                         else{
-                            console.log(newFrames[key].items)
                             console.log("changes?")
-                            console.log(doc.data().wireframes[key].items)
+                           
 
                         }
                         fireStore.collection('user_wireframes').doc(doc.id).update({wireframes: newFrames});
@@ -134,9 +130,45 @@ class ItemsList extends React.Component {
         })
     }
 
+    testing(tt){
+        console.log("tt")
+        console.log(tt);
+    }
+
     cancelChange = () => {
         console.log("cancel");
-        this.setState({goHome: true});
+        let newFrames = this.props.wireframes;
+        let myTitle = this.props.wireframe.title;
+        let key = this.props.wireframe.key;
+        var validLeave = this.testing;
+
+        //I need to get truth value out of the following code
+        //once that is recieved launch modal or gohome.
+        
+        const fireStore = getFirestore();
+        fireStore.collection('user_wireframes').get().then(function(querySnapshot){
+            querySnapshot.forEach(function(doc) {
+                if(doc.data().wireframes.length > key){//failsafe
+                    if(doc.data().wireframes[key].title === myTitle)//confirm
+                    {
+                        if(JSON.stringify( newFrames[key].items) == JSON.stringify( doc.data().wireframes[key].items)){
+                            console.log("no changes")
+                            validLeave = true;
+                            
+                            //this.setState({goHome: true});
+                        }
+                        else{
+                            validLeave = false;
+                            console.log("changes?")
+                        }
+                        //fireStore.collection('user_wireframes').doc(doc.id).update({wireframes: newFrames});
+                    }
+                }
+            })
+        })
+        //setTimeout(console.log(validLeave), 450)
+        
+        //this.setState({goHome: true});
 
         
 
@@ -231,19 +263,19 @@ class ItemsList extends React.Component {
   
         
         const newItem = {
-            "key":key,
-            "element":"",
-            "x":newX,
-            "y":newY,
-            "height":"60px",
-            "width":"100px",
             "background_color":"#ffffff",
-            "color":"#ffffff",
-            "text":"",
-            "font_size":20,
+            "border_color": "black",
             "border_radius":2,
             "border_thickness":2,
-            "border_color": "black"
+            "color":"#ffffff",
+            "element":"",
+            "font_size":20,
+            "height":"60px",
+            "key":key,
+            "text":"",
+            "width":"100px",
+            "x":newX,
+            "y":newY
              
         }
         //container, button, label, textfield
@@ -301,6 +333,7 @@ class ItemsList extends React.Component {
     }
 
     changeRadius = (e) => {
+        console.log("?????????????????")
         const { target } = e;
 
         let newItem = this.state.item;
@@ -459,6 +492,30 @@ class ItemsList extends React.Component {
                         <button className="btn col s10" type="submit" name="action" onClick={this.cancelChange}>Close
                             <i className="material-icons right">close</i>
                         </button>
+                        { 
+                            this.state.displayCloseModal ? <div className="col s2 delete_frame">
+                          <Modal open={this.state.open} header="Delete List" trigger={
+                             <i className="material-icons right" onClick={this.deleteWireframe.bind(this, wireframe.key)}>close</i>
+                            } >
+
+                                   <h5> <p>Are you sure you want to delete this list?
+                                <br />
+                                <br />
+                                    The list will not be retreivable.
+                                <br />
+                            </p>
+                            </h5>
+
+                            <div className="row">
+
+                                <a className="waves-effect waves-light btn col s2" onClick={this.deleteWireframe.bind(this, wireframe.key)}>Yes</a>
+                                <p className="col s1"></p>
+                                <a className="waves-effect waves-light btn col s2" onClick={this.keepWireframe}>No</a>
+
+                            </div>
+                        </Modal>
+                        </div> : null 
+                        }
                        
                     </div>
 
@@ -545,6 +602,27 @@ class ItemsList extends React.Component {
                         </div>
 
                         <div className="input-field col s8">
+                            <label style={{top: "-18px", color: "black"}}>Border Color</label>
+                        </div>
+                        <div className="col s4">
+                        <div style={ styles.swatch } onClick={ this.handleClick.bind(this, 3) }>
+                            <div style={{ width: '50px',
+                                    height: '50px',
+                                    borderStyle:'solid',
+                                    borderWidth:'2px',
+                                    borderRadius: '50%',
+                                    background: item.border_color,}} />
+                        </div>
+                            { 
+                            this.state.displayColorPicker3 ? <div style={ styles.popover }>
+                            <div style={ styles.cover } onClick={ this.handleClose.bind(this, 3) }></div>
+                            <SketchPicker color={ item.border_color } onChange={ this.handleChange.bind(this, 'border') }  >  </SketchPicker>
+                            
+                            </div> : null 
+                            }
+                        </div>
+
+                        <div className="input-field col s8">
                             <label style={{top: "-18px", color: "black"}}>Background Color</label>
                         </div>
                         <div className="col s4">
@@ -565,64 +643,9 @@ class ItemsList extends React.Component {
                             }
                         </div>
 
-                        <div className="input-field col s8">
-                            <label style={{top: "-18px", color: "black"}}>Background Color</label>
-                        </div>
-                        <div className="col s4">
-                        <div style={ styles.swatch } onClick={ this.handleClick.bind(this, 3) }>
-                            <div style={{ width: '50px',
-                                    height: '50px',
-                                    borderStyle:'solid',
-                                    borderWidth:'2px',
-                                    borderRadius: '50%',
-                                    background: item.border_color,}} />
-                        </div>
-                            { 
-                            this.state.displayColorPicker3 ? <div style={ styles.popover }>
-                            <div style={ styles.cover } onClick={ this.handleClose.bind(this, 3) }></div>
-                            <SketchPicker color={ item.border_color } onChange={ this.handleChange.bind(this, 'border') }  >  </SketchPicker>
-                            
-                            </div> : null 
-                            }
-                        </div>
 
-{/*                         <div className="input-field col s4">
-                            <label style={{top: "-18px", color: "black"}}>Background Color</label>
-                        </div>
-                        <div className="col s8">
-                        <div style={ styles.swatch } onClick={ this.handleClick2 }>
-                            <div style={{ width: '40px',
-                                    height: '40px',
-                                    borderRadius: '50%',
-                                    background: item.background_color,}} />
-                        </div>
-                            { 
-                            this.state.displayColorPicker ? <div style={ styles.popover }>
-                            <div style={ styles.cover } onClick={ this.handleClose }></div>
-                            <SketchPicker color={ this.state.color } onChange={ this.handleChange }  >  </SketchPicker>
-                            
-                            </div> : null 
-                            }
-                        </div>
 
-                        <div className="input-field col s4">
-                            <label style={{top: "-18px", color: "black"}}>Border Color</label>
-                        </div>
-                        <div className="col s8">
-                        <div style={ styles.swatch } onClick={ this.handleClick2 }>
-                            <div style={{ width: '40px',
-                                    height: '40px',
-                                    borderRadius: '50%',
-                                    background: item.border_color,}} />
-                        </div>
-                            { 
-                            this.state.displayColorPicker ? <div style={ styles.popover }>
-                            <div style={ styles.cover } onClick={ this.handleClose }></div>
-                            <SketchPicker color={ this.state.color } onChange={ this.handleChange }  >  </SketchPicker>
-                            
-                            </div> : null 
-                            }
-                        </div> */}
+
 
                     </div>
 
