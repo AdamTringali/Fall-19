@@ -11,9 +11,25 @@ import { firestore } from 'firebase';
 class HomeScreen extends Component {
 
     state = {
+        index: 0,
         newList: false,
         firstName: "",
         lastName: "",
+    }
+
+    createNewDoc = () => {
+        console.log("creating new doc.  new user only. ");
+        const user = this.props.user;
+        console.log(this.props.wireframeList.length)
+        let data = {
+            firstName: user.firstName,
+            lastName: user.lastName,
+            user_id: this.props.wireframeList.length,
+            wireframes: []
+          };
+
+        const fireStore = getFirestore();
+        fireStore.collection('user_wireframes').doc(JSON.stringify(Math.random()*100)).set(data);
     }
 
     async goToNewList (props) {
@@ -31,9 +47,15 @@ class HomeScreen extends Component {
                     items: [],
                     key: cpy.length,
                     selected: -1,
+                    height: "500px",
+                    width: "500px",
                     title: "Unknown",
                 }
-                cpy.push(item)
+                cpy.unshift(item)
+
+                for(var i = 0; i < cpy.length; i++)
+                    cpy[i].key = i;
+                
                 fireStore.collection('user_wireframes').doc(doc.id).update({wireframes: cpy});
             }
 
@@ -54,10 +76,12 @@ class HomeScreen extends Component {
         console.log("handleNewList homescreen.js");
         //console.log("current user " + user.firstName + " " + user.lastName)
 
+        
         this.goToNewList(this.props)
-       // this.setState({newList: true});
-        const oldNum = this.props.wireframe.wireframes.length;
-        this.props.history.push(this.props.wireframe.id+'/'+ oldNum);
+        this.setState({newList: true});
+    
+
+
         //console.log(this.props)
     
 
@@ -79,12 +103,7 @@ class HomeScreen extends Component {
         if(!this.props.wireframeList)
             return <React.Fragment />
 
-        if(this.state.newList){
-            console.log("newlist")
-            setTimeout(function(){},1000)
-            const oldNum = this.props.wireframe.wireframes.length;
-            this.props.history.push(this.props.wireframe.id+'/'+ oldNum);
-        }
+
        
         if(this.props.user.firstName !== "" && this.props.user.firstName)
         {
@@ -101,7 +120,27 @@ class HomeScreen extends Component {
             user_index = this.props.wireframeList[user_index].user_id;
         }
         else{
-            //console.log("NO WIREFRAMES FOUND FOR USER : " + this.props.user.firstName);
+            if(this.props.user.firstName){
+
+                console.log("NO WIREFRAMES FOUND FOR USER : " + this.props.user.firstName);
+                this.createNewDoc();
+            }
+        }
+
+        if(this.state.newList){
+            if(wireframes.length == 0)
+            {   if(wireframes[wireframes.length])
+                    if(wireframes[0].title === "Unknown")
+                        this.props.history.push(this.props.wireframe.id+'/'+ 0);
+            }
+            else if(wireframes[0].title === "Unknown"){
+                console.log("newlist")
+                const oldNum = this.props.wireframe.wireframes.length-1;
+                this.props.history.push(this.props.wireframe.id+'/'+ 0);
+            }
+
+            //const oldNum = this.props.wireframe.wireframes.length;
+            //this.props.history.push(this.props.wireframe.id+'/'+ oldNum);
         }
         //console.log("abc");
         //console.log(wireframes);

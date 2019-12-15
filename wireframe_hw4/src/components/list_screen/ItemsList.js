@@ -18,6 +18,7 @@ import { Modal } from 'react-materialize';
 class ItemsList extends React.Component {
 
     state = {
+        testing: "",
         displayCloseModal: false,
         displayColorPicker1: false,
         displayColorPicker2: false,
@@ -33,8 +34,8 @@ class ItemsList extends React.Component {
             color: ""
         },
         wireframe_size: {
-            width: "500px",
-            height: "600px",
+            width: this.props.wireframe.width,
+            height: this.props.wireframe.height,
             position: "relative"
         },
         goHome: false,
@@ -51,7 +52,7 @@ class ItemsList extends React.Component {
         let selected = wireframe.selected;
         let newItems = wireframe.items;
 
-        if(e.keyCode === 8){                    
+        if(e.keyCode === 46){                    
             console.log("delete, selected: " + selected);
 
             if(selected >= 0){
@@ -105,10 +106,19 @@ class ItemsList extends React.Component {
 
     }
 
+    saveAndHome = () => {
+
+        this.setState({displayCloseModal: false});
+        this.submitChange();
+        this.setState({goHome: true});
+
+    }
+
     submitChange = () => {
         let newFrames = this.props.wireframes;
         let myTitle = this.props.wireframe.title;
         let key = this.props.wireframe.key;
+        let newSize = this.state.wireframe_size
         
         const fireStore = getFirestore();
         fireStore.collection('user_wireframes').get().then(function(querySnapshot){
@@ -116,61 +126,60 @@ class ItemsList extends React.Component {
                 if(doc.data().wireframes.length > key){//failsafe
                     if(doc.data().wireframes[key].title === myTitle)//confirm
                     {
-                        if(JSON.stringify( newFrames[key].items) == JSON.stringify( doc.data().wireframes[key].items))
-                            console.log("no changes")
-                        else{
-                            console.log("changes?")
-                           
 
-                        }
+                        fireStore.collection('user_wireframes').doc(doc.id).update({height: newSize.height});
+                        fireStore.collection('user_wireframes').doc(doc.id).update({width: newSize.width});
+
                         fireStore.collection('user_wireframes').doc(doc.id).update({wireframes: newFrames});
                     }
                 }
             })
         })
+
+        this.props.wireframe.height = newSize.height;
     }
 
-    testing(tt){
-        console.log("tt")
-        console.log(tt);
-    }
+
 
     cancelChange = () => {
-        console.log("cancel");
         let newFrames = this.props.wireframes;
         let myTitle = this.props.wireframe.title;
         let key = this.props.wireframe.key;
-        var validLeave = this.testing;
+     
 
         //I need to get truth value out of the following code
         //once that is recieved launch modal or gohome.
-        
-        const fireStore = getFirestore();
-        fireStore.collection('user_wireframes').get().then(function(querySnapshot){
-            querySnapshot.forEach(function(doc) {
-                if(doc.data().wireframes.length > key){//failsafe
-                    if(doc.data().wireframes[key].title === myTitle)//confirm
-                    {
-                        if(JSON.stringify( newFrames[key].items) == JSON.stringify( doc.data().wireframes[key].items)){
-                            console.log("no changes")
-                            validLeave = true;
-                            
-                            //this.setState({goHome: true});
+        async function f(validLeave){
+                let promise = new Promise((resolve, reject) => {
+                const fireStore = getFirestore();
+                fireStore.collection('user_wireframes').get().then(function(querySnapshot){
+                    querySnapshot.forEach(function(doc) {
+                        if(doc.data().wireframes.length > key){//failsafe
+                            if(doc.data().wireframes[key].title === myTitle)//confirm
+                            {
+                                if(JSON.stringify( newFrames[key].items) == JSON.stringify( doc.data().wireframes[key].items)){
+                                    resolve(true);
+                                }
+                                else{
+                                    resolve(false);                            
+                                }
+                            }
                         }
-                        else{
-                            validLeave = false;
-                            console.log("changes?")
-                        }
-                        //fireStore.collection('user_wireframes').doc(doc.id).update({wireframes: newFrames});
-                    }
-                }
-            })
-        })
-        //setTimeout(console.log(validLeave), 450)
-        
-        //this.setState({goHome: true});
+                    })
+                })
+                });
 
-        
+                let result = await promise;
+
+                return result;
+            }
+        f().then(function (value) { 
+            if(value)
+                this.setState({goHome: true}) 
+            else
+                this.setState({displayCloseModal: true})
+
+        }.bind(this)  )
 
     }
 
@@ -333,7 +342,6 @@ class ItemsList extends React.Component {
     }
 
     changeRadius = (e) => {
-        console.log("?????????????????")
         const { target } = e;
 
         let newItem = this.state.item;
@@ -484,33 +492,37 @@ class ItemsList extends React.Component {
                     <br/>
                     <br/>
                     <div className="row">
-                        <button className="btn col s10" type="submit" name="action" onClick={this.submitChange}>Submit
+                        <button className="btn col s10 offset-s1" type="submit" name="action" onClick={this.submitChange}>Submit
                             <i className="material-icons right">send</i>
                         </button>
                         <br/>
                         <br/>
-                        <button className="btn col s10" type="submit" name="action" onClick={this.cancelChange}>Close
+                        <button className="btn col s10 offset-s1" type="submit" name="action" onClick={this.cancelChange}>Close
                             <i className="material-icons right">close</i>
                         </button>
                         { 
-                            this.state.displayCloseModal ? <div className="col s2 delete_frame">
-                          <Modal open={this.state.open} header="Delete List" trigger={
-                             <i className="material-icons right" onClick={this.deleteWireframe.bind(this, wireframe.key)}>close</i>
-                            } >
+                            this.state.displayCloseModal ? 
+                            <div className="col s2 delete_frame">
+                          <Modal open={this.state.displayCloseModal} header="Go Home" 
+                            
+                             >
+                            <br />
 
-                                   <h5> <p>Are you sure you want to delete this list?
+                                   <h5> <p>Are you sure you want to abandon your masterpiece?
                                 <br />
                                 <br />
-                                    The list will not be retreivable.
+                                <br />
+                                    This cannot be undone. 
                                 <br />
                             </p>
                             </h5>
-
+                            <br />
+                            <br />
                             <div className="row">
 
-                                <a className="waves-effect waves-light btn col s2" onClick={this.deleteWireframe.bind(this, wireframe.key)}>Yes</a>
+                                <button className="col s3" style={{height:"25px"}} onClick={() => this.setState({goHome: true})}>Go Home</button>
                                 <p className="col s1"></p>
-                                <a className="waves-effect waves-light btn col s2" onClick={this.keepWireframe}>No</a>
+                                <button className="col s3" style={{height:"25px", width:"160px"}} onClick={this.saveAndHome}>Save and Go Home</button>
 
                             </div>
                         </Modal>
@@ -544,13 +556,13 @@ class ItemsList extends React.Component {
                             <label style={{top: "-5px", color: "black"}}>Height</label>
                         </div>
                         <div className="input-field col s8">
-                            <input id="height" type="text"  style={{border: "groove", height: "30px", borderRadius: "5px"}} defaultValue={this.state.wireframe_size.height} onChange={this.changeWireframeHeight}/>
+                            <input id="height" type="text"  style={{border: "groove", height: "30px", borderRadius: "5px"}} defaultValue={wireframe.height/*this.state.wireframe_size.height*/} onChange={this.changeWireframeHeight}/>
                         </div>
                         <div className="input-field col s4">
                             <label style={{top: "-5px", color: "black"}} >Width</label>
                         </div>
                         <div className="input-field col s8">
-                            <input id="width" type="text"  style={{border: "groove", height: "30px", borderRadius: "5px"}} defaultValue={this.state.wireframe_size.width} onChange={this.changeWireframeWidth} />
+                            <input id="width" type="text"  style={{border: "groove", height: "30px", borderRadius: "5px"}} defaultValue={wireframe.width/*this.state.wireframe_size.width*/} onChange={this.changeWireframeWidth} />
                         </div>
                     </div>
                     <h5 className="center-align">Control</h5>

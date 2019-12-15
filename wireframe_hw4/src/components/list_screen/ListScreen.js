@@ -42,8 +42,6 @@ class ListScreen extends Component {
 
 
     render() {
-        console.log("render")
-        console.log(this.props.history)
 
         const auth = this.props.auth;
         const wireframe = this.props.wireframe;

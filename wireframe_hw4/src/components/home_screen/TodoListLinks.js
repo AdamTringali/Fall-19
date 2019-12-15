@@ -14,10 +14,21 @@ class TodoListLinks extends React.Component {
         open: false,
     }
 
-   /* deleteWireframe = (test) => {
-        console.log("deleting wireframe");
-        console.log(test);
-    }*/
+    setKeys = (info) => {
+        let wireframeList = this.props.wireframeList;
+        for(var i = 0; i < wireframeList.length; i++){
+            if(wireframeList[i].id === this.props.docid)
+                {               
+                    let removed = wireframeList[i].wireframes.splice(info,1);
+                    wireframeList[i].wireframes.unshift(removed[0]);
+                    for(var j = 0; j < wireframeList[i].wireframes.length; j++)
+                        wireframeList[i].wireframes[j].key = j;
+                    
+                    const fireStore = getFirestore();
+                    fireStore.collection('user_wireframes').doc(this.props.docid).update({wireframes: wireframeList[i].wireframes})
+                }
+        }
+    }
 
 
     deleteWireframe = (key) =>{
@@ -91,7 +102,7 @@ class TodoListLinks extends React.Component {
                         </Modal>
                         </div>
                         <div className="col s10">
-                            <Link to={'/'+ this.props.docid + '/' + wireframe.key} key={wireframe.key} >
+                            <Link to={'/'+ this.props.docid + '/' + 0} key={wireframe.key} onClick={this.setKeys.bind(this, wireframe.key)}>
                                 <TodoListCard wireframe={wireframe} />
                             </Link>
                         </div>
