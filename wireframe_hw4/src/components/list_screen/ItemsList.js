@@ -4,25 +4,21 @@ import { compose } from 'redux';
 import ItemCard from './ItemCard';
 import { firestoreConnect } from 'react-redux-firebase';
 import { getFirestore } from 'redux-firestore';
-import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router-dom'
-import { Button } from 'react-materialize'
-import { Draggable, Droppable } from 'react-drag-and-drop'
-import ResizableRect from 'react-resizable-rotatable-draggable'
-import {Rnd} from 'react-rnd';
-import {DirectLink, Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
-import { SketchPicker, CirclePicker, EditableInput } from 'react-color';
+import { SketchPicker } from 'react-color';
 import { Modal } from 'react-materialize';
 
 
 class ItemsList extends React.Component {
 
     state = {
+        zoomIn: false,
         testing: "",
         displayCloseModal: false,
         displayColorPicker1: false,
         displayColorPicker2: false,
         displayColorPicker3: false,
+        goHome: false,
         removing: false,
         item: {
             text: "",
@@ -38,7 +34,7 @@ class ItemsList extends React.Component {
             height: this.props.wireframe.height,
             position: "relative"
         },
-        goHome: false,
+        items: {}
     }
 
     
@@ -137,6 +133,7 @@ class ItemsList extends React.Component {
         })
 
         this.props.wireframe.height = newSize.height;
+        this.props.wireframe.width = newSize.width;
     }
 
 
@@ -145,6 +142,7 @@ class ItemsList extends React.Component {
         let newFrames = this.props.wireframes;
         let myTitle = this.props.wireframe.title;
         let key = this.props.wireframe.key;
+        console.log()
      
 
         //I need to get truth value out of the following code
@@ -157,7 +155,7 @@ class ItemsList extends React.Component {
                         if(doc.data().wireframes.length > key){//failsafe
                             if(doc.data().wireframes[key].title === myTitle)//confirm
                             {
-                                if(JSON.stringify( newFrames[key].items) == JSON.stringify( doc.data().wireframes[key].items)){
+                                if(JSON.stringify( newFrames[key]) === JSON.stringify( doc.data().wireframes[key])){
                                     resolve(true);
                                 }
                                 else{
@@ -211,7 +209,21 @@ class ItemsList extends React.Component {
         }
     }
 
-    checkSelected = () => {
+    checkSelected = (test) => {
+        //console.log("check selected")
+        //console.log(test._dispatchInstances[0])
+        if(!test._dispatchInstances[0]){
+            console.log("unselect")
+            let newItem= {
+                text: "",
+                font_size: "",
+                border_radius: "",
+                border_thickness: "",
+            };
+            this.setState({item: newItem});
+            this.props.wireframe.selected = -1;
+            return false;
+        }
         const wireframe = this.props.wireframe;
 
         if(wireframe.selected >= 0){
@@ -262,9 +274,9 @@ class ItemsList extends React.Component {
             //UNNCECESSARY FOR LOOP.
             //USED FOR DOUBLE CHECKING FOR MATCHING COORD'S
             for(var i = 0; i < key; i++ ){
-                if(items[i].x == newX)
+                if(items[i].x === newX)
                     newX += 60;
-                if(items[i].y == newY)
+                if(items[i].y === newY)
                     newY += 60
             }
         }
@@ -335,11 +347,7 @@ class ItemsList extends React.Component {
         this.setState({item: newItem})
         this.props.wireframe.items = items;
     }
-    
-    clicking = (e) => {
-        
-        console.log("unselect me now")
-    }
+ 
 
     changeRadius = (e) => {
         const { target } = e;
@@ -360,25 +368,79 @@ class ItemsList extends React.Component {
     }
 
     handleClick = (id) => {
-        if(id == 1)
+        if(id === 1)
             this.setState({ displayColorPicker1: !this.state.displayColorPicker1 })
-        else if(id == 2)
+        else if(id === 2)
             this.setState({ displayColorPicker2: !this.state.displayColorPicker2 })
-        else if(id == 3)
+        else if(id === 3)
             this.setState({ displayColorPicker3: !this.state.displayColorPicker3 })
 
 
     };
 
     handleClose = (id) => {
-        if(id == 1)
+        if(id === 1)
             this.setState({ displayColorPicker1: false })
-        else if(id == 2)
+        else if(id === 2)
             this.setState({ displayColorPicker2: false })
-        else if(id == 3)
+        else if(id === 3)
             this.setState({ displayColorPicker3: false })
 
     };
+
+    zoomIn = () => {
+        console.log("zoming in");
+        var wireframe_size = {...this.state.wireframe_size};
+        
+        wireframe_size.height = parseInt(wireframe_size.height.substring(0, wireframe_size.height.length-2))*2 + 'px';
+        wireframe_size.width = parseInt(wireframe_size.width.substring(0, wireframe_size.width.length-2))*2 + 'px';
+        this.setState({wireframe_size})
+
+        let myItems = this.props.wireframe.items;
+     
+        for(var i = 0; i < myItems.length; i++ ){
+
+            myItems[i].height = parseInt( myItems[i].height.substring(0, myItems[i].height.length-2) ) * 2 + 'px'
+            myItems[i].width = parseInt( myItems[i].width.substring(0, myItems[i].width.length-2) ) * 2 + 'px'
+            myItems[i].x = myItems[i].x  * 2
+            myItems[i].y = myItems[i].y  * 2
+         
+        }
+
+        this.setState({zoomIn: true});
+        this.setState({items: myItems});
+
+        let cpy = this.props.wireframes;
+        cpy[0].height = wireframe_size.height;
+        cpy[0].width = wireframe_size.width;
+        cpy[0].items = myItems;
+        this.props.loadItems(cpy);
+        setTimeout(function (){ this.forceUpdate()}.bind(this),1000)
+
+
+    }
+
+    zoomOut = () => {
+        console.log("zooming out")
+        var wireframe_size = {...this.state.wireframe_size};
+        
+        wireframe_size.height = parseInt(wireframe_size.height.substring(0, wireframe_size.height.length-2))/2 + 'px';
+        wireframe_size.width = parseInt(wireframe_size.width.substring(0, wireframe_size.width.length-2))/2 + 'px';
+        this.setState({wireframe_size})
+
+        let myItems = this.props.wireframe.items;
+     
+        for(var i = 0; i < myItems.length; i++ ){
+
+            myItems[i].height = parseInt( myItems[i].height.substring(0, myItems[i].height.length-2) ) / 2 + 'px'
+            myItems[i].width = parseInt( myItems[i].width.substring(0, myItems[i].width.length-2) ) / 2 + 'px'
+            myItems[i].x = myItems[i].x  /2
+            myItems[i].y = myItems[i].y  /2
+         
+        }
+        this.setState({items: myItems});
+ 
+    }
 
     handleChange = (whichColor, color2) => {
         let newitem = this.state.item;
@@ -401,37 +463,39 @@ class ItemsList extends React.Component {
 
     };
 
+   
+
     render() {
+    
         const wireframe = this.props.wireframe;
+
 
         if(this.state.goHome)
             return <Redirect to="/" />;
 
-        //let item = this.state.item;
         var item = this.state.item;
-       
     
         if(this.state.removing)
             return <React.Fragment />
 
-            const styles = {
-                  swatch: {
-                    display: 'inline-block',
-                    cursor: 'pointer',
-                  },
-                  popover: {
-                    position: 'absolute',
-                    zIndex: '2',
-                  },
-                  cover: {
-                    position: 'fixed',
-                    top: '0px',
-                    right: '0px',
-                    bottom: '0px',
-                    left: '0px',
-                  },
-           
-              };
+        const styles = {
+                swatch: {
+                display: 'inline-block',
+                cursor: 'pointer',
+                },
+                popover: {
+                position: 'absolute',
+                zIndex: '2',
+                },
+                cover: {
+                position: 'fixed',
+                top: '0px',
+                right: '0px',
+                bottom: '0px',
+                left: '0px',
+                },
+        
+            };
 
         return (
             
@@ -443,8 +507,8 @@ class ItemsList extends React.Component {
                 <div className="groove_border col s2" style={{height: "80%"}} > <p className="right-align"></p> 
                 
                     <div className="row">
-                        <i className="material-icons col s3">zoom_in</i>
-                        <i className="material-icons col s3">zoom_out</i>
+                        <i className="material-icons col s3" onClick={this.zoomIn}>zoom_in</i>
+                        <i className="material-icons col s3" onClick={this.zoomOut}>zoom_out</i>
                     </div>
 
                     <div className="item-container ">
@@ -479,7 +543,7 @@ class ItemsList extends React.Component {
 
                                 <div className="center-align">
                                  <input  type="text" style={{border: "groove", height: "25px", width:"80%", borderRadius: "5px", color:"gray"}} value="Item" readOnly={true} onClick={this.addControl.bind(this, 'textfield')}/>
-                                 <div className="center-align" className="" style={{fontSize: "15px"}}>Textfield</div>
+                                 <div className="center-align" style={{fontSize: "15px"}}>Textfield</div>
                                 </div>
                                 
                                 
@@ -556,13 +620,13 @@ class ItemsList extends React.Component {
                             <label style={{top: "-5px", color: "black"}}>Height</label>
                         </div>
                         <div className="input-field col s8">
-                            <input id="height" type="text"  style={{border: "groove", height: "30px", borderRadius: "5px"}} defaultValue={wireframe.height/*this.state.wireframe_size.height*/} onChange={this.changeWireframeHeight}/>
+                            <input id="height" type="text"  style={{border: "groove", height: "30px", borderRadius: "5px"}} value={this.state.wireframe_size.height/*this.state.wireframe_size.height*/} onChange={this.changeWireframeHeight}/>
                         </div>
                         <div className="input-field col s4">
                             <label style={{top: "-5px", color: "black"}} >Width</label>
                         </div>
                         <div className="input-field col s8">
-                            <input id="width" type="text"  style={{border: "groove", height: "30px", borderRadius: "5px"}} defaultValue={wireframe.width/*this.state.wireframe_size.width*/} onChange={this.changeWireframeWidth} />
+                            <input id="width" type="text"  style={{border: "groove", height: "30px", borderRadius: "5px"}} value={/*defaultValue = wireframe.width*/this.state.wireframe_size.width} onChange={this.changeWireframeWidth} />
                         </div>
                     </div>
                     <h5 className="center-align">Control</h5>
@@ -672,25 +736,32 @@ class ItemsList extends React.Component {
     }
 }
 
+const mapDispatchToProps = (dispatch) => ({
+    loadItems: (wireframes) => {dispatch({type: "LOAD_ITEMS", wireframes: wireframes} )},
+   
+});
+
 const mapStateToProps = (state, ownProps) => {
-    const wireframe = ownProps.wireframe;
+    //const wireframe = ownProps.wireframe;
     const id = ownProps.id;
-    const key = wireframe.key
+    //const key = wireframe.key
     const wireframes = state.wireframe[0].wireframes;
     
 
     return {
         id,
         wireframes, 
-        key,
-        wireframe,
+        //key,
+       //wireframe,
         auth: state.firebase.auth,
     };
 };
 
 
+
+
 export default compose(
-    connect(mapStateToProps),
+    connect(mapStateToProps, mapDispatchToProps),
     firestoreConnect([
         { collection: 'wireframes' },
     ]),

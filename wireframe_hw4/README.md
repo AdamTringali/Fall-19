@@ -1,28 +1,7 @@
 ### -- ADAM TRINGALI --- TO RUN
 npm install
-npm install --save react-dnd react-dnd-html5-backend??
-
-npm install --save react-resizable-rotatable-draggable
 npm install --save styled-components
-
-npm install react-drag-and-drop
-
-
-npm install --save styled-components@4
-npm install --save react-resizable-rotatable-draggable`
-npm install --save re-resizable
-
-npm i moveable
-
-npm install react-draggable
-npm install --save react-resizable
-
-~~ Switched to PC ~~~
-
-npm install
 npm install react-scroll
-
--- 
 npm install react-color --save
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

@@ -5,7 +5,6 @@ import { Redirect } from 'react-router-dom';
 import { firestoreConnect } from 'react-redux-firebase';
 import TodoListLinks from './TodoListLinks'
 import { getFirestore } from 'redux-firestore';
-import { firestore } from 'firebase';
 
 
 class HomeScreen extends Component {
@@ -128,14 +127,13 @@ class HomeScreen extends Component {
         }
 
         if(this.state.newList){
-            if(wireframes.length == 0)
+            if(wireframes.length === 0)
             {   if(wireframes[wireframes.length])
                     if(wireframes[0].title === "Unknown")
                         this.props.history.push(this.props.wireframe.id+'/'+ 0);
             }
             else if(wireframes[0].title === "Unknown"){
                 console.log("newlist")
-                const oldNum = this.props.wireframe.wireframes.length-1;
                 this.props.history.push(this.props.wireframe.id+'/'+ 0);
             }
 

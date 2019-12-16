@@ -5,11 +5,6 @@ import { compose } from 'redux';
 import ItemsList from './ItemsList.js';
 import { firestoreConnect } from 'react-redux-firebase';
 import { getFirestore } from 'redux-firestore';
-import { Modal } from 'react-materialize';
-import {Rnd} from 'react-rnd';
-
-
-
 
 class ListScreen extends Component {
 
@@ -85,6 +80,8 @@ const mapStateToProps = (state, ownProps) => {
     const { id } = ownProps.match.params;
   const { key } = ownProps.match.params;
   const wireframes = state.wireframe[0].wireframes;
+  if(!wireframes)
+    return <React.Fragment />
   const wireframe = wireframes[key];
   //const items = wireframe.items;
 

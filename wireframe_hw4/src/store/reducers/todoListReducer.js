@@ -9,10 +9,23 @@ const todoListReducer = (state = initState, action) => {
     switch (action.type) {
         case "LOAD_WIREFRAMES":
             console.log("case: LOAD_WIREFRAME");
+            let myFrames = action.wireframes;
+            for(var i = 0; i < myFrames.length; i++)
+            {
+                myFrames[i].selected = -1;
+            }
+
+
             return [
-                {...state, wireframes: action.wireframes}
+                {...state, wireframes: myFrames}
             ]
-            break;
+
+        case "LOAD_ITEMS":
+                console.log("case: LOAD_ITEMS");
+                //console.log(action.wireframes)
+                return [
+                    {...state, wireframes: action.wireframes}
+                ]
         case "SUBMIT_CHANGES":
             console.log("case: SUBMIT_CHANGES");
             break;
@@ -20,7 +33,6 @@ const todoListReducer = (state = initState, action) => {
 
         default:
             return state;
-            break;
     }
 };
 

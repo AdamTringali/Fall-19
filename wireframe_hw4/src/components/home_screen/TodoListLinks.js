@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import TodoListCard from './TodoListCard';
 import { Modal } from 'react-materialize';
-import { Redirect } from 'react-router-dom'
 import { getFirestore } from 'redux-firestore';
 
 
@@ -136,6 +135,6 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => ({
     loadWireframes: (wireframes) => {dispatch({type: "LOAD_WIREFRAMES", wireframes: wireframes} )},
    
-  });
+});
 
 export default compose(connect(mapStateToProps, mapDispatchToProps))(TodoListLinks);

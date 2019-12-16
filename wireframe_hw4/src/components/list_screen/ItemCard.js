@@ -1,9 +1,4 @@
 import React from 'react';
-import { relative } from 'path';
-import ResizableRect from 'react-resizable-rotatable-draggable'
-import Moveable from "react-moveable";
-import Draggable from 'react-draggable';
-import { Resizable, ResizableBox } from 'react-resizable';
 import { Rnd } from 'react-rnd';
 import { getFirestore } from 'redux-firestore';
 
@@ -34,10 +29,10 @@ class ItemCard extends React.Component {
 
 
     stopFocus = () => {
-        console.log("stopping focus?");
+       /* console.log("stopping focus?");
         let {wireframe} = this.props;
         wireframe.selected = -1;
-        this.setState({selected: -1});
+        this.setState({selected: -1});*/
 
     }
 
@@ -53,17 +48,45 @@ class ItemCard extends React.Component {
         this.props.item.y =  newCoord.y;
     }
 
+    onResize = (test, info, ref, t5) =>{
+        //console.log("onresize")
+        //console.log(ref.style.transform)
+        let trans = ref.style.transform;
+        let x = parseInt ( trans.substring(10, trans.indexOf(',')-2) ) + 4;
+        let y = parseInt( trans.substring(trans.indexOf(',')+2, trans.indexOf(')')-2) ) + 4;
+        //console.log("x " + x + ", y: " + y)
+        let newCoord = {...this.state.rnd};
+        newCoord.x = x;
+        newCoord.y = y;
+        this.setState({rnd: newCoord})
 
-    onResizeStop = (test, info, ref) => {
-        console.log("onresizestop");
+        this.props.item.x =  newCoord.x;
+        this.props.item.y =  newCoord.y;
+
+    }
+
+
+    onResizeStop = (test, info, ref, t5) => {
+        //console.log("onresizestop");
+       // console.log(ref.style) 
 
         let newSize = {...this.state.rnd};
         newSize.height = ref.style.height;
         newSize.width = ref.style.width;
+        //newSize.x = x;
+        //newSize.y = y;
+
         this.setState({rnd: newSize})
 
+        
+        //this.props.item.x = x;
+       // this.props.item.y = y;
         this.props.item.height = newSize.height;
         this.props.item.width = newSize.width;
+
+        
+        this.forceUpdate()
+        
 
     }
 
@@ -97,22 +120,22 @@ class ItemCard extends React.Component {
 
     render() {
         const { item } = this.props;  
-        //this.checkBorder();
-
-  
+        
 
             if(item.element === 'button'){
                 return(
                     <Rnd className="r2"
                     style={this.state.rnd.style}
-                      default={{
-                        x: this.state.rnd.x,
-                        y: this.state.rnd.y,
-                        height: this.state.rnd.height,
-                        width: this.state.rnd.width,
-                        }}
+                      position={{
+                        x: item.x,
+                        y: item.y}}
+                        size={{
+                        height: item.height,
+                        width: item.width}}
+                        
                       bounds="parent" 
                       onDragStop={this.onDragStop.bind(this)}
+                      onResize={this.onResize.bind(this)}
                       onResizeStop={this.onResizeStop.bind(this)}> 
                     <button id={item.key} 
                     onBlur={this.stopFocus}
@@ -125,7 +148,18 @@ class ItemCard extends React.Component {
                     background: this.props.item.background_color,
                     borderRadius:this.props.item.border_radius + 'px'}} 
                     onClick={this.selectControl.bind(this, item.key)}>
-                    {item.text}</button>
+                    {item.text}
+                    { this.props.wireframe.selected === item.key ? 
+                           <div>
+                            <div className='top-left' ></div>
+                            <div className='top-right'></div>
+                            <div className='bottom-left'></div>
+                            <div className='bottom-right'></div>
+                            </div>
+                        : null
+                        }
+
+                    </button>
                     </Rnd>
                 )
              }
@@ -134,14 +168,15 @@ class ItemCard extends React.Component {
                 return (   
                     <Rnd
                     style={this.state.rnd.style}
-                      default={{
-                        x: this.state.rnd.x,
-                        y: this.state.rnd.y,
-                        height: this.state.rnd.height,
-                        width: this.state.rnd.width
-                    }}
+                    position={{
+                        x: item.x,
+                        y: item.y}}
+                        size={{
+                        height: item.height,
+                        width: item.width}}
                       bounds="parent"
                       onDragStop={this.onDragStop.bind(this)}
+                      onResize={this.onResize.bind(this)}
                       onResizeStop={this.onResizeStop.bind(this)}>
                      <div
                      onBlur={this.stopFocus}
@@ -157,6 +192,15 @@ class ItemCard extends React.Component {
                        tabIndex="0"
                       >
                           {item.text}
+                          { this.props.wireframe.selected === item.key ? 
+                           <div>
+                            <div className='top-left' ></div>
+                            <div className='top-right'></div>
+                            <div className='bottom-left'></div>
+                            <div className='bottom-right'></div>
+                            </div>
+                        : null
+                        }
                           </div>
                     </Rnd>
                 )
@@ -170,17 +214,24 @@ class ItemCard extends React.Component {
                     zIndex: "6"
 
                     }}
-                    default={{
-                        x: this.state.rnd.x,
-                        y: this.state.rnd.y, 
-                        height: this.state.rnd.height,
-                        width: this.state.rnd.width}}
+                    position={{
+                        x: item.x,
+                        y: item.y}}
+                        size={{
+                        height: item.height,
+                        width: item.width}}
                     bounds="parent"
                     onDragStop={this.onDragStop.bind(this)}
+                    onResize={this.onResize.bind(this)}
                       onResizeStop={this.onResizeStop.bind(this)}>
                 
-                        
-                    <input id="inp" style={{height: '100%', width:'100%', fontSize: item.font_size + 'px', 
+                { this.props.wireframe.selected === item.key ? 
+                           <div style={{height:"100%", width:"100%", overflow:"hidden"}} >
+                            <div className='top-left' ></div>
+                            <div className='top-right'></div>
+                            <div className='bottom-left'></div>
+                            <div className='bottom-right'></div>
+                            <input id="inp" style={{height: '100%', width:'100%', fontSize: item.font_size + 'px', 
                     cursor:"grab",
                     background: this.props.item.background_color,
                     borderStyle:"solid",
@@ -191,8 +242,36 @@ class ItemCard extends React.Component {
                     borderRadius:this.props.item.border_radius + 'px' }}
                     onClick={this.selectControl.bind(this, item.key)} value={item.text} readOnly={true}
                     onBlur={this.stopFocus}>
-                       
+                        
                     </input>
+                            </div>
+                        :  <input id="inp" style={{height: '100%', width:'100%', fontSize: item.font_size + 'px', 
+                        cursor:"grab",
+                        background: this.props.item.background_color,
+                        borderStyle:"solid",
+                        paddingLeft:"10px",
+                        color:this.props.item.color,
+                        borderColor:this.props.item.border_color,
+                        borderWidth:this.props.item.border_thickness + 'px',
+                        borderRadius:this.props.item.border_radius + 'px' }}
+                        onClick={this.selectControl.bind(this, item.key)} value={item.text} readOnly={true}
+                        onBlur={this.stopFocus}>
+                            
+                        </input>
+                        }
+           {/*          <input id="inp" style={{height: '100%', width:'100%', fontSize: item.font_size + 'px', 
+                    cursor:"grab",
+                    background: this.props.item.background_color,
+                    borderStyle:"solid",
+                    paddingLeft:"10px",
+                    color:this.props.item.color,
+                    borderColor:this.props.item.border_color,
+                    borderWidth:this.props.item.border_thickness + 'px',
+                    borderRadius:this.props.item.border_radius + 'px' }}
+                    onClick={this.selectControl.bind(this, item.key)} value={item.text} readOnly={true}
+                    onBlur={this.stopFocus}>
+                        
+                    </input> */}
                     
 
 
@@ -210,13 +289,15 @@ class ItemCard extends React.Component {
                 overflow:"hidden",
                 zIndex: "3"
                 }}
-                default={{
-                    x: this.state.rnd.x,
-                    y: this.state.rnd.y, 
-                    height: this.state.rnd.height,
-                    width: this.state.rnd.width}}
+                position={{
+                    x: item.x,
+                    y: item.y}}
+                    size={{
+                    height: item.height,
+                    width: item.width}}
                 bounds="parent"
                 onDragStop={this.onDragStop.bind(this)}
+                onResize={this.onResize.bind(this)}
                 onResizeStop={this.onResizeStop.bind(this)}>
 
                     <div 
@@ -230,6 +311,15 @@ class ItemCard extends React.Component {
                     borderColor:this.props.item.border_color,
                     borderWidth:this.props.item.border_thickness + 'px',
                     borderRadius:this.props.item.border_radius + 'px'}}>
+                           { this.props.wireframe.selected === item.key ? 
+                           <div>
+                            <div className='top-left' ></div>
+                            <div className='top-right'></div>
+                            <div className='bottom-left'></div>
+                            <div className='bottom-right'></div>
+                            </div>
+                        : null
+                        }
                     </div>
                 
                 </Rnd>
